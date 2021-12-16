@@ -1,0 +1,34 @@
+accounts:
+  - name: alex
+    coins: ["210000000tcht", "200000000cgas"]
+  - name: walt
+    coins: ["10000tcht", "100000000cgas"]
+validator:
+  name: alex
+  staked: "1000000tcht"
+client:
+  vuex:
+    path: "vue/src/store"
+  openapi:
+    path: "docs/static/openapi.yml"
+faucet:
+  name: walt
+  coins: ["5tcht", "100000cgas"]
+  coins_max: ["10000tcht", "10000cgas"]
+genesis:
+  chain_id: "modified-grapes"
+  app_state:
+    staking:
+      params:
+        bond_denom: "tcht"
+    mint:
+      params:
+        mint_denom: "cgas"
+    crisis:
+      constant_fee:
+        denom: "cgas"
+    gov:
+      deposit_params:
+        min_deposit:
+          - amount: "10000000"
+            denom: "cgas"
