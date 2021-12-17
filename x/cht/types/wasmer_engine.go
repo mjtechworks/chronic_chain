@@ -8,7 +8,7 @@ import (
 // WasmerEngine defines the WASM contract runtime engine.
 type WasmerEngine interface {
 
-	// Create will compile the cht code, and store the resulting pre-compile
+	// Create will compile the wasm code, and store the resulting pre-compile
 	// as well as the original code. Both can be referenced later via CodeID
 	// This must be done one time for given code, after which it can be
 	// instatitated many times, and each instance called many times.
@@ -19,7 +19,7 @@ type WasmerEngine interface {
 	Create(code wasmvm.WasmCode) (wasmvm.Checksum, error)
 
 	// AnalyzeCode will statically analyze the code.
-	// Currently, just reports if it exposes all IBC entry points.
+	// Currently just reports if it exposes all IBC entry points.
 	AnalyzeCode(checksum wasmvm.Checksum) (*wasmvmtypes.AnalysisReport, error)
 
 	// Instantiate will create a new contract based on the given codeID.
@@ -28,7 +28,7 @@ type WasmerEngine interface {
 	//
 	// Storage should be set with a PrefixedKVStore that this code can safely access.
 	//
-	// Under the hood, we may recompile the cht, use a cached native compile, or even use a cached instance
+	// Under the hood, we may recompile the wasm, use a cached native compile, or even use a cached instance
 	// for performance.
 	Instantiate(
 		checksum wasmvm.Checksum,
@@ -125,12 +125,12 @@ type WasmerEngine interface {
 		deserCost wasmvmtypes.UFraction,
 	) (*wasmvmtypes.Response, uint64, error)
 
-	// GetCode will load the original cht code for the given code id.
+	// GetCode will load the original wasm code for the given code id.
 	// This will only succeed if that code id was previously returned from
 	// a call to Create.
 	//
 	// This can be used so that the (short) code id (hash) is stored in the iavl tree
-	// and the larger binary blobs (cht and pre-compiles) are all managed by the
+	// and the larger binary blobs (wasm and pre-compiles) are all managed by the
 	// rust library
 	GetCode(code wasmvm.Checksum) (wasmvm.WasmCode, error)
 
@@ -191,8 +191,7 @@ type WasmerEngine interface {
 		gasMeter wasmvm.GasMeter,
 		gasLimit uint64,
 		deserCost wasmvmtypes.UFraction,
-	) (*wasmvmtypes.IBCReceiveResponse, uint64, error)
-
+	) (*wasmvmtypes.IBCReceiveResult, uint64, error)
 	// IBCPacketAck is available on IBC-enabled contracts and is called when an
 	// the response for an outgoing packet (previously sent by this contract)
 	// is received

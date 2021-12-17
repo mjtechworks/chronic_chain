@@ -48,14 +48,14 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Grants: {},
-
+				
 				_Structure: {
 						GenericAuthorization: getStructure(GenericAuthorization.fromPartial({})),
 						Grant: getStructure(Grant.fromPartial({})),
 						EventGrant: getStructure(EventGrant.fromPartial({})),
 						EventRevoke: getStructure(EventRevoke.fromPartial({})),
 						GrantAuthorization: getStructure(GrantAuthorization.fromPartial({})),
-
+						
 		},
 		_Subscriptions: new Set(),
 	}
@@ -88,7 +88,7 @@ export default {
 					}
 			return state.Grants[JSON.stringify(params)] ?? {}
 		},
-
+				
 		getTypeStructure: (state) => (type) => {
 			return state._Structure[type].fields
 		}
@@ -117,18 +117,18 @@ export default {
 				}
 			})
 		},
-
-
-
-
-
-
+		
+		
+		
+		 		
+		
+		
 		async QueryGrants({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
 			try {
 				const queryClient=await initQueryClient(rootGetters)
 				let value= (await queryClient.queryGrants(query)).data
-
-
+				
+					
 				while (all && (<any> value).pagination && (<any> value).pagination.nextKey!=null) {
 					let next_values=(await queryClient.queryGrants({...query, 'pagination.key':(<any> value).pagination.nextKey})).data
 					value = mergeResults(value, next_values);
@@ -138,45 +138,16 @@ export default {
 				return getters['getGrants']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryGrants', 'API Node Unavailable. Could not perform query: ' + e.message)
-
+				
 			}
 		},
-
-
-		async sendMsgRevoke({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgRevoke(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, gas: "200000" }, memo})
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgRevoke:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgRevoke:Send', 'Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
-		async sendMsgExec({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgExec(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee,
-	gas: "200000" }, memo})
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgExec:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgExec:Send', 'Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
+		
+		
 		async sendMsgGrant({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgGrant(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee,
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
 	gas: "200000" }, memo})
 				return result
 			} catch (e) {
@@ -187,18 +158,48 @@ export default {
 				}
 			}
 		},
-
-		async MsgRevoke({ rootGetters }, { value }) {
+		async sendMsgExec({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgExec(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new SpVuexError('TxClient:MsgExec:Init', 'Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new SpVuexError('TxClient:MsgExec:Send', 'Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgRevoke({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgRevoke(value)
-				return msg
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgRevoke:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new SpVuexError('TxClient:MsgRevoke:Create', 'Could not create message: ' + e.message)
-
+					throw new SpVuexError('TxClient:MsgRevoke:Send', 'Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		
+		async MsgGrant({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgGrant(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new SpVuexError('TxClient:MsgGrant:Init', 'Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new SpVuexError('TxClient:MsgGrant:Create', 'Could not create message: ' + e.message)
+					
 				}
 			}
 		},
@@ -212,24 +213,24 @@ export default {
 					throw new SpVuexError('TxClient:MsgExec:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new SpVuexError('TxClient:MsgExec:Create', 'Could not create message: ' + e.message)
-
+					
 				}
 			}
 		},
-		async MsgGrant({ rootGetters }, { value }) {
+		async MsgRevoke({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgGrant(value)
+				const msg = await txClient.msgRevoke(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgGrant:Init', 'Could not initialize signing client. Wallet is required.')
+					throw new SpVuexError('TxClient:MsgRevoke:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new SpVuexError('TxClient:MsgGrant:Create', 'Could not create message: ' + e.message)
-
+					throw new SpVuexError('TxClient:MsgRevoke:Create', 'Could not create message: ' + e.message)
+					
 				}
 			}
 		},
-
+		
 	}
 }

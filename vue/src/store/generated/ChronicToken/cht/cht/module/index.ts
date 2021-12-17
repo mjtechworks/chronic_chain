@@ -6,21 +6,23 @@ import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "
 import { Api } from "./rest";
 import { MsgExecuteContract } from "./types/cht/tx";
 import { MsgInstantiateContract } from "./types/cht/tx";
-import { MsgMigrateContract } from "./types/cht/tx";
+import { MsgClearAdmin } from "./types/cht/tx";
+import { MsgStoreCode } from "./types/cht/tx";
 import { MsgUpdateAdmin } from "./types/cht/tx";
+import { MsgMigrateContract } from "./types/cht/tx";
 import { MsgIBCSend } from "./types/cht/ibc";
 import { MsgIBCCloseChannel } from "./types/cht/ibc";
-import { MsgClearAdmin } from "./types/cht/tx";
 
 
 const types = [
   ["/cht.MsgExecuteContract", MsgExecuteContract],
   ["/cht.MsgInstantiateContract", MsgInstantiateContract],
-  ["/cht.MsgMigrateContract", MsgMigrateContract],
+  ["/cht.MsgClearAdmin", MsgClearAdmin],
+  ["/cht.MsgStoreCode", MsgStoreCode],
   ["/cht.MsgUpdateAdmin", MsgUpdateAdmin],
+  ["/cht.MsgMigrateContract", MsgMigrateContract],
   ["/cht.MsgIBCSend", MsgIBCSend],
   ["/cht.MsgIBCCloseChannel", MsgIBCCloseChannel],
-  ["/cht.MsgClearAdmin", MsgClearAdmin],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -51,11 +53,12 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
     msgExecuteContract: (data: MsgExecuteContract): EncodeObject => ({ typeUrl: "/cht.MsgExecuteContract", value: data }),
     msgInstantiateContract: (data: MsgInstantiateContract): EncodeObject => ({ typeUrl: "/cht.MsgInstantiateContract", value: data }),
-    msgMigrateContract: (data: MsgMigrateContract): EncodeObject => ({ typeUrl: "/cht.MsgMigrateContract", value: data }),
+    msgClearAdmin: (data: MsgClearAdmin): EncodeObject => ({ typeUrl: "/cht.MsgClearAdmin", value: data }),
+    msgStoreCode: (data: MsgStoreCode): EncodeObject => ({ typeUrl: "/cht.MsgStoreCode", value: data }),
     msgUpdateAdmin: (data: MsgUpdateAdmin): EncodeObject => ({ typeUrl: "/cht.MsgUpdateAdmin", value: data }),
+    msgMigrateContract: (data: MsgMigrateContract): EncodeObject => ({ typeUrl: "/cht.MsgMigrateContract", value: data }),
     msgIBCSend: (data: MsgIBCSend): EncodeObject => ({ typeUrl: "/cht.MsgIBCSend", value: data }),
     msgIBCCloseChannel: (data: MsgIBCCloseChannel): EncodeObject => ({ typeUrl: "/cht.MsgIBCCloseChannel", value: data }),
-    msgClearAdmin: (data: MsgClearAdmin): EncodeObject => ({ typeUrl: "/cht.MsgClearAdmin", value: data }),
     
   };
 };

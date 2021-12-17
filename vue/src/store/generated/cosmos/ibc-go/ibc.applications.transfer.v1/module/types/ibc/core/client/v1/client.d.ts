@@ -1,4 +1,4 @@
-import { Reader, Writer } from 'protobufjs/minimal';
+import { Writer, Reader } from 'protobufjs/minimal';
 import { Any } from '../../../../google/protobuf/any';
 import { Plan } from '../../../../cosmos/upgrade/v1beta1/upgrade';
 export declare const protobufPackage = "ibc.core.client.v1";

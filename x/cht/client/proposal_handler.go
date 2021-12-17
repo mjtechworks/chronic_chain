@@ -1,17 +1,17 @@
 package client
 
 import (
-	govClient "github.com/cosmos/cosmos-sdk/x/gov/client"
+	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 
 	"github.com/ChronicToken/cht/x/cht/client/cli"
 	"github.com/ChronicToken/cht/x/cht/client/rest"
 )
 
-// ProposalHandlers define the cht cli proposal types and rest handler.
-var ProposalHandlers = []govClient.ProposalHandler{
-	govClient.NewProposalHandler(cli.ProposalStoreCodeCmd, rest.StoreCodeProposalHandler),
-	govClient.NewProposalHandler(cli.ProposalInstantiateContractCmd, rest.InstantiateProposalHandler),
-	govClient.NewProposalHandler(cli.ProposalMigrateContractCmd, rest.MigrateProposalHandler),
-	govClient.NewProposalHandler(cli.ProposalUpdateContractAdminCmd, rest.UpdateContractAdminProposalHandler),
-	govClient.NewProposalHandler(cli.ProposalClearContractAdminCmd, rest.ClearContractAdminProposalHandler),
+// ProposalHandlers define the wasm cli proposal types and rest handler.
+var ProposalHandlers = []govclient.ProposalHandler{
+	govclient.NewProposalHandler(cli.ProposalStoreCodeCmd, rest.StoreCodeProposalHandler),
+	govclient.NewProposalHandler(cli.ProposalInstantiateContractCmd, rest.InstantiateProposalHandler),
+	govclient.NewProposalHandler(cli.ProposalMigrateContractCmd, rest.MigrateProposalHandler),
+	govclient.NewProposalHandler(cli.ProposalUpdateContractAdminCmd, rest.UpdateContractAdminProposalHandler),
+	govclient.NewProposalHandler(cli.ProposalClearContractAdminCmd, rest.ClearContractAdminProposalHandler),
 }

@@ -1,9 +1,9 @@
 package types
 
 const (
-	// WasmModuleEventType is stored with any contract TX that returns non empty EventAttributes
-	WasmModuleEventType = "cht"
-	// CustomContractEventPrefix contracts can create custom events. To not mix them with other system events they got the `cht-` prefix.
+	// ChtModuleEventType is stored with any contract TX that returns non empty EventAttributes
+	ChtModuleEventType = "cht"
+	// CustomContractEventPrefix contracts can create custom events. To not mix them with other system events they got the `wasm-` prefix.
 	CustomContractEventPrefix = "cht-"
 
 	EventTypeStoreCode         = "store_code"

@@ -1,10 +1,11 @@
 package keeper
 
 import (
-	"github.com/ChronicToken/cht/x/cht/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
+
+	"github.com/ChronicToken/cht/x/cht/types"
 )
 
 // ValidatorSetSource is a subset of the staking keeper
@@ -17,7 +18,7 @@ type ValidatorSetSource interface {
 // CONTRACT: all types of accounts must have been already initialized/created
 func InitGenesis(ctx sdk.Context, keeper *Keeper, data types.GenesisState, stakingKeeper ValidatorSetSource, msgHandler sdk.Handler) ([]abci.ValidatorUpdate, error) {
 	contractKeeper := NewGovPermissionKeeper(keeper)
-	//keeper.setParams(ctx, data.Params)
+	keeper.setParams(ctx, data.Params)
 	var maxCodeID uint64
 	for i, code := range data.Codes {
 		err := keeper.importCode(ctx, code.CodeID, code.CodeInfo, code.CodeBytes)

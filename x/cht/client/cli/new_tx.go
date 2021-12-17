@@ -16,7 +16,7 @@ import (
 func MigrateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "migrate [contract_addr_bech32] [new_code_id_int64] [json_encoded_migration_args]",
-		Short:   "Migrate a cht contract to a new code version",
+		Short:   "Migrate a chronic contract to a new code version",
 		Aliases: []string{"update", "mig", "m"},
 		Args:    cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {

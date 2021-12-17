@@ -22,10 +22,10 @@ const (
 	ProposalTypeUnpinCodes          ProposalType = "UnpinCodes"
 )
 
-// DisableAllProposals contains no cht gov types.
+// DisableAllProposals contains no wasm gov types.
 var DisableAllProposals []ProposalType
 
-// EnableAllProposals contains all cht gov types as keys.
+// EnableAllProposals contains all wasm gov types as keys.
 var EnableAllProposals = []ProposalType{
 	ProposalTypeStoreCode,
 	ProposalTypeInstantiateContract,
@@ -62,13 +62,13 @@ func init() { // register new content types with the sdk
 	govtypes.RegisterProposalType(string(ProposalTypeClearAdmin))
 	govtypes.RegisterProposalType(string(ProposalTypePinCodes))
 	govtypes.RegisterProposalType(string(ProposalTypeUnpinCodes))
-	govtypes.RegisterProposalTypeCodec(&StoreCodeProposal{}, "cht/StoreCodeProposal")
-	govtypes.RegisterProposalTypeCodec(&InstantiateContractProposal{}, "cht/InstantiateContractProposal")
-	govtypes.RegisterProposalTypeCodec(&MigrateContractProposal{}, "cht/MigrateContractProposal")
-	govtypes.RegisterProposalTypeCodec(&UpdateAdminProposal{}, "cht/UpdateAdminProposal")
-	govtypes.RegisterProposalTypeCodec(&ClearAdminProposal{}, "cht/ClearAdminProposal")
-	govtypes.RegisterProposalTypeCodec(&PinCodesProposal{}, "cht/PinCodesProposal")
-	govtypes.RegisterProposalTypeCodec(&UnpinCodesProposal{}, "cht/UnpinCodesProposal")
+	govtypes.RegisterProposalTypeCodec(&StoreCodeProposal{}, "wasm/StoreCodeProposal")
+	govtypes.RegisterProposalTypeCodec(&InstantiateContractProposal{}, "wasm/InstantiateContractProposal")
+	govtypes.RegisterProposalTypeCodec(&MigrateContractProposal{}, "wasm/MigrateContractProposal")
+	govtypes.RegisterProposalTypeCodec(&UpdateAdminProposal{}, "wasm/UpdateAdminProposal")
+	govtypes.RegisterProposalTypeCodec(&ClearAdminProposal{}, "wasm/ClearAdminProposal")
+	govtypes.RegisterProposalTypeCodec(&PinCodesProposal{}, "wasm/PinCodesProposal")
+	govtypes.RegisterProposalTypeCodec(&UnpinCodesProposal{}, "wasm/UnpinCodesProposal")
 }
 
 // ProposalRoute returns the routing key of a parameter change proposal.
@@ -92,7 +92,7 @@ func (p StoreCodeProposal) ValidateBasic() error {
 		return sdkerrors.Wrap(err, "run as")
 	}
 
-	if err := validateChronicCode(p.WASMByteCode); err != nil {
+	if err := validateChtCode(p.WASMByteCode); err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "code bytes %s", err.Error())
 	}
 
@@ -114,7 +114,7 @@ func (p StoreCodeProposal) String() string {
 `, p.Title, p.Description, p.RunAs, p.WASMByteCode)
 }
 
-// MarshalYAML pretty prints the cht byte code
+// MarshalYAML pretty prints the wasm byte code
 func (p StoreCodeProposal) MarshalYAML() (interface{}, error) {
 	return struct {
 		Title                 string        `yaml:"title"`

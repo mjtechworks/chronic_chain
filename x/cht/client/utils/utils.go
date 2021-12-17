@@ -7,7 +7,7 @@ import (
 
 var (
 	gzipIdent = []byte("\x1F\x8B\x08")
-	wasmIdent = []byte("\x00\x61\x73\x6D")
+	chtIdent  = []byte("\x00\x61\x73\x6D")
 )
 
 // IsGzip returns checks if the file contents are gzip compressed
@@ -15,9 +15,9 @@ func IsGzip(input []byte) bool {
 	return bytes.Equal(input[:3], gzipIdent)
 }
 
-// IsWasm checks if the file contents are of cht binary
-func IsWasm(input []byte) bool {
-	return bytes.Equal(input[:4], wasmIdent)
+// IsCht checks if the file contents are of cht binary
+func IsCht(input []byte) bool {
+	return bytes.Equal(input[:4], chtIdent)
 }
 
 // GzipIt compresses the input ([]byte)

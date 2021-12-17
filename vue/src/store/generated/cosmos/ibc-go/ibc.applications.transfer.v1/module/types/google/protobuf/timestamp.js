@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as Long from 'long';
-import { configure, Reader, util, Writer } from 'protobufjs/minimal';
+import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'google.protobuf';
 const baseTimestamp = { seconds: 0, nanos: 0 };
 export const Timestamp = {

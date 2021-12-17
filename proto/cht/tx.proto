@@ -8,7 +8,7 @@ import "cht/types.proto";
 option go_package = "github.com/ChronicToken/cht/x/cht/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// Msg defines the Msg service.
+// Msg defines the wasm Msg service.
 service Msg {
   // StoreCode to submit Wasm code to the system
   rpc StoreCode(MsgStoreCode) returns (MsgStoreCodeResponse);

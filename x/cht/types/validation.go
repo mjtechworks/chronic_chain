@@ -11,7 +11,7 @@ const (
 	MaxLabelSize = 128
 )
 
-func validateChronicCode(s []byte) error {
+func validateChtCode(s []byte) error {
 	if len(s) == 0 {
 		return sdkerrors.Wrap(ErrEmpty, "is required")
 	}

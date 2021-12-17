@@ -8,6 +8,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/gogo/protobuf/jsonpb"
+	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
 
@@ -92,7 +93,7 @@ func ParamKeyTable() paramtypes.KeyTable {
 	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
 }
 
-// DefaultParams returns default cht parameters
+// DefaultParams returns default wasm parameters
 func DefaultParams() Params {
 	return Params{
 		CodeUploadAccess:             AllowEverybody,
@@ -118,17 +119,17 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	}
 }
 
-// ValidateBasic performs basic validation on cht parameters
+// ValidateBasic performs basic validation on wasm parameters
 func (p Params) ValidateBasic() error {
-	//if err := validateAccessType(p.InstantiateDefaultPermission); err != nil {
-	//	return errors.Wrap(err, "instantiate default permission")
-	//}
-	//if err := validateAccessConfig(p.CodeUploadAccess); err != nil {
-	//	return errors.Wrap(err, "upload access")
-	//}
-	//if err := validateMaxWasmCodeSize(p.MaxWasmCodeSize); err != nil {
-	//	return errors.Wrap(err, "max cht code size")
-	//}
+	if err := validateAccessType(p.InstantiateDefaultPermission); err != nil {
+		return errors.Wrap(err, "instantiate default permission")
+	}
+	if err := validateAccessConfig(p.CodeUploadAccess); err != nil {
+		return errors.Wrap(err, "upload access")
+	}
+	if err := validateMaxWasmCodeSize(p.MaxWasmCodeSize); err != nil {
+		return errors.Wrap(err, "max wasm code size")
+	}
 	return nil
 }
 

@@ -8,7 +8,7 @@ import (
 
 var _ types.ContractOpsKeeper = PermissionedKeeper{}
 
-// decoratedKeeper contains a subset of the cht keeper that are already or can be guarded by an authorization policy in the future
+// decoratedKeeper contains a subset of the wasm keeper that are already or can be guarded by an authorization policy in the future
 type decoratedKeeper interface {
 	create(ctx sdk.Context, creator sdk.AccAddress, wasmCode []byte, instantiateAccess *types.AccessConfig, authZ AuthorizationPolicy) (codeID uint64, err error)
 	instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.AccAddress, initMsg []byte, label string, deposit sdk.Coins, authZ AuthorizationPolicy) (sdk.AccAddress, []byte, error)

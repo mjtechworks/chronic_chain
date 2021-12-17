@@ -3,24 +3,27 @@ package cht
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	// this line is used by starport scaffolding # 1
+	"math/rand"
 
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/codec"
+	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/server"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/ChronicToken/cht/x/cht/client/cli"
 	"github.com/ChronicToken/cht/x/cht/client/rest"
 	"github.com/ChronicToken/cht/x/cht/keeper"
+	"github.com/ChronicToken/cht/x/cht/simulation"
 	"github.com/ChronicToken/cht/x/cht/types"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
 var (
@@ -28,151 +31,210 @@ var (
 	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
-// ----------------------------------------------------------------------------
-// AppModuleBasic
-// ----------------------------------------------------------------------------
+// Module init related flags
+const (
+	flagChtMemoryCacheSize    = "wasm.memory_cache_size"
+	flagChtQueryGasLimit      = "wasm.query_gas_limit"
+	flagChtSimulationGasLimit = "wasm.simulation_gas_limit"
+)
 
-// AppModuleBasic implements the AppModuleBasic interface for the capability module.
-type AppModuleBasic struct {
-	cdc codec.BinaryCodec
+// AppModuleBasic defines the basic application module used by the cht module.
+type AppModuleBasic struct{}
+
+func (b AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) { //nolint:staticcheck
+	RegisterCodec(amino)
 }
 
-func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
-	return AppModuleBasic{cdc: cdc}
-}
-
-// Name returns the capability module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
-
-func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
-}
-
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
-}
-
-// DefaultGenesis returns the capability module's default genesis state.
-func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(&GenesisState{})
-}
-
-// ValidateGenesis performs genesis state validation for the capability module.
-func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var genState types.GenesisState
-	if err := cdc.UnmarshalJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-	return genState.ValidateBasic()
-}
-
-// RegisterRESTRoutes registers the capability module's REST service handlers.
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
-}
-
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	err := types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+func (b AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, serveMux *runtime.ServeMux) {
+	err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(clientCtx))
 	if err != nil {
 		panic(err)
 	}
 }
 
-// GetTxCmd returns the capability module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
+// Name returns the cht module's name.
+func (AppModuleBasic) Name() string {
+	return ModuleName
+}
+
+// DefaultGenesis returns default genesis state as raw bytes for the cht
+// module.
+func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
+	return cdc.MustMarshalJSON(&GenesisState{
+		Params: DefaultParams(),
+	})
+}
+
+// ValidateGenesis performs genesis state validation for the cht module.
+func (b AppModuleBasic) ValidateGenesis(marshaler codec.JSONCodec, config client.TxEncodingConfig, message json.RawMessage) error {
+	var data GenesisState
+	err := marshaler.UnmarshalJSON(message, &data)
+	if err != nil {
+		return err
+	}
+	return ValidateGenesis(data)
+}
+
+// RegisterRESTRoutes registers the REST routes for the cht module.
+func (AppModuleBasic) RegisterRESTRoutes(cliCtx client.Context, rtr *mux.Router) {
+	rest.RegisterRoutes(cliCtx, rtr)
+}
+
+// GetTxCmd returns the root tx command for the cht module.
+func (b AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.GetTxCmd()
 }
 
-// GetQueryCmd returns the capability module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+// GetQueryCmd returns no root query command for the cht module.
+func (b AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }
 
-// RegisterInterfaces registers the module's interface types
-func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
-	types.RegisterInterfaces(reg)
+// RegisterInterfaces implements InterfaceModule
+func (b AppModuleBasic) RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+	types.RegisterInterfaces(registry)
 }
 
-// ----------------------------------------------------------------------------
-// AppModule
-// ----------------------------------------------------------------------------
+// ____________________________________________________________________________
 
-// AppModule implements the AppModule interface for the capability module.
+// AppModule implements an application module for the cht module.
 type AppModule struct {
 	AppModuleBasic
 	cdc                codec.Codec
-	keeper             keeper.Keeper
+	keeper             *Keeper
 	validatorSetSource keeper.ValidatorSetSource
 }
 
-func NewAppModule(cdc codec.Codec, keeper keeper.Keeper, validatorSetSource keeper.ValidatorSetSource) AppModule {
+func (am AppModule) ConsensusVersion() uint64 {
+	return 2
+}
+
+// NewAppModule creates a new AppModule object
+func NewAppModule(cdc codec.Codec, keeper *Keeper, validatorSetSource keeper.ValidatorSetSource) AppModule {
 	return AppModule{
-		AppModuleBasic:     NewAppModuleBasic(cdc),
+		AppModuleBasic:     AppModuleBasic{},
 		cdc:                cdc,
 		keeper:             keeper,
 		validatorSetSource: validatorSetSource,
 	}
 }
 
-// Name returns the capability module's name.
-func (am AppModule) Name() string {
-	return am.AppModuleBasic.Name()
-}
-
-// Route returns the capability module's message routing key.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(keeper.NewDefaultPermissionKeeper(am.keeper)))
-}
-
-// QuerierRoute returns the capability module's query routing key.
-func (AppModule) QuerierRoute() string { return types.QuerierRoute }
-
-// LegacyQuerierHandler returns the capability module's Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return nil
-}
-
-// RegisterServices registers a GRPC query service to respond to the
-// module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(keeper.NewDefaultPermissionKeeper(am.keeper)))
-	types.RegisterQueryServer(cfg.QueryServer(), NewQuerier(&am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), NewQuerier(am.keeper))
 }
 
-// RegisterInvariants registers the capability module's invariants.
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (am AppModule) LegacyQuerierHandler(amino *codec.LegacyAmino) sdk.Querier { //nolint:staticcheck
+	return keeper.NewLegacyQuerier(am.keeper, am.keeper.QueryGasLimit())
+}
 
-// InitGenesis performs the capability module's genesis initialization It returns
+// RegisterInvariants registers the cht module invariants.
+func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
+
+// Route returns the message routing key for the cht module.
+func (am AppModule) Route() sdk.Route {
+	return sdk.NewRoute(RouterKey, NewHandler(keeper.NewDefaultPermissionKeeper(am.keeper)))
+}
+
+// QuerierRoute returns the cht module's querier route name.
+func (AppModule) QuerierRoute() string {
+	return QuerierRoute
+}
+
+// InitGenesis performs genesis initialization for the cht module. It returns
 // no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genState types.GenesisState
-	// Initialize global index to index in genesis state
-	cdc.MustUnmarshalJSON(gs, &genState)
-	fmt.Println(genState.String())
-	validators, err := keeper.InitGenesis(ctx, &am.keeper, genState, am.validatorSetSource, am.Route().Handler())
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+	var genesisState GenesisState
+	cdc.MustUnmarshalJSON(data, &genesisState)
+	validators, err := InitGenesis(ctx, am.keeper, genesisState, am.validatorSetSource, am.Route().Handler())
 	if err != nil {
 		panic(err)
 	}
 	return validators
 }
 
-// ExportGenesis returns the capability module's exported genesis state as raw JSON bytes.
+// ExportGenesis returns the exported genesis state as raw bytes for the cht
+// module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := keeper.ExportGenesis(ctx, &am.keeper)
-	return cdc.MustMarshalJSON(genState)
+	gs := ExportGenesis(ctx, am.keeper)
+	return cdc.MustMarshalJSON(gs)
 }
 
-// ConsensusVersion implements ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 2 }
-
-// BeginBlock executes all ABCI BeginBlock logic respective to the capability module.
+// BeginBlock returns the begin blocker for the cht module.
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
-// EndBlock executes all ABCI EndBlock logic respective to the capability module. It
-// returns no validator updates.
-func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+// EndBlock returns the end blocker for the cht module. It returns no validator
+// updates.
+func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
+}
+
+// ____________________________________________________________________________
+
+// AppModuleSimulation functions
+
+// GenerateGenesisState creates a randomized GenState of the bank module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.RandomizedGenState(simState)
+}
+
+// ProposalContents doesn't return any content functions for governance proposals.
+func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	return nil
+}
+
+// RandomizedParams creates randomized bank param changes for the simulator.
+func (am AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	return simulation.ParamChanges(r, am.cdc)
+}
+
+// RegisterStoreDecoder registers a decoder for supply module's types
+func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+}
+
+// WeightedOperations returns the all the gov module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return nil
+}
+
+// ____________________________________________________________________________
+
+// AddModuleInitFlags implements servertypes.ModuleInitFlags interface.
+func AddModuleInitFlags(startCmd *cobra.Command) {
+	defaults := DefaultChtConfig()
+	startCmd.Flags().Uint32(flagChtMemoryCacheSize, defaults.MemoryCacheSize, "Sets the size in MiB (NOT bytes) of an in-memory cache for Cht modules. Set to 0 to disable.")
+	startCmd.Flags().Uint64(flagChtQueryGasLimit, defaults.SmartQueryGasLimit, "Set the max gas that can be spent on executing a query with a Cht contract")
+	startCmd.Flags().String(flagChtSimulationGasLimit, "", "Set the max gas that can be spent when executing a simulation TX")
+}
+
+// ReadChtConfig reads the Cht specifig configuration
+func ReadChtConfig(opts servertypes.AppOptions) (types.ChtConfig, error) {
+	cfg := types.DefaultChtConfig()
+	var err error
+	if v := opts.Get(flagChtMemoryCacheSize); v != nil {
+		if cfg.MemoryCacheSize, err = cast.ToUint32E(v); err != nil {
+			return cfg, err
+		}
+	}
+	if v := opts.Get(flagChtQueryGasLimit); v != nil {
+		if cfg.SmartQueryGasLimit, err = cast.ToUint64E(v); err != nil {
+			return cfg, err
+		}
+	}
+	if v := opts.Get(flagChtSimulationGasLimit); v != nil {
+		if raw, ok := v.(string); ok && raw != "" {
+			limit, err := cast.ToUint64E(v) // non empty string set
+			if err != nil {
+				return cfg, err
+			}
+			cfg.SimulationGasLimit = &limit
+		}
+	}
+	// attach contract debugging to global "trace" flag
+	if v := opts.Get(server.FlagTrace); v != nil {
+		if cfg.ContractDebugMode, err = cast.ToBoolE(v); err != nil {
+			return cfg, err
+		}
+	}
+	return cfg, nil
 }

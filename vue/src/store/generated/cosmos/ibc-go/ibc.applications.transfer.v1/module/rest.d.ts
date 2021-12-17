@@ -1,9 +1,9 @@
 /**
- * Params defines the set of IBC transfer parameters.
+* Params defines the set of IBC transfer parameters.
 NOTE: To prevent a single token from being transferred, set the
 TransfersEnabled parameter to true and then set the bank module's SendEnabled
 parameter for the denomination to false.
- */
+*/
 export interface Applicationstransferv1Params {
     /**
      * send_enabled enables or disables all cross-chain token transfers from this
@@ -17,7 +17,7 @@ export interface Applicationstransferv1Params {
     receiveEnabled?: boolean;
 }
 /**
- * `Any` contains an arbitrary serialized protocol buffer message along with a
+* `Any` contains an arbitrary serialized protocol buffer message along with a
 URL that describes the type of the serialized message.
 
 Protobuf library provides support to pack/unpack Any values in the form
@@ -99,7 +99,7 @@ field. Example (for message [google.protobuf.Duration][]):
       "@type": "type.googleapis.com/google.protobuf.Duration",
       "value": "1.212s"
     }
- */
+*/
 export interface ProtobufAny {
     /**
      * A URL/resource name that uniquely identifies the type of the serialized
@@ -139,9 +139,9 @@ export interface RpcStatus {
     details?: ProtobufAny[];
 }
 /**
- * DenomTrace contains the base denomination for ICS20 fungible tokens and the
+* DenomTrace contains the base denomination for ICS20 fungible tokens and the
 source tracing information path.
- */
+*/
 export interface V1DenomTrace {
     /**
      * path defines the chain of port/channel identifiers used for tracing the
@@ -152,13 +152,13 @@ export interface V1DenomTrace {
     baseDenom?: string;
 }
 /**
- * Normally the RevisionHeight is incremented at each height while keeping
+* Normally the RevisionHeight is incremented at each height while keeping
 RevisionNumber the same. However some consensus algorithms may choose to
 reset the height in certain conditions e.g. hard forks, state-machine
 breaking changes In these cases, the RevisionNumber is incremented so that
 height continues to be monitonically increasing even as the RevisionHeight
 gets reset
- */
+*/
 export interface V1Height {
     /** @format uint64 */
     revisionNumber?: string;
@@ -170,17 +170,17 @@ export interface V1Height {
  */
 export declare type V1MsgTransferResponse = object;
 /**
- * QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
+* QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
 method.
- */
+*/
 export interface V1QueryDenomTraceResponse {
     /** denom_trace returns the requested denomination trace information. */
     denomTrace?: V1DenomTrace;
 }
 /**
- * QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
+* QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
 method.
- */
+*/
 export interface V1QueryDenomTracesResponse {
     /** denom_traces returns all denominations trace information. */
     denomTraces?: V1DenomTrace[];
@@ -195,21 +195,21 @@ export interface V1QueryParamsResponse {
     params?: Applicationstransferv1Params;
 }
 /**
- * Coin defines a token with a denomination and an amount.
+* Coin defines a token with a denomination and an amount.
 
 NOTE: The amount field is an Int which implements the custom method
 signatures required by gogoproto.
- */
+*/
 export interface V1Beta1Coin {
     denom?: string;
     amount?: string;
 }
 /**
- * message SomeRequest {
+* message SomeRequest {
          Foo some_parameter = 1;
          PageRequest pagination = 2;
  }
- */
+*/
 export interface V1Beta1PageRequest {
     /**
      * key is a value returned in PageResponse.next_key to begin
@@ -240,14 +240,14 @@ export interface V1Beta1PageRequest {
     countTotal?: boolean;
 }
 /**
- * PageResponse is to be embedded in gRPC response messages where the
+* PageResponse is to be embedded in gRPC response messages where the
 corresponding request message has used PageRequest.
 
  message SomeResponse {
          repeated Bar results = 1;
          PageResponse page = 2;
  }
- */
+*/
 export interface V1Beta1PageResponse {
     /** @format byte */
     nextKey?: string;
@@ -296,16 +296,16 @@ export declare class HttpClient<SecurityDataType = unknown> {
     private securityWorker;
     private abortControllers;
     private baseApiParams;
-    private contentFormatters;
     constructor(apiConfig?: ApiConfig<SecurityDataType>);
     setSecurityData: (data: SecurityDataType) => void;
-    abortRequest: (cancelToken: CancelToken) => void;
-    request: <T = any, E = any>({ body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams) => Promise<HttpResponse<T, E>>;
+    private addQueryParam;
     protected toQueryString(rawQuery?: QueryParamsType): string;
     protected addQueryParams(rawQuery?: QueryParamsType): string;
-    private addQueryParam;
+    private contentFormatters;
     private mergeRequestParams;
     private createAbortSignal;
+    abortRequest: (cancelToken: CancelToken) => void;
+    request: <T = any, E = any>({ body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams) => Promise<HttpResponse<T, E>>;
 }
 /**
  * @title ibc/applications/transfer/v1/genesis.proto

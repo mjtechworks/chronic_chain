@@ -28,7 +28,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		// this line is used by starport scaffolding # types/genesis/testcase
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			err := tc.genState.ValidateBasic()
+			err := tc.genState.Validate()
 			if tc.valid {
 				require.NoError(t, err)
 			} else {

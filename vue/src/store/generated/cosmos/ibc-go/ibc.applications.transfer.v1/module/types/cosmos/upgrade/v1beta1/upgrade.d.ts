@@ -1,4 +1,4 @@
-import { Reader, Writer } from 'protobufjs/minimal';
+import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "cosmos.upgrade.v1beta1";
 /** Plan specifies information about a planned upgrade and when it should occur. */
 export interface Plan {

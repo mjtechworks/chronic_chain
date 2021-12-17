@@ -1,5 +1,5 @@
 import { StdFee } from "@cosmjs/launchpad";
-import { EncodeObject, OfflineSigner } from "@cosmjs/proto-signing";
+import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgTransfer } from "./types/ibc/applications/transfer/v1/tx";
 export declare const MissingWalletError: Error;

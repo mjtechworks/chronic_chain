@@ -23,7 +23,7 @@ func (k Keeper) OnOpenChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelOpenMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-open-channel")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-open-channel")
 
 	_, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
@@ -55,7 +55,7 @@ func (k Keeper) OnConnectChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelConnectMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-connect-channel")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-connect-channel")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
 		return err
@@ -85,7 +85,7 @@ func (k Keeper) OnCloseChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelCloseMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-close-channel")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-close-channel")
 
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
@@ -116,7 +116,7 @@ func (k Keeper) OnRecvPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketReceiveMsg,
 ) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-recv-packet")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-recv-packet")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
 		return nil, err
@@ -132,7 +132,7 @@ func (k Keeper) OnRecvPacket(
 		return nil, sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
 	}
 	// note submessage reply results can overwrite the `Acknowledgement` data
-	return k.handleContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res.Messages, res.Attributes, res.Acknowledgement, res.Events)
+	return k.handleContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res.Ok.Messages, res.Ok.Attributes, res.Ok.Acknowledgement, res.Ok.Events)
 }
 
 // OnAckPacket calls the contract to handle the "acknowledgement" data which can contain success or failure of a packet
@@ -147,7 +147,7 @@ func (k Keeper) OnAckPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketAckMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-ack-packet")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-ack-packet")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
 		return err
@@ -173,7 +173,7 @@ func (k Keeper) OnTimeoutPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketTimeoutMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "ibc-timeout-packet")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-timeout-packet")
 
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {

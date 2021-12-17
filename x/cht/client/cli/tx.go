@@ -10,11 +10,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 
-	chtdUtils "github.com/ChronicToken/cht/x/cht/client/utils"
+	chtUtils "github.com/ChronicToken/cht/x/cht/client/utils"
 	"github.com/ChronicToken/cht/x/cht/types"
 )
 
@@ -32,7 +32,7 @@ const (
 func GetTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
-		Short:                      fmt.Sprintf("%s transactions subcommands", types.ModuleName),
+		Short:                      "chronic transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
@@ -52,7 +52,7 @@ func GetTxCmd() *cobra.Command {
 func StoreCodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "store [cht file]",
-		Short:   "Upload a cht binary",
+		Short:   "Upload a chronic binary",
 		Aliases: []string{"upload", "st", "s"},
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -78,20 +78,20 @@ func StoreCodeCmd() *cobra.Command {
 }
 
 func parseStoreCodeArgs(file string, sender sdk.AccAddress, flags *flag.FlagSet) (types.MsgStoreCode, error) {
-	wasm, err := ioutil.ReadFile(file)
+	cht, err := ioutil.ReadFile(file)
 	if err != nil {
 		return types.MsgStoreCode{}, err
 	}
 
 	// gzip the cht file
-	if chtdUtils.IsWasm(wasm) {
-		wasm, err = chtdUtils.GzipIt(wasm)
+	if chtUtils.IsCht(cht) {
+		cht, err = chtUtils.GzipIt(cht)
 
 		if err != nil {
 			return types.MsgStoreCode{}, err
 		}
-	} else if !chtdUtils.IsGzip(wasm) {
-		return types.MsgStoreCode{}, fmt.Errorf("invalid input file. Use cht binary or gzip")
+	} else if !chtUtils.IsGzip(cht) {
+		return types.MsgStoreCode{}, fmt.Errorf("invalid input file. Use chronic binary or gzip")
 	}
 
 	var perm *types.AccessConfig
@@ -102,7 +102,7 @@ func parseStoreCodeArgs(file string, sender sdk.AccAddress, flags *flag.FlagSet)
 	if onlyAddrStr != "" {
 		allowedAddr, err := sdk.AccAddressFromBech32(onlyAddrStr)
 		if err != nil {
-			return types.MsgStoreCode{}, sdkErrors.Wrap(err, flagInstantiateByAddress)
+			return types.MsgStoreCode{}, sdkerrors.Wrap(err, flagInstantiateByAddress)
 		}
 		x := types.AccessTypeOnlyAddress.With(allowedAddr)
 		perm = &x
@@ -124,7 +124,7 @@ func parseStoreCodeArgs(file string, sender sdk.AccAddress, flags *flag.FlagSet)
 
 	msg := types.MsgStoreCode{
 		Sender:                sender.String(),
-		WASMByteCode:          wasm,
+		WASMByteCode:          cht,
 		InstantiatePermission: perm,
 	}
 	return msg, nil
@@ -134,7 +134,7 @@ func parseStoreCodeArgs(file string, sender sdk.AccAddress, flags *flag.FlagSet)
 func InstantiateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "instantiate [code_id_int64] [json_encoded_init_args] --label [text] --admin [address,optional] --amount [coins,optional]",
-		Short:   "Instantiate a cht contract",
+		Short:   "Instantiate a chronic contract",
 		Aliases: []string{"start", "init", "inst", "i"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -204,7 +204,7 @@ func parseInstantiateArgs(rawCodeID, initMsg string, sender sdk.AccAddress, flag
 func ExecuteContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "execute [contract_addr_bech32] [json_encoded_send_args] --amount [coins,optional]",
-		Short:   "Execute a command on a cht contract",
+		Short:   "Execute a command on a chronic contract",
 		Aliases: []string{"run", "call", "exec", "ex", "e"},
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

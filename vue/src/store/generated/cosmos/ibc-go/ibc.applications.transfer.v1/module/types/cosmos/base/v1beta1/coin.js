@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal';
+import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'cosmos.base.v1beta1';
 const baseCoin = { denom: '', amount: '' };
 export const Coin = {

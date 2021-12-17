@@ -12,8 +12,8 @@ import (
 )
 
 func registerNewTxRoutes(cliCtx client.Context, r *mux.Router) {
-	r.HandleFunc("/cht/contract/{contractAddr}/admin", setContractAdminHandlerFn(cliCtx)).Methods("PUT")
-	r.HandleFunc("/cht/contract/{contractAddr}/code", migrateContractHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc("/chronic/contract/{contractAddr}/admin", setContractAdminHandlerFn(cliCtx)).Methods("PUT")
+	r.HandleFunc("/chronic/contract/{contractAddr}/code", migrateContractHandlerFn(cliCtx)).Methods("PUT")
 }
 
 type migrateContractReq struct {

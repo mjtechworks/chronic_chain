@@ -2,16 +2,18 @@ package cht
 
 import (
 	"fmt"
+
 	"github.com/gogo/protobuf/proto"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/ChronicToken/cht/x/cht/keeper"
 	"github.com/ChronicToken/cht/x/cht/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewHandler ...
+// NewHandler returns a handler for "cht" type messages.
 func NewHandler(k types.ContractOpsKeeper) sdk.Handler {
 	msgServer := keeper.NewMsgServerImpl(k)
 
@@ -52,7 +54,7 @@ func filterMessageEvents(ctx sdk.Context) *sdk.EventManager {
 	m := sdk.NewEventManager()
 	for _, e := range ctx.EventManager().Events() {
 		if e.Type == sdk.EventTypeMessage &&
-			!hasWasmModuleAttribute(e.Attributes) {
+			!hasChtModuleAttribute(e.Attributes) {
 			continue
 		}
 		m.EmitEvent(e)
@@ -60,7 +62,7 @@ func filterMessageEvents(ctx sdk.Context) *sdk.EventManager {
 	return m
 }
 
-func hasWasmModuleAttribute(attrs []abci.EventAttribute) bool {
+func hasChtModuleAttribute(attrs []abci.EventAttribute) bool {
 	for _, a := range attrs {
 		if sdk.AttributeKeyModule == string(a.Key) &&
 			types.ModuleName == string(a.Value) {
