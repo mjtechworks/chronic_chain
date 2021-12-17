@@ -1,53 +1,34 @@
 package types
 
-import "fmt"
+import (
+	"fmt"
+)
 
-// GenesisState - all nameservice state that must be provided at genesis
-type GenesisState struct {
-	// TODO: Fill out what is needed by the module for genesis
-	WhoisRecords []Whois `json:"whois_records"`
-}
+// DefaultIndex is the default capability global index
+const DefaultIndex uint64 = 1
 
-func (g GenesisState) Reset() {
-	g = GenesisState{}
-}
-
-func (g GenesisState) String() string {
-	return fmt.Sprintf(`MsgDeleteName:
-	  WhoisRecords:       	%s
-	`, g.WhoisRecords)
-}
-
-func (g GenesisState) ProtoMessage() {}
-
-// NewGenesisState creates a new GenesisState object
-func NewGenesisState( /* TODO: Fill out with what is needed for genesis state */ ) GenesisState {
-	return GenesisState{
-		// TODO: Fill out according to your genesis state
-		WhoisRecords: nil,
+// DefaultGenesis returns the default Capability genesis state
+func DefaultGenesis() *GenesisState {
+	return &GenesisState{
+		WhoisList: []Whois{},
+		// this line is used by starport scaffolding # genesis/types/default
 	}
 }
 
-// DefaultGenesisState - default GenesisState used by Cosmos Hub
-func DefaultGenesisState() GenesisState {
-	return GenesisState{
-		WhoisRecords: []Whois{},
-	}
-}
+// Validate performs basic genesis state validation returning an error upon any
+// failure.
+func (gs GenesisState) Validate() error {
+	// Check for duplicated index in whois
+	whoisIndexMap := make(map[string]struct{})
 
-// ValidateGenesis validates the nameservice genesis parameters
-func ValidateGenesis(data GenesisState) error {
-	// TODO: Create a sanity check to make sure the state conforms to the modules needs
-	for _, record := range data.WhoisRecords {
-		if record.Creator == nil {
-			return fmt.Errorf("invalid WhoisRecord: Creator: %s. Error: Missing Creator", record.Creator)
+	for _, elem := range gs.WhoisList {
+		index := string(WhoisKey(elem.Index))
+		if _, ok := whoisIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for whois")
 		}
-		if record.Value == "" {
-			return fmt.Errorf("invalid WhoisRecord: Value: %s. Error: Missing Value", record.Value)
-		}
-		if record.Price == nil {
-			return fmt.Errorf("invalid WhoisRecord: Price: %s. Error: Missing Price", record.Price)
-		}
+		whoisIndexMap[index] = struct{}{}
 	}
+	// this line is used by starport scaffolding # genesis/types/validate
+
 	return nil
 }

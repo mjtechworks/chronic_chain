@@ -3,25 +3,33 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/msgservice"
 )
 
-// RegisterCodec registers concrete types on codec
 func RegisterCodec(cdc *codec.LegacyAmino) {
-	// this line is used by starport scaffolding # 1
-	cdc.RegisterConcrete(MsgBuyName{}, "nameservice/BuyName", nil)
-	cdc.RegisterConcrete(MsgSetName{}, "nameservice/SetName", nil)
-	cdc.RegisterConcrete(MsgDeleteName{}, "nameservice/DeleteName", nil)
+	cdc.RegisterConcrete(&MsgBuyName{}, "nameservice/BuyName", nil)
+	cdc.RegisterConcrete(&MsgSetName{}, "nameservice/SetName", nil)
+	cdc.RegisterConcrete(&MsgDeleteName{}, "nameservice/DeleteName", nil)
+	// this line is used by starport scaffolding # 2
 }
 
-// ModuleCdc defines the module codec
+func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgBuyName{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgSetName{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgDeleteName{},
+	)
+	// this line is used by starport scaffolding # 3
+
+	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
+}
+
 var (
-	Amino     = codec.NewLegacyAmino()
+	amino     = codec.NewLegacyAmino()
 	ModuleCdc = codec.NewProtoCodec(cdctypes.NewInterfaceRegistry())
 )
-
-func init() {
-	RegisterCodec(Amino)
-	cryptocodec.RegisterCrypto(Amino)
-	Amino.Seal()
-}

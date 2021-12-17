@@ -2,17 +2,26 @@ package cli
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client/flags"
+	"time"
 
 	"github.com/spf13/cobra"
 
-	"github.com/ChronicToken/cht/x/nameservice/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	// "github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/ChronicToken/cht/x/nameservice/types"
+)
+
+var (
+	DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
+)
+
+const (
+	flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
 )
 
 // GetTxCmd returns the transaction commands for this module
 func GetTxCmd() *cobra.Command {
-	nameserviceTxCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("%s transactions subcommands", types.ModuleName),
 		DisableFlagParsing:         true,
@@ -20,9 +29,10 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	nameserviceTxCmd.AddCommand(GetCmdBuyName(),
-		GetCmdSetWhois(),
-		GetCmdDeleteWhois())
-	flags.AddTxFlagsToCmd(nameserviceTxCmd)
-	return nameserviceTxCmd
+	cmd.AddCommand(CmdBuyName())
+	cmd.AddCommand(CmdSetName())
+	cmd.AddCommand(CmdDeleteName())
+	// this line is used by starport scaffolding # 1
+
+	return cmd
 }

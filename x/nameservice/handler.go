@@ -3,25 +3,33 @@ package nameservice
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 	"github.com/ChronicToken/cht/x/nameservice/keeper"
 	"github.com/ChronicToken/cht/x/nameservice/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewHandler returns a handler for "nameservice" type messages.
+// NewHandler ...
 func NewHandler(k keeper.Keeper) sdk.Handler {
+	msgServer := keeper.NewMsgServerImpl(k)
+
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
+
 		switch msg := msg.(type) {
-		case types.MsgSetName:
-			return handleMsgSetName(ctx, k, msg)
-		case types.MsgBuyName:
-			return handleMsgBuyName(ctx, k, msg)
-		case types.MsgDeleteName:
-			return handleMsgDeleteName(ctx, k, msg)
+		case *types.MsgBuyName:
+			res, err := msgServer.BuyName(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgSetName:
+			res, err := msgServer.SetName(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgDeleteName:
+			res, err := msgServer.DeleteName(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+			// this line is used by starport scaffolding # 1
 		default:
-			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, fmt.Sprintf("Unrecognized nameservice Msg type: %v", msg.String()))
+			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
 		}
 	}
 }

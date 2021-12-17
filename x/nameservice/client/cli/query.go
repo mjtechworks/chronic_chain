@@ -2,14 +2,12 @@ package cli
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-
 	// "strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
-
+	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/ChronicToken/cht/x/nameservice/types"
@@ -18,7 +16,7 @@ import (
 // GetQueryCmd returns the cli query commands for this module
 func GetQueryCmd(queryRoute string) *cobra.Command {
 	// Group nameservice queries under a subcommand
-	nameserviceQueryCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
 		DisableFlagParsing:         true,
@@ -26,13 +24,9 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	nameserviceQueryCmd.AddCommand(
-		GetCmdListWhois(queryRoute),
-		GetCmdGetWhois(queryRoute),
-		GetCmdResolveName(queryRoute),
-	)
+	cmd.AddCommand(CmdListWhois())
+	cmd.AddCommand(CmdShowWhois())
+	// this line is used by starport scaffolding # 1
 
-	flags.AddQueryFlagsToCmd(nameserviceQueryCmd)
-
-	return nameserviceQueryCmd
+	return cmd
 }
