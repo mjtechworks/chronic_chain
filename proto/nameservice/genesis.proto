@@ -1,0 +1,14 @@
+syntax = "proto3";
+package coreators.nameservice.nameservice;
+
+import "nameservice/whois.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/coreators/nameservice/x/nameservice/types";
+
+// GenesisState defines the nameservice module's genesis state.
+message GenesisState {
+    repeated Whois whoisList = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

@@ -377,12 +377,14 @@ func New(
 		supportedFeatures,
 	)
 
-	app.NameserviceKeeper = nameservicemodulekeeper.NewKeeper(app.BankKeeper,
-		cdc,
+	app.NameserviceKeeper = *nameservicemodulekeeper.NewKeeper(
+		appCodec,
 		keys[nameservicemoduletypes.StoreKey],
-	)
+		keys[nameservicemoduletypes.MemStoreKey],
 
-	nameserviceModule := nameservicemodule.NewAppModule(app.NameserviceKeeper, app.BankKeeper)
+		app.BankKeeper,
+	)
+	nameserviceModule := nameservicemodule.NewAppModule(appCodec, app.NameserviceKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 

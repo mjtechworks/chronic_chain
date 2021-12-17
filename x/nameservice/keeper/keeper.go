@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	// this line is used by starport scaffolding # 1
 	"fmt"
 
 	"github.com/tendermint/tendermint/libs/log"
@@ -9,29 +8,34 @@ import (
 	"github.com/ChronicToken/cht/x/nameservice/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bank "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 )
 
-// Keeper of the nameservice store
-type Keeper struct {
-	CoinKeeper bank.Keeper
-	storeKey   sdk.StoreKey
-	cdc        *codec.LegacyAmino
-	// paramspace types.ParamSubspace
-}
+type (
+	Keeper struct {
+		cdc      codec.BinaryCodec
+		storeKey sdk.StoreKey
+		memKey   sdk.StoreKey
 
-// NewKeeper creates a nameservice keeper
-func NewKeeper(coinKeeper bank.Keeper, cdc *codec.LegacyAmino, key sdk.StoreKey) Keeper {
-	keeper := Keeper{
-		CoinKeeper: coinKeeper,
-		storeKey:   key,
-		cdc:        cdc,
-		// paramspace: paramspace.WithKeyTable(types.ParamKeyTable()),
+		bankKeeper types.BankKeeper
 	}
-	return keeper
+)
+
+func NewKeeper(
+	cdc codec.BinaryCodec,
+	storeKey,
+	memKey sdk.StoreKey,
+
+	bankKeeper types.BankKeeper,
+) *Keeper {
+	return &Keeper{
+		cdc:      cdc,
+		storeKey: storeKey,
+		memKey:   memKey,
+
+		bankKeeper: bankKeeper,
+	}
 }
 
-// Logger returns a module-specific logger.
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
