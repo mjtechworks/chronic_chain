@@ -185,7 +185,7 @@ export declare const MsgClearAdminResponse: {
     toJSON(_: MsgClearAdminResponse): unknown;
     fromPartial(_: DeepPartial<MsgClearAdminResponse>): MsgClearAdminResponse;
 };
-/** Msg defines the Msg service. */
+/** Msg defines the wasm Msg service. */
 export interface Msg {
     /** StoreCode to submit Wasm code to the system */
     StoreCode(request: MsgStoreCode): Promise<MsgStoreCodeResponse>;

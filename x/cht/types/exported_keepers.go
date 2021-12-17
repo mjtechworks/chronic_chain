@@ -24,10 +24,10 @@ type ViewKeeper interface {
 
 // ContractOpsKeeper contains mutable operations on a contract.
 type ContractOpsKeeper interface {
-	// Create uploads and compiles a WASM contract, returning a short identifier for the contract
-	Create(ctx sdk.Context, creator sdk.AccAddress, wasmCode []byte, instantiateAccess *AccessConfig) (codeID uint64, err error)
+	// Create uploads and compiles a Chronic contract, returning a short identifier for the contract
+	Create(ctx sdk.Context, creator sdk.AccAddress, chtCode []byte, instantiateAccess *AccessConfig) (codeID uint64, err error)
 
-	// Instantiate creates an instance of a WASM contract
+	// Instantiate creates an instance of a chronic contract
 	Instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.AccAddress, initMsg []byte, label string, deposit sdk.Coins) (sdk.AccAddress, []byte, error)
 
 	// Execute executes the contract instance
@@ -42,10 +42,10 @@ type ContractOpsKeeper interface {
 	// ClearContractAdmin sets the admin value on the ContractInfo to nil, to disable further migrations/ updates.
 	ClearContractAdmin(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress) error
 
-	// PinCode pins the cht contract in wasmvm cache
+	// PinCode pins the chronic contract in wasmvm cache
 	PinCode(ctx sdk.Context, codeID uint64) error
 
-	// UnpinCode removes the cht contract from wasmvm cache
+	// UnpinCode removes the chronic contract from wasmvm cache
 	UnpinCode(ctx sdk.Context, codeID uint64) error
 
 	// SetContractInfoExtension updates the extension point data that is stored with the contract info

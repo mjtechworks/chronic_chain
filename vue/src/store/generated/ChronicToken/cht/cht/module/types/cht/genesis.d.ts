@@ -2,7 +2,7 @@ import { Writer, Reader } from 'protobufjs/minimal';
 import { Params, CodeInfo, ContractInfo, Model } from '../cht/types';
 import { MsgStoreCode, MsgInstantiateContract, MsgExecuteContract } from '../cht/tx';
 export declare const protobufPackage = "cht";
-/** GenesisState defines the cht module's genesis state. */
+/** GenesisState - genesis state of x/wasm */
 export interface GenesisState {
     params: Params | undefined;
     codes: Code[];

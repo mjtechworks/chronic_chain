@@ -5,9 +5,9 @@ import (
 	"reflect"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
-	codecTypes "github.com/cosmos/cosmos-sdk/codec/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/gogo/protobuf/proto"
 )
 
@@ -19,20 +19,20 @@ const (
 
 func (m Model) ValidateBasic() error {
 	if len(m.Key) == 0 {
-		return sdkErrors.Wrap(ErrEmpty, "key")
+		return sdkerrors.Wrap(ErrEmpty, "key")
 	}
 	return nil
 }
 
 func (c CodeInfo) ValidateBasic() error {
 	if len(c.CodeHash) == 0 {
-		return sdkErrors.Wrap(ErrEmpty, "code hash")
+		return sdkerrors.Wrap(ErrEmpty, "code hash")
 	}
 	if _, err := sdk.AccAddressFromBech32(c.Creator); err != nil {
-		return sdkErrors.Wrap(err, "creator")
+		return sdkerrors.Wrap(err, "creator")
 	}
 	if err := c.InstantiateConfig.ValidateBasic(); err != nil {
-		return sdkErrors.Wrap(err, "instantiate config")
+		return sdkerrors.Wrap(err, "instantiate config")
 	}
 	return nil
 }
@@ -48,7 +48,7 @@ func NewCodeInfo(codeHash []byte, creator sdk.AccAddress, instantiatePermission 
 
 var AllCodeHistoryTypes = []ContractCodeHistoryOperationType{ContractCodeHistoryOperationTypeGenesis, ContractCodeHistoryOperationTypeInit, ContractCodeHistoryOperationTypeMigrate}
 
-// NewContractInfo creates a new instance of a given WASM contract info
+// NewContractInfo creates a new instance of a given Chronic contract info
 func NewContractInfo(codeID uint64, creator, admin sdk.AccAddress, label string, createdAt *AbsoluteTxPosition) ContractInfo {
 	var adminAddr string
 	if !admin.Empty() {
@@ -73,18 +73,18 @@ type validatable interface {
 // but also in the genesis import process.
 func (c *ContractInfo) ValidateBasic() error {
 	if c.CodeID == 0 {
-		return sdkErrors.Wrap(ErrEmpty, "code id")
+		return sdkerrors.Wrap(ErrEmpty, "code id")
 	}
 	if _, err := sdk.AccAddressFromBech32(c.Creator); err != nil {
-		return sdkErrors.Wrap(err, "creator")
+		return sdkerrors.Wrap(err, "creator")
 	}
 	if len(c.Admin) != 0 {
 		if _, err := sdk.AccAddressFromBech32(c.Admin); err != nil {
-			return sdkErrors.Wrap(err, "admin")
+			return sdkerrors.Wrap(err, "admin")
 		}
 	}
 	if err := validateLabel(c.Label); err != nil {
-		return sdkErrors.Wrap(err, "label")
+		return sdkerrors.Wrap(err, "label")
 	}
 	if c.Extension == nil {
 		return nil
@@ -95,7 +95,7 @@ func (c *ContractInfo) ValidateBasic() error {
 		return nil
 	}
 	if err := e.ValidateBasic(); err != nil {
-		return sdkErrors.Wrap(err, "extension")
+		return sdkerrors.Wrap(err, "extension")
 	}
 	return nil
 }
@@ -112,9 +112,9 @@ func (c *ContractInfo) SetExtension(ext ContractInfoExtension) error {
 			return err
 		}
 	}
-	any, err := codecTypes.NewAnyWithValue(ext)
+	any, err := codectypes.NewAnyWithValue(ext)
 	if err != nil {
-		return sdkErrors.Wrap(sdkErrors.ErrPackAny, err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrPackAny, err.Error())
 	}
 
 	c.Extension = any
@@ -125,12 +125,12 @@ func (c *ContractInfo) SetExtension(ext ContractInfoExtension) error {
 // For example with a custom extension of type `MyContractDetails` it will look as following:
 // 		var d MyContractDetails
 //		if err := info.ReadExtension(&d); err != nil {
-//			return nil, sdkErrors.Wrap(err, "extension")
+//			return nil, sdkerrors.Wrap(err, "extension")
 //		}
 func (c *ContractInfo) ReadExtension(e ContractInfoExtension) error {
 	rv := reflect.ValueOf(e)
 	if rv.Kind() != reflect.Ptr || rv.IsNil() {
-		return sdkErrors.Wrap(sdkErrors.ErrInvalidType, "not a pointer")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidType, "not a pointer")
 	}
 	if c.Extension == nil {
 		return nil
@@ -139,7 +139,7 @@ func (c *ContractInfo) ReadExtension(e ContractInfoExtension) error {
 	cached := c.Extension.GetCachedValue()
 	elem := reflect.ValueOf(cached).Elem()
 	if !elem.Type().AssignableTo(rv.Elem().Type()) {
-		return sdkErrors.Wrapf(sdkErrors.ErrInvalidType, "extension is of type %s but argument of %s", elem.Type(), rv.Elem().Type())
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "extension is of type %s but argument of %s", elem.Type(), rv.Elem().Type())
 	}
 	rv.Elem().Set(elem)
 	return nil
@@ -193,15 +193,15 @@ type ContractInfoExtension interface {
 	String() string
 }
 
-var _ codecTypes.UnpackInterfacesMessage = &ContractInfo{}
+var _ codectypes.UnpackInterfacesMessage = &ContractInfo{}
 
-// UnpackInterfaces implements codecTypes.UnpackInterfaces
-func (c *ContractInfo) UnpackInterfaces(unpacker codecTypes.AnyUnpacker) error {
+// UnpackInterfaces implements codectypes.UnpackInterfaces
+func (c *ContractInfo) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
 	var details ContractInfoExtension
 	if err := unpacker.UnpackAny(c.Extension, &details); err != nil {
 		return err
 	}
-	return codecTypes.UnpackInterfaces(details, unpacker)
+	return codectypes.UnpackInterfaces(details, unpacker)
 }
 
 // NewAbsoluteTxPosition gets a block position from the context
@@ -278,24 +278,24 @@ func NewEnv(ctx sdk.Context, contractAddr sdk.AccAddress) wasmvmtypes.Env {
 func NewInfo(creator sdk.AccAddress, deposit sdk.Coins) wasmvmtypes.MessageInfo {
 	return wasmvmtypes.MessageInfo{
 		Sender: creator.String(),
-		Funds:  NewChronicCoins(deposit),
+		Funds:  NewChtCoins(deposit),
 	}
 }
 
-// NewChronicCoins translates between Cosmos SDK coins and Wasm coins
-func NewChronicCoins(cosmosCoins sdk.Coins) (wasmCoins []wasmvmtypes.Coin) {
+// NewChtCoins translates between Cosmos SDK coins and Chronic coins
+func NewChtCoins(cosmosCoins sdk.Coins) (chtCoins []wasmvmtypes.Coin) {
 	for _, coin := range cosmosCoins {
-		wasmCoin := wasmvmtypes.Coin{
+		chtCoin := wasmvmtypes.Coin{
 			Denom:  coin.Denom,
 			Amount: coin.Amount.String(),
 		}
-		wasmCoins = append(wasmCoins, wasmCoin)
+		chtCoins = append(chtCoins, chtCoin)
 	}
-	return wasmCoins
+	return chtCoins
 }
 
-// ChronicConfig is the extra config required for cht
-type ChronicConfig struct {
+// ChtConfig is the extra config required for wasm
+type ChtConfig struct {
 	// SimulationGasLimit is the max gas to be used in a tx simulation call.
 	// When not set the consensus max block gas is used instead
 	SimulationGasLimit *uint64
@@ -307,9 +307,9 @@ type ChronicConfig struct {
 	ContractDebugMode bool
 }
 
-// DefaultChronicConfig returns the default settings for WasmConfig
-func DefaultChronicConfig() ChronicConfig {
-	return ChronicConfig{
+// DefaultWasmConfig returns the default settings for WasmConfig
+func DefaultChtConfig() ChtConfig {
+	return ChtConfig{
 		SmartQueryGasLimit: defaultSmartQueryGasLimit,
 		MemoryCacheSize:    defaultMemoryCacheSize,
 		ContractDebugMode:  defaultContractDebugMode,

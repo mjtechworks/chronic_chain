@@ -46,7 +46,7 @@ func (c Code) ValidateBasic() error {
 	if err := c.CodeInfo.ValidateBasic(); err != nil {
 		return sdkerrors.Wrap(err, "code info")
 	}
-	if err := validateChronicCode(c.CodeBytes); err != nil {
+	if err := validateChtCode(c.CodeBytes); err != nil {
 		return sdkerrors.Wrap(err, "code bytes")
 	}
 	return nil

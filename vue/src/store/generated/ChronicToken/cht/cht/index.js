@@ -363,20 +363,37 @@ export default {
                 }
             }
         },
-        async sendMsgMigrateContract({ rootGetters }, { value, fee = [], memo = '' }) {
+        async sendMsgClearAdmin({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgMigrateContract(value);
+                const msg = await txClient.msgClearAdmin(value);
                 const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
                         gas: "200000" }, memo });
                 return result;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgMigrateContract:Init', 'Could not initialize signing client. Wallet is required.');
+                    throw new SpVuexError('TxClient:MsgClearAdmin:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgMigrateContract:Send', 'Could not broadcast Tx: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgClearAdmin:Send', 'Could not broadcast Tx: ' + e.message);
+                }
+            }
+        },
+        async sendMsgStoreCode({ rootGetters }, { value, fee = [], memo = '' }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgStoreCode(value);
+                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
+                        gas: "200000" }, memo });
+                return result;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgStoreCode:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgStoreCode:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -394,6 +411,23 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgUpdateAdmin:Send', 'Could not broadcast Tx: ' + e.message);
+                }
+            }
+        },
+        async sendMsgMigrateContract({ rootGetters }, { value, fee = [], memo = '' }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgMigrateContract(value);
+                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
+                        gas: "200000" }, memo });
+                return result;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgMigrateContract:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgMigrateContract:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -431,23 +465,6 @@ export default {
                 }
             }
         },
-        async sendMsgClearAdmin({ rootGetters }, { value, fee = [], memo = '' }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgClearAdmin(value);
-                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
-                        gas: "200000" }, memo });
-                return result;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgClearAdmin:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgClearAdmin:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
         async MsgExecuteContract({ rootGetters }, { value }) {
             try {
                 const txClient = await initTxClient(rootGetters);
@@ -478,18 +495,33 @@ export default {
                 }
             }
         },
-        async MsgMigrateContract({ rootGetters }, { value }) {
+        async MsgClearAdmin({ rootGetters }, { value }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgMigrateContract(value);
+                const msg = await txClient.msgClearAdmin(value);
                 return msg;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgMigrateContract:Init', 'Could not initialize signing client. Wallet is required.');
+                    throw new SpVuexError('TxClient:MsgClearAdmin:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgMigrateContract:Create', 'Could not create message: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgClearAdmin:Create', 'Could not create message: ' + e.message);
+                }
+            }
+        },
+        async MsgStoreCode({ rootGetters }, { value }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgStoreCode(value);
+                return msg;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgStoreCode:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgStoreCode:Create', 'Could not create message: ' + e.message);
                 }
             }
         },
@@ -505,6 +537,21 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgUpdateAdmin:Create', 'Could not create message: ' + e.message);
+                }
+            }
+        },
+        async MsgMigrateContract({ rootGetters }, { value }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgMigrateContract(value);
+                return msg;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgMigrateContract:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgMigrateContract:Create', 'Could not create message: ' + e.message);
                 }
             }
         },
@@ -535,21 +582,6 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgIBCCloseChannel:Create', 'Could not create message: ' + e.message);
-                }
-            }
-        },
-        async MsgClearAdmin({ rootGetters }, { value }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgClearAdmin(value);
-                return msg;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgClearAdmin:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgClearAdmin:Create', 'Could not create message: ' + e.message);
                 }
             }
         },

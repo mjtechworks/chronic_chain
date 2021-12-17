@@ -1495,7 +1495,7 @@ export const QueryPinnedCodesResponse = {
   }
 }
 
-/** Query defines the gRPC querier service. */
+/** Query provides defines the gRPC querier service */
 export interface Query {
   /** ContractInfo gets the contract meta data */
   ContractInfo(request: QueryContractInfoRequest): Promise<QueryContractInfoResponse>

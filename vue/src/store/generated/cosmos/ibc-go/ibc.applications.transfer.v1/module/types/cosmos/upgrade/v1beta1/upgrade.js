@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Timestamp } from '../../../google/protobuf/timestamp';
 import * as Long from 'long';
-import { configure, Reader, util, Writer } from 'protobufjs/minimal';
+import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'cosmos.upgrade.v1beta1';
 const basePlan = { name: '', height: 0, info: '' };
 export const Plan = {

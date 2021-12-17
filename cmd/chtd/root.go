@@ -2,9 +2,13 @@ package main
 
 import (
 	"errors"
-	"github.com/tendermint/spm/cosmoscmd"
 	"io"
+	"os"
 	"path/filepath"
+
+	"github.com/prometheus/client_golang/prometheus"
+
+	chtkeeper "github.com/ChronicToken/cht/x/cht/keeper"
 
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	vestingcli "github.com/cosmos/cosmos-sdk/x/auth/vesting/client/cli"
@@ -26,15 +30,62 @@ import (
 	"github.com/cosmos/cosmos-sdk/snapshots"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/version"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 
 	"github.com/ChronicToken/cht/app"
+	"github.com/ChronicToken/cht/x/cht"
+	clientcodec "github.com/ChronicToken/cht/x/cht/client/codec"
 )
 
-func initRootCmd(rootCmd *cobra.Command, encodingConfig cosmoscmd.EncodingConfig) {
+// NewRootCmd creates a new root command for chtd. It is called once in the
+// main function.
+func NewRootCmd() (*cobra.Command, app.EncodingConfig) {
+	encodingConfig := app.MakeEncodingConfig()
+	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"
+	validatorAddressPrefix := app.AccountAddressPrefix + "valoper"
+	validatorPubKeyPrefix := app.AccountAddressPrefix + "valoperpub"
+	consNodeAddressPrefix := app.AccountAddressPrefix + "valcons"
+	consNodePubKeyPrefix := app.AccountAddressPrefix + "valconspub"
+
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
+	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
+	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
+	config.Seal()
+
+	initClientCtx := client.Context{}.
+		WithCodec(clientcodec.NewProtoCodec(encodingConfig.Marshaler, encodingConfig.InterfaceRegistry)).
+		WithInterfaceRegistry(encodingConfig.InterfaceRegistry).
+		WithTxConfig(encodingConfig.TxConfig).
+		WithLegacyAmino(encodingConfig.Amino).
+		WithInput(os.Stdin).
+		WithAccountRetriever(authtypes.AccountRetriever{}).
+		WithBroadcastMode(flags.BroadcastBlock).
+		WithHomeDir(app.DefaultNodeHome)
+
+	rootCmd := &cobra.Command{
+		Use:   version.AppName,
+		Short: "Chronic Daemon (server)",
+		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
+			if err := client.SetCmdClientContextHandler(initClientCtx, cmd); err != nil {
+				return err
+			}
+
+			return server.InterceptConfigsPreRunHandler(cmd, "", nil)
+		},
+	}
+
+	initRootCmd(rootCmd, encodingConfig)
+
+	return rootCmd, encodingConfig
+}
+
+func initRootCmd(rootCmd *cobra.Command, encodingConfig app.EncodingConfig) {
+	//authclient.Codec = encodingConfig.Marshaler
 
 	rootCmd.AddCommand(
 		genutilcli.InitCmd(app.ModuleBasics, app.DefaultNodeHome),
@@ -43,13 +94,13 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig cosmoscmd.EncodingConfig
 		genutilcli.GenTxCmd(app.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
 		genutilcli.ValidateGenesisCmd(app.ModuleBasics),
 		AddGenesisAccountCmd(app.DefaultNodeHome),
-		AddGenesisWasmMsgCmd(app.DefaultNodeHome),
+		AddGenesisChtMsgCmd(app.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),
 		// testnetCmd(app.ModuleBasics, banktypes.GenesisBalancesIterator{}),
 		debug.Cmd(),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, createChronicAppAndExport, addModuleInitFlags)
+	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, createChtAppAndExport, addModuleInitFlags)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
@@ -62,6 +113,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig cosmoscmd.EncodingConfig
 
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
+	cht.AddModuleInitFlags(startCmd)
 }
 
 func queryCommand() *cobra.Command {
@@ -132,7 +184,7 @@ func txCommand() *cobra.Command {
 
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer, appOpts servertypes.AppOptions) servertypes.Application {
 	var cache sdk.MultiStorePersistentCache
-	encodingConfig := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
+
 	if cast.ToBool(appOpts.Get(server.FlagInterBlockCache)) {
 		cache = store.NewCommitKVStoreCacheManager()
 	}
@@ -156,12 +208,17 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer, appOpts serverty
 	if err != nil {
 		panic(err)
 	}
+	var cOpts []cht.Option
+	if cast.ToBool(appOpts.Get("telemetry.enabled")) {
+		cOpts = append(cOpts, chtkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
+	}
 
 	return app.New(logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
-		encodingConfig,
+		app.GetEnabledProposals(),
 		appOpts,
+		cOpts,
 		baseapp.SetPruning(pruningOpts),
 		baseapp.SetMinGasPrices(cast.ToString(appOpts.Get(server.FlagMinGasPrices))),
 		baseapp.SetHaltHeight(cast.ToUint64(appOpts.Get(server.FlagHaltHeight))),
@@ -176,41 +233,25 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer, appOpts serverty
 	)
 }
 
-func createChronicAppAndExport(
+func createChtAppAndExport(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailAllowedAddrs []string,
 	appOpts servertypes.AppOptions) (servertypes.ExportedApp, error) {
-	encodingConfig := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
-	var chronicApp cosmoscmd.App
+
+	var chtApp *app.App
 	homePath, ok := appOpts.Get(flags.FlagHome).(string)
 	if !ok || homePath == "" {
 		return servertypes.ExportedApp{}, errors.New("application home not set")
 	}
-
+	var emptyOpts []cht.Option
 	if height != -1 {
-		chronicApp = app.New(
-			logger,
-			db,
-			traceStore,
-			false,
-			map[int64]bool{},
-			homePath, uint(1),
-			encodingConfig,
-			appOpts)
+		chtApp = app.New(logger, db, traceStore, false, map[int64]bool{}, homePath, uint(1), app.GetEnabledProposals(), appOpts, emptyOpts)
 
-		if err := chronicApp.LoadHeight(height); err != nil {
+		if err := chtApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	} else {
-		chronicApp = app.New(
-			logger,
-			db,
-			traceStore,
-			true,
-			map[int64]bool{},
-			homePath, uint(1),
-			encodingConfig,
-			appOpts)
+		chtApp = app.New(logger, db, traceStore, true, map[int64]bool{}, homePath, uint(1), app.GetEnabledProposals(), appOpts, emptyOpts)
 	}
 
-	return chronicApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
+	return chtApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
 }

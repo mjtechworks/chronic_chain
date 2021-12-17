@@ -42,7 +42,7 @@ const (
 	DefaultEventAttributeDataCost uint64 = 1
 	// DefaultContractMessageDataCost is how much SDK gas is charged *per byte* of the message that goes to the contract
 	// This is used with len(msg). Note that the message is deserialized in the receiving contract and this is charged
-	// with cht gas already. The derserialization of results is also charged in wasmvm. I am unsure if we need to add
+	// with wasm gas already. The derserialization of results is also charged in wasmvm. I am unsure if we need to add
 	// additional costs here.
 	// Note: also used for error fields on reply, and data on reply. Maybe these should be pulled out to a different (non-zero) field
 	DefaultContractMessageDataCost uint64 = 0
@@ -58,9 +58,9 @@ const (
 type GasRegister interface {
 	// NewContractInstanceCosts costs to crate a new contract instance from code
 	NewContractInstanceCosts(pinned bool, msgLen int) sdk.Gas
-	// CompileCosts costs to persist and "compile" a new cht contract
+	// CompileCosts costs to persist and "compile" a new wasm contract
 	CompileCosts(byteLength int) sdk.Gas
-	// InstantiateContractCosts costs when interacting with a cht contract
+	// InstantiateContractCosts costs when interacting with a wasm contract
 	InstantiateContractCosts(pinned bool, msgLen int) sdk.Gas
 	// ReplyCosts costs to to handle a message reply
 	ReplyCosts(pinned bool, reply wasmvmtypes.Reply) sdk.Gas
@@ -74,9 +74,9 @@ type GasRegister interface {
 
 // WasmGasRegisterConfig config type
 type WasmGasRegisterConfig struct {
-	// InstanceCost costs when interacting with a cht contract
+	// InstanceCost costs when interacting with a wasm contract
 	InstanceCost sdk.Gas
-	// CompileCosts costs to persist and "compile" a new cht contract
+	// CompileCosts costs to persist and "compile" a new wasm contract
 	CompileCost sdk.Gas
 	// GasMultiplier is how many cosmwasm gas points = 1 sdk gas point
 	// SDK reference costs can be found here: https://github.com/cosmos/cosmos-sdk/blob/02c6c9fafd58da88550ab4d7d494724a477c8a68/store/types/gas.go#L153-L164
@@ -115,8 +115,8 @@ type WasmGasRegister struct {
 	c WasmGasRegisterConfig
 }
 
-// NewDefaultWasmGasRegister creates instance with default values
-func NewDefaultWasmGasRegister() WasmGasRegister {
+// NewDefaultChtGasRegister creates instance with default values
+func NewDefaultChtGasRegister() WasmGasRegister {
 	return NewWasmGasRegister(DefaultGasRegisterConfig())
 }
 
@@ -135,7 +135,7 @@ func (g WasmGasRegister) NewContractInstanceCosts(pinned bool, msgLen int) store
 	return g.InstantiateContractCosts(pinned, msgLen)
 }
 
-// CompileCosts costs to persist and "compile" a new cht contract
+// CompileCosts costs to persist and "compile" a new wasm contract
 func (g WasmGasRegister) CompileCosts(byteLength int) storetypes.Gas {
 	if byteLength < 0 {
 		panic(sdkerrors.Wrap(types.ErrInvalid, "negative length"))
@@ -143,7 +143,7 @@ func (g WasmGasRegister) CompileCosts(byteLength int) storetypes.Gas {
 	return g.c.CompileCost * uint64(byteLength)
 }
 
-// InstantiateContractCosts costs when interacting with a cht contract
+// InstantiateContractCosts costs when interacting with a wasm contract
 func (g WasmGasRegister) InstantiateContractCosts(pinned bool, msgLen int) sdk.Gas {
 	if msgLen < 0 {
 		panic(sdkerrors.Wrap(types.ErrInvalid, "negative length"))

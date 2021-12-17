@@ -30,7 +30,7 @@ func WithMessageHandler(x Messenger) Option {
 	})
 }
 
-// WithMessageHandlerDecorator is an optional constructor parameter to decorate the cht handler for wasmVM messages.
+// WithMessageHandlerDecorator is an optional constructor parameter to decorate the wasm handler for wasmVM messages.
 // This option should not be combined with Option `WithMessageEncoders` or `WithMessageHandler`
 func WithMessageHandlerDecorator(d func(old Messenger) Messenger) Option {
 	return optsFn(func(k *Keeper) {
@@ -46,7 +46,7 @@ func WithQueryHandler(x WasmVMQueryHandler) Option {
 	})
 }
 
-// WithQueryHandlerDecorator is an optional constructor parameter to decorate the default cht query handler for wasmVM requests.
+// WithQueryHandlerDecorator is an optional constructor parameter to decorate the default wasm query handler for wasmVM requests.
 // This option should not be combined with Option `WithQueryPlugins` or `WithQueryHandler`
 func WithQueryHandlerDecorator(d func(old WasmVMQueryHandler) WasmVMQueryHandler) Option {
 	return optsFn(func(k *Keeper) {
@@ -66,7 +66,7 @@ func WithQueryPlugins(x *QueryPlugins) Option {
 	})
 }
 
-// WithMessageEncoders is an optional constructor parameter to pass custom message encoder to the default cht message handler.
+// WithMessageEncoders is an optional constructor parameter to pass custom message encoder to the default wasm message handler.
 // This option expects the `DefaultMessageHandler` set and should not be combined with Option `WithMessageHandler` or `WithMessageHandlerDecorator`.
 func WithMessageEncoders(x *MessageEncoders) Option {
 	return optsFn(func(k *Keeper) {

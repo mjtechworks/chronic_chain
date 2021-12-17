@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as Long from 'long';
-import { configure, Reader, util, Writer } from 'protobufjs/minimal';
+import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 import { Any } from '../../../../google/protobuf/any';
 import { Plan } from '../../../../cosmos/upgrade/v1beta1/upgrade';
 export const protobufPackage = 'ibc.core.client.v1';

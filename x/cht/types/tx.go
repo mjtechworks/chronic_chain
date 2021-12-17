@@ -9,7 +9,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// RawContractMessage defines a json message that is sent or returned by a cht contract.
+// RawContractMessage defines a json message that is sent or returned by a wasm contract.
 // This type can hold any type of bytes. Until validateBasic is called there should not be
 // any assumptions made that the data is valid syntax or semantic.
 type RawContractMessage []byte
@@ -41,11 +41,11 @@ func (r RawContractMessage) Bytes() []byte {
 	return r
 }
 
-func Route() string {
+func (msg MsgStoreCode) Route() string {
 	return RouterKey
 }
 
-func Type() string {
+func (msg MsgStoreCode) Type() string {
 	return "store-code"
 }
 
@@ -54,7 +54,7 @@ func (msg MsgStoreCode) ValidateBasic() error {
 		return err
 	}
 
-	if err := validateChronicCode(msg.WASMByteCode); err != nil {
+	if err := validateChtCode(msg.WASMByteCode); err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "code bytes %s", err.Error())
 	}
 
@@ -283,7 +283,7 @@ func (msg MsgIBCSend) Route() string {
 }
 
 func (msg MsgIBCSend) Type() string {
-	return "cht-ibc-send"
+	return "wasm-ibc-send"
 }
 
 func (msg MsgIBCSend) ValidateBasic() error {
@@ -303,7 +303,7 @@ func (msg MsgIBCCloseChannel) Route() string {
 }
 
 func (msg MsgIBCCloseChannel) Type() string {
-	return "cht-ibc-close"
+	return "wasm-ibc-close"
 }
 
 func (msg MsgIBCCloseChannel) ValidateBasic() error {

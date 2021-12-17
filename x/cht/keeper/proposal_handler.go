@@ -10,13 +10,13 @@ import (
 	"github.com/ChronicToken/cht/x/cht/types"
 )
 
-// NewWasmProposalHandler creates a new governance Handler for cht proposals
-func NewWasmProposalHandler(k decoratedKeeper, enabledProposalTypes []types.ProposalType) govtypes.Handler {
-	return NewWasmProposalHandlerX(NewGovPermissionKeeper(k), enabledProposalTypes)
+// NewChtProposalHandler creates a new governance Handler for cht proposals
+func NewChtProposalHandler(k decoratedKeeper, enabledProposalTypes []types.ProposalType) govtypes.Handler {
+	return NewChtProposalHandlerX(NewGovPermissionKeeper(k), enabledProposalTypes)
 }
 
-// NewWasmProposalHandlerX creates a new governance Handler for cht proposals
-func NewWasmProposalHandlerX(k types.ContractOpsKeeper, enabledProposalTypes []types.ProposalType) govtypes.Handler {
+// NewChtProposalHandlerX creates a new governance Handler for cht proposals
+func NewChtProposalHandlerX(k types.ContractOpsKeeper, enabledProposalTypes []types.ProposalType) govtypes.Handler {
 	enabledTypes := make(map[string]struct{}, len(enabledProposalTypes))
 	for i := range enabledProposalTypes {
 		enabledTypes[string(enabledProposalTypes[i])] = struct{}{}
@@ -26,7 +26,7 @@ func NewWasmProposalHandlerX(k types.ContractOpsKeeper, enabledProposalTypes []t
 			return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "content must not be empty")
 		}
 		if _, ok := enabledTypes[content.ProposalType()]; !ok {
-			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unsupported cht proposal content type: %q", content.ProposalType())
+			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unsupported chronic proposal content type: %q", content.ProposalType())
 		}
 		switch c := content.(type) {
 		case *types.StoreCodeProposal:
@@ -44,7 +44,7 @@ func NewWasmProposalHandlerX(k types.ContractOpsKeeper, enabledProposalTypes []t
 		case *types.UnpinCodesProposal:
 			return handleUnpinCodesProposal(ctx, k, *c)
 		default:
-			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized cht proposal content type: %T", c)
+			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized chronic proposal content type: %T", c)
 		}
 	}
 }

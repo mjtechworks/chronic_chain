@@ -9,7 +9,7 @@ import (
 	"github.com/ChronicToken/cht/x/cht/types"
 )
 
-// Messenger is an extension point for custom chtd message handling
+// Messenger is an extension point for custom wasmd message handling
 type Messenger interface {
 	// DispatchMsg encodes the wasmVM message and dispatches it.
 	DispatchMsg(ctx sdk.Context, contractAddr sdk.AccAddress, contractIBCPortID string, msg wasmvmtypes.CosmosMsg) (events []sdk.Event, data [][]byte, err error)

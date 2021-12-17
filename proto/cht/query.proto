@@ -5,59 +5,58 @@ import "gogoproto/gogo.proto";
 import "cht/types.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-// this line is used by starport scaffolding # 1
 
 option go_package = "github.com/ChronicToken/cht/x/cht/types";
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 
-// Query defines the gRPC querier service.
+// Query provides defines the gRPC querier service
 service Query {
   // ContractInfo gets the contract meta data
   rpc ContractInfo(QueryContractInfoRequest)
       returns (QueryContractInfoResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/contract/{address}";
+    option (google.api.http).get = "/cht/contract/{address}";
   }
   // ContractHistory gets the contract code history
   rpc ContractHistory(QueryContractHistoryRequest)
       returns (QueryContractHistoryResponse) {
     option (google.api.http).get =
-        "/cosmwasm/cht/v1/contract/{address}/history";
+        "/cht/contract/{address}/history";
   }
   // ContractsByCode lists all smart contracts for a code id
   rpc ContractsByCode(QueryContractsByCodeRequest)
       returns (QueryContractsByCodeResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/code/{code_id}/contracts";
+    option (google.api.http).get = "/cht/code/{code_id}/contracts";
   }
   // AllContractState gets all raw store data for a single contract
   rpc AllContractState(QueryAllContractStateRequest)
       returns (QueryAllContractStateResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/contract/{address}/state";
+    option (google.api.http).get = "/cht/contract/{address}/state";
   }
   // RawContractState gets single key from the raw store data of a contract
   rpc RawContractState(QueryRawContractStateRequest)
       returns (QueryRawContractStateResponse) {
     option (google.api.http).get =
-        "/cht/v1/contract/{address}/raw/{query_data}";
+        "/cht/contract/{address}/raw/{query_data}";
   }
   // SmartContractState get smart query result from the contract
   rpc SmartContractState(QuerySmartContractStateRequest)
       returns (QuerySmartContractStateResponse) {
     option (google.api.http).get =
-        "/cht/v1/contract/{address}/smart/{query_data}";
+        "/cht/contract/{address}/smart/{query_data}";
   }
   // Code gets the binary code and metadata for a singe wasm code
   rpc Code(QueryCodeRequest) returns (QueryCodeResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/code/{code_id}";
+    option (google.api.http).get = "/cht/code/{code_id}";
   }
   // Codes gets the metadata for all stored wasm codes
   rpc Codes(QueryCodesRequest) returns (QueryCodesResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/code";
+    option (google.api.http).get = "/cht/code";
   }
 
   // PinnedCodes gets the pinned code ids
   rpc PinnedCodes(QueryPinnedCodesRequest) returns (QueryPinnedCodesResponse) {
-    option (google.api.http).get = "/cosmwasm/cht/v1/codes/pinned";
+    option (google.api.http).get = "/cht/codes/pinned";
   }
 }
 

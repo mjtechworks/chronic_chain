@@ -17,7 +17,7 @@ import (
 func ProposalStoreCodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "cht-store [cht file] --title [text] --description [text] --run-as [address]",
-		Short: "Submit a cht binary proposal",
+		Short: "Submit a chronic binary proposal",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -90,7 +90,7 @@ func ProposalStoreCodeCmd() *cobra.Command {
 func ProposalInstantiateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "instantiate-contract [code_id_int64] [json_encoded_init_args] --label [text] --title [text] --description [text] --run-as [address] --admin [address,optional] --amount [coins,optional]",
-		Short: "Submit an instantiate cht contract proposal",
+		Short: "Submit an instantiate chronic contract proposal",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -167,7 +167,7 @@ func ProposalInstantiateContractCmd() *cobra.Command {
 func ProposalMigrateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "migrate-contract [contract_addr_bech32] [new_code_id_int64] [json_encoded_migration_args]",
-		Short: "Submit a migrate cht contract to a new code version proposal",
+		Short: "Submit a migrate chronic contract to a new code version proposal",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

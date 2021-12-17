@@ -91,16 +91,11 @@ func NewKeeper(
 	router sdk.Router,
 	queryRouter GRPCQueryRouter,
 	homeDir string,
-	chtConfig types.ChronicConfig,
+	chtConfig types.ChtConfig,
 	supportedFeatures string,
 	opts ...Option,
 ) Keeper {
-	wasmer, err := wasmvm.NewVM(
-		filepath.Join(homeDir, "cht"),
-		supportedFeatures,
-		contractMemoryLimit,
-		chtConfig.ContractDebugMode,
-		chtConfig.MemoryCacheSize)
+	wasmer, err := wasmvm.NewVM(filepath.Join(homeDir, "cht"), supportedFeatures, contractMemoryLimit, chtConfig.ContractDebugMode, chtConfig.MemoryCacheSize)
 	if err != nil {
 		panic(err)
 	}
@@ -120,7 +115,7 @@ func NewKeeper(
 		messenger:        NewDefaultMessageHandler(router, channelKeeper, capabilityKeeper, bankKeeper, cdc, portSource),
 		queryGasLimit:    chtConfig.SmartQueryGasLimit,
 		paramSpace:       paramSpace,
-		gasRegister:      NewDefaultWasmGasRegister(),
+		gasRegister:      NewDefaultChtGasRegister(),
 	}
 	keeper.wasmVMQueryHandler = DefaultQueryPlugins(bankKeeper, stakingKeeper, distKeeper, channelKeeper, queryRouter, keeper)
 	for _, o := range opts {
@@ -143,13 +138,13 @@ func (k Keeper) getInstantiateAccessConfig(ctx sdk.Context) types.AccessType {
 	return a
 }
 
-func (k Keeper) GetMaxWasmCodeSize(ctx sdk.Context) uint64 {
+func (k Keeper) GetMaxChtCodeSize(ctx sdk.Context) uint64 {
 	var a uint64
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMaxWasmCodeSize, &a)
 	return a
 }
 
-// GetParams returns the total set of cht parameters.
+// GetParams returns the total set of wasm parameters.
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 	var params types.Params
 	k.paramSpace.GetParamSet(ctx, &params)
@@ -160,7 +155,7 @@ func (k Keeper) setParams(ctx sdk.Context, ps types.Params) {
 	k.paramSpace.SetParamSet(ctx, &ps)
 }
 
-func (k Keeper) create(ctx sdk.Context, creator sdk.AccAddress, wasmCode []byte, instantiateAccess *types.AccessConfig, authZ AuthorizationPolicy) (codeID uint64, err error) {
+func (k Keeper) create(ctx sdk.Context, creator sdk.AccAddress, chtCode []byte, instantiateAccess *types.AccessConfig, authZ AuthorizationPolicy) (codeID uint64, err error) {
 	if creator == nil {
 		return 0, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "cannot be nil")
 	}
@@ -168,13 +163,13 @@ func (k Keeper) create(ctx sdk.Context, creator sdk.AccAddress, wasmCode []byte,
 	if !authZ.CanCreateCode(k.getUploadAccessConfig(ctx), creator) {
 		return 0, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "can not create code")
 	}
-	wasmCode, err = uncompress(wasmCode, k.GetMaxWasmCodeSize(ctx))
+	chtCode, err = uncompress(chtCode, k.GetMaxChtCodeSize(ctx))
 	if err != nil {
 		return 0, sdkerrors.Wrap(types.ErrCreateFailed, err.Error())
 	}
-	ctx.GasMeter().ConsumeGas(k.gasRegister.CompileCosts(len(wasmCode)), "Compiling WASM Bytecode")
+	ctx.GasMeter().ConsumeGas(k.gasRegister.CompileCosts(len(chtCode)), "Compiling WASM Bytecode")
 
-	checksum, err := k.wasmVM.Create(wasmCode)
+	checksum, err := k.wasmVM.Create(chtCode)
 	if err != nil {
 		return 0, sdkerrors.Wrap(types.ErrCreateFailed, err.Error())
 	}
@@ -210,7 +205,7 @@ func (k Keeper) storeCodeInfo(ctx sdk.Context, codeID uint64, codeInfo types.Cod
 }
 
 func (k Keeper) importCode(ctx sdk.Context, codeID uint64, codeInfo types.CodeInfo, wasmCode []byte) error {
-	wasmCode, err := uncompress(wasmCode, k.GetMaxWasmCodeSize(ctx))
+	wasmCode, err := uncompress(wasmCode, k.GetMaxChtCodeSize(ctx))
 	if err != nil {
 		return sdkerrors.Wrap(types.ErrCreateFailed, err.Error())
 	}
@@ -233,7 +228,7 @@ func (k Keeper) importCode(ctx sdk.Context, codeID uint64, codeInfo types.CodeIn
 }
 
 func (k Keeper) instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.AccAddress, initMsg []byte, label string, deposit sdk.Coins, authZ AuthorizationPolicy) (sdk.AccAddress, []byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "instantiate")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "instantiate")
 
 	instanceCosts := k.gasRegister.NewContractInstanceCosts(k.IsPinnedCode(ctx, codeID), len(initMsg))
 	ctx.GasMeter().ConsumeGas(instanceCosts, "Loading CosmWasm module: instantiate")
@@ -283,7 +278,7 @@ func (k Keeper) instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.A
 	// prepare querier
 	querier := k.newQueryHandler(ctx, contractAddress)
 
-	// instantiate cht contract
+	// instantiate wasm contract
 	gas := k.runtimeGasForContract(ctx)
 	res, gasUsed, err := k.wasmVM.Instantiate(codeInfo.CodeHash, env, info, initMsg, prefixStore, cosmwasmAPI, querier, k.gasMeter(ctx), gas, costJSONDeserialization)
 	k.consumeRuntimeGas(ctx, gasUsed)
@@ -331,7 +326,7 @@ func (k Keeper) instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.A
 
 // Execute executes the contract instance
 func (k Keeper) execute(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, msg []byte, coins sdk.Coins) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "execute")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "execute")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddress)
 	if err != nil {
 		return nil, err
@@ -373,7 +368,7 @@ func (k Keeper) execute(ctx sdk.Context, contractAddress sdk.AccAddress, caller 
 }
 
 func (k Keeper) migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, newCodeID uint64, msg []byte, authZ AuthorizationPolicy) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "migrate")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "migrate")
 	migrateSetupCosts := k.gasRegister.InstantiateContractCosts(k.IsPinnedCode(ctx, newCodeID), len(msg))
 	ctx.GasMeter().ConsumeGas(migrateSetupCosts, "Loading CosmWasm module: migrate")
 
@@ -444,9 +439,9 @@ func (k Keeper) migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller 
 
 // Sudo allows priviledged access to a contract. This can never be called by governance or external tx, but only by
 // another native Go module directly. Thus, the keeper doesn't place any access controls on it, that is the
-// responsibility or the app developer (who passes the cht.Keeper in app.go)
+// responsibility or the app developer (who passes the wasm.Keeper in app.go)
 func (k Keeper) Sudo(ctx sdk.Context, contractAddress sdk.AccAddress, msg []byte) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "sudo")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "sudo")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddress)
 	if err != nil {
 		return nil, err
@@ -592,7 +587,7 @@ func (k Keeper) getLastContractHistoryEntry(ctx sdk.Context, contractAddr sdk.Ac
 
 // QuerySmart queries the smart contract itself.
 func (k Keeper) QuerySmart(ctx sdk.Context, contractAddr sdk.AccAddress, req []byte) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "query-smart")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "query-smart")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
 		return nil, err
@@ -615,7 +610,7 @@ func (k Keeper) QuerySmart(ctx sdk.Context, contractAddr sdk.AccAddress, req []b
 
 // QueryRaw returns the contract's state for give key. Returns `nil` when key is `nil`.
 func (k Keeper) QueryRaw(ctx sdk.Context, contractAddress sdk.AccAddress, key []byte) []byte {
-	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "query-raw")
+	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "query-raw")
 	if key == nil {
 		return nil
 	}
@@ -741,7 +736,7 @@ func (k Keeper) GetByteCode(ctx sdk.Context, codeID uint64) ([]byte, error) {
 	return k.wasmVM.GetCode(codeInfo.CodeHash)
 }
 
-// PinCode pins the cht contract in wasmvm cache
+// PinCode pins the wasm contract in wasmvm cache
 func (k Keeper) pinCode(ctx sdk.Context, codeID uint64) error {
 	codeInfo := k.GetCodeInfo(ctx, codeID)
 	if codeInfo == nil {
@@ -762,7 +757,7 @@ func (k Keeper) pinCode(ctx sdk.Context, codeID uint64) error {
 	return nil
 }
 
-// UnpinCode removes the cht contract from wasmvm cache
+// UnpinCode removes the wasm contract from wasmvm cache
 func (k Keeper) unpinCode(ctx sdk.Context, codeID uint64) error {
 	codeInfo := k.GetCodeInfo(ctx, codeID)
 	if codeInfo == nil {
@@ -860,7 +855,7 @@ func (k Keeper) runtimeGasForContract(ctx sdk.Context) uint64 {
 
 func (k Keeper) consumeRuntimeGas(ctx sdk.Context, gas uint64) {
 	consumed := k.gasRegister.FromWasmVMGas(gas)
-	ctx.GasMeter().ConsumeGas(consumed, "cht contract")
+	ctx.GasMeter().ConsumeGas(consumed, "wasm contract")
 	// throw OutOfGas error if we ran out (got exactly to zero due to better limit enforcing)
 	if ctx.GasMeter().IsOutOfGas() {
 		panic(sdk.ErrorOutOfGas{Descriptor: "Wasmer function execution"})
@@ -879,7 +874,7 @@ func BuildContractAddress(codeID, instanceID uint64) sdk.AccAddress {
 	binary.BigEndian.PutUint64(contractID[:8], codeID)
 	binary.BigEndian.PutUint64(contractID[8:], instanceID)
 	// 20 bytes to work with Cosmos SDK 0.42 (0.43 pushes for 32 bytes)
-	// TODO: remove truncate if we update to 0.43 before chtd 1.0
+	// TODO: remove truncate if we update to 0.43 before wasmd 1.0
 	return Module(types.ModuleName, contractID)[:20]
 }
 
@@ -1024,9 +1019,9 @@ func NewBankCoinTransferrer(keeper types.BankKeeper) BankCoinTransferrer {
 func (c BankCoinTransferrer) TransferCoins(parentCtx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error {
 	em := sdk.NewEventManager()
 	ctx := parentCtx.WithEventManager(em)
-	if err := c.keeper.IsSendEnabledCoins(ctx, amt...); err != nil {
-		return err
-	}
+	//if err := c.keeper.SendEnabledCoins(ctx, amt...); err != nil {
+	//	return err
+	//}
 	if c.keeper.BlockedAddr(fromAddr) {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "blocked address can not be used")
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/ChronicToken/cht/x/cht/types"
 )
@@ -15,17 +15,15 @@ type msgServer struct {
 	keeper types.ContractOpsKeeper
 }
 
-// NewMsgServerImpl returns an implementation of the MsgServer interface
-// for the provided Keeper.
-func NewMsgServerImpl(keeper types.ContractOpsKeeper) types.MsgServer {
-	return &msgServer{keeper: keeper}
+func NewMsgServerImpl(k types.ContractOpsKeeper) types.MsgServer {
+	return &msgServer{keeper: k}
 }
 
 func (m msgServer) StoreCode(goCtx context.Context, msg *types.MsgStoreCode) (*types.MsgStoreCodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
@@ -49,12 +47,12 @@ func (m msgServer) InstantiateContract(goCtx context.Context, msg *types.MsgInst
 
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 	var adminAddr sdk.AccAddress
 	if msg.Admin != "" {
 		if adminAddr, err = sdk.AccAddressFromBech32(msg.Admin); err != nil {
-			return nil, sdkErrors.Wrap(err, "admin")
+			return nil, sdkerrors.Wrap(err, "admin")
 		}
 	}
 
@@ -79,11 +77,11 @@ func (m msgServer) ExecuteContract(goCtx context.Context, msg *types.MsgExecuteC
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 	contractAddr, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "contract")
+		return nil, sdkerrors.Wrap(err, "contract")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
@@ -106,11 +104,11 @@ func (m msgServer) MigrateContract(goCtx context.Context, msg *types.MsgMigrateC
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 	contractAddr, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "contract")
+		return nil, sdkerrors.Wrap(err, "contract")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
@@ -133,15 +131,15 @@ func (m msgServer) UpdateAdmin(goCtx context.Context, msg *types.MsgUpdateAdmin)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 	contractAddr, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "contract")
+		return nil, sdkerrors.Wrap(err, "contract")
 	}
 	newAdminAddr, err := sdk.AccAddressFromBech32(msg.NewAdmin)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "new admin")
+		return nil, sdkerrors.Wrap(err, "new admin")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
@@ -161,11 +159,11 @@ func (m msgServer) ClearAdmin(goCtx context.Context, msg *types.MsgClearAdmin) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "sender")
+		return nil, sdkerrors.Wrap(err, "sender")
 	}
 	contractAddr, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		return nil, sdkErrors.Wrap(err, "contract")
+		return nil, sdkerrors.Wrap(err, "contract")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(

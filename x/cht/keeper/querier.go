@@ -282,7 +282,7 @@ func queryCode(ctx sdk.Context, codeID uint64, keeper types.ViewKeeper) (*types.
 
 	code, err := keeper.GetByteCode(ctx, codeID)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "loading cht code")
+		return nil, sdkerrors.Wrap(err, "loading wasm code")
 	}
 
 	return &types.QueryCodeResponse{CodeInfoResponse: &info, Data: code}, nil

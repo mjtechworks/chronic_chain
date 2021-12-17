@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	// ModuleName is the name of the contract module
+	// ModuleName defines the module name
 	ModuleName = "cht"
 
 	// StoreKey is the string store representation
@@ -15,14 +15,11 @@ const (
 	// TStoreKey is the string transient store representation
 	TStoreKey = "transient_" + ModuleName
 
-	// QuerierRoute is the querier route for the cht module
+	// QuerierRoute is the querier route for the Cht module
 	QuerierRoute = ModuleName
 
-	// RouterKey is the msg router key for the cht module
+	// RouterKey is the msg router key for the Cht module
 	RouterKey = ModuleName
-
-	// MemStoreKey defines the in-memory store key
-	MemStoreKey = "mem_cht"
 )
 
 // nolint
@@ -40,18 +37,18 @@ var (
 	KeyLastInstanceID = append(SequenceKeyPrefix, []byte("lastContractId")...)
 )
 
-// GetCodeKey constructs the key for retreiving the ID for the WASM code
+// GetCodeKey constructs the key for retreiving the ID for the Cht code
 func GetCodeKey(codeID uint64) []byte {
 	contractIDBz := sdk.Uint64ToBigEndian(codeID)
 	return append(CodeKeyPrefix, contractIDBz...)
 }
 
-// GetContractAddressKey returns the key for the WASM contract instance
+// GetContractAddressKey returns the key for the Chronic contract instance
 func GetContractAddressKey(addr sdk.AccAddress) []byte {
 	return append(ContractKeyPrefix, addr...)
 }
 
-// GetContractStorePrefix returns the store prefix for the WASM contract instance
+// GetContractStorePrefix returns the store prefix for the Chronic contract instance
 func GetContractStorePrefix(addr sdk.AccAddress) []byte {
 	return append(ContractStorePrefix, addr...)
 }

@@ -1,20 +1,20 @@
 accounts:
-  - name: alex
+  - name: alice
     coins: ["210000000tcht", "200000000cgas"]
-  - name: walt
+  - name: bob
     coins: ["10000tcht", "100000000cgas"]
 validator:
-  name: alex
+  name: alice
   staked: "1000000tcht"
 client:
-  vuex:
-    path: "vue/src/store"
   openapi:
     path: "docs/static/openapi.yml"
+  vuex:
+    path: "vue/src/store"
 faucet:
-  name: walt
-  coins: ["5tcht", "100000cgas"]
-  coins_max: ["10000tcht", "10000cgas"]
+  name: bob
+  coins: [ "5tcht", "100000cgas" ]
+  coins_max: [ "10000tcht", "10000cgas" ]
 genesis:
   chain_id: "modified-grapes"
   app_state:

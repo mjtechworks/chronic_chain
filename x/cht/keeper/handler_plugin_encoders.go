@@ -7,14 +7,14 @@ import (
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	distributionTypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	govTypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	stakingTypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	ibcTransferTypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
-	ibcClientTypes "github.com/cosmos/ibc-go/modules/core/02-client/types"
-	channelTypes "github.com/cosmos/ibc-go/modules/core/04-channel/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
+	ibcclienttypes "github.com/cosmos/ibc-go/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/modules/core/04-channel/types"
 
 	"github.com/ChronicToken/cht/x/cht/types"
 )
@@ -101,12 +101,12 @@ func (e MessageEncoders) Encode(ctx sdk.Context, contractAddr sdk.AccAddress, co
 	case msg.Gov != nil:
 		return EncodeGovMsg(contractAddr, msg.Gov)
 	}
-	return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "unknown variant of Wasm")
+	return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "unknown variant of Wasm")
 }
 
 func EncodeBankMsg(sender sdk.AccAddress, msg *wasmvmtypes.BankMsg) ([]sdk.Msg, error) {
 	if msg.Send == nil {
-		return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "unknown variant of Bank")
+		return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "unknown variant of Bank")
 	}
 	if len(msg.Send.Amount) == 0 {
 		return nil, nil
@@ -115,7 +115,7 @@ func EncodeBankMsg(sender sdk.AccAddress, msg *wasmvmtypes.BankMsg) ([]sdk.Msg, 
 	if err != nil {
 		return nil, err
 	}
-	sdkMsg := bankTypes.MsgSend{
+	sdkMsg := banktypes.MsgSend{
 		FromAddress: sender.String(),
 		ToAddress:   msg.Send.ToAddress,
 		Amount:      toSend,
@@ -124,25 +124,25 @@ func EncodeBankMsg(sender sdk.AccAddress, msg *wasmvmtypes.BankMsg) ([]sdk.Msg, 
 }
 
 func NoCustomMsg(sender sdk.AccAddress, msg json.RawMessage) ([]sdk.Msg, error) {
-	return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "custom variant not supported")
+	return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "custom variant not supported")
 }
 
 func EncodeDistributionMsg(sender sdk.AccAddress, msg *wasmvmtypes.DistributionMsg) ([]sdk.Msg, error) {
 	switch {
 	case msg.SetWithdrawAddress != nil:
-		setMsg := distributionTypes.MsgSetWithdrawAddress{
+		setMsg := distributiontypes.MsgSetWithdrawAddress{
 			DelegatorAddress: sender.String(),
 			WithdrawAddress:  msg.SetWithdrawAddress.Address,
 		}
 		return []sdk.Msg{&setMsg}, nil
 	case msg.WithdrawDelegatorReward != nil:
-		withdrawMsg := distributionTypes.MsgWithdrawDelegatorReward{
+		withdrawMsg := distributiontypes.MsgWithdrawDelegatorReward{
 			DelegatorAddress: sender.String(),
 			ValidatorAddress: msg.WithdrawDelegatorReward.Validator,
 		}
 		return []sdk.Msg{&withdrawMsg}, nil
 	default:
-		return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "unknown variant of Distribution")
+		return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "unknown variant of Distribution")
 	}
 }
 
@@ -153,7 +153,7 @@ func EncodeStakingMsg(sender sdk.AccAddress, msg *wasmvmtypes.StakingMsg) ([]sdk
 		if err != nil {
 			return nil, err
 		}
-		sdkMsg := stakingTypes.MsgDelegate{
+		sdkMsg := stakingtypes.MsgDelegate{
 			DelegatorAddress: sender.String(),
 			ValidatorAddress: msg.Delegate.Validator,
 			Amount:           coin,
@@ -165,7 +165,7 @@ func EncodeStakingMsg(sender sdk.AccAddress, msg *wasmvmtypes.StakingMsg) ([]sdk
 		if err != nil {
 			return nil, err
 		}
-		sdkMsg := stakingTypes.MsgBeginRedelegate{
+		sdkMsg := stakingtypes.MsgBeginRedelegate{
 			DelegatorAddress:    sender.String(),
 			ValidatorSrcAddress: msg.Redelegate.SrcValidator,
 			ValidatorDstAddress: msg.Redelegate.DstValidator,
@@ -177,14 +177,14 @@ func EncodeStakingMsg(sender sdk.AccAddress, msg *wasmvmtypes.StakingMsg) ([]sdk
 		if err != nil {
 			return nil, err
 		}
-		sdkMsg := stakingTypes.MsgUndelegate{
+		sdkMsg := stakingtypes.MsgUndelegate{
 			DelegatorAddress: sender.String(),
 			ValidatorAddress: msg.Undelegate.Validator,
 			Amount:           coin,
 		}
 		return []sdk.Msg{&sdkMsg}, nil
 	default:
-		return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "unknown variant of Staking")
+		return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "unknown variant of Staking")
 	}
 }
 
@@ -196,10 +196,10 @@ func EncodeStargateMsg(unpacker codectypes.AnyUnpacker) StargateEncoder {
 		}
 		var sdkMsg sdk.Msg
 		if err := unpacker.UnpackAny(&any, &sdkMsg); err != nil {
-			return nil, sdkErrors.Wrap(types.ErrInvalidMsg, fmt.Sprintf("Cannot unpack proto message with type URL: %s", msg.TypeURL))
+			return nil, sdkerrors.Wrap(types.ErrInvalidMsg, fmt.Sprintf("Cannot unpack proto message with type URL: %s", msg.TypeURL))
 		}
 		if err := codectypes.UnpackInterfaces(sdkMsg, unpacker); err != nil {
-			return nil, sdkErrors.Wrap(types.ErrInvalidMsg, fmt.Sprintf("UnpackInterfaces inside msg: %s", err))
+			return nil, sdkerrors.Wrap(types.ErrInvalidMsg, fmt.Sprintf("UnpackInterfaces inside msg: %s", err))
 		}
 		return []sdk.Msg{sdkMsg}, nil
 	}
@@ -257,7 +257,7 @@ func EncodeWasmMsg(sender sdk.AccAddress, msg *wasmvmtypes.WasmMsg) ([]sdk.Msg, 
 		}
 		return []sdk.Msg{&sdkMsg}, nil
 	default:
-		return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "unknown variant of Wasm")
+		return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "unknown variant of Wasm")
 	}
 }
 
@@ -265,7 +265,7 @@ func EncodeIBCMsg(portSource types.ICS20TransferPortSource) func(ctx sdk.Context
 	return func(ctx sdk.Context, sender sdk.AccAddress, contractIBCPortID string, msg *wasmvmtypes.IBCMsg) ([]sdk.Msg, error) {
 		switch {
 		case msg.CloseChannel != nil:
-			return []sdk.Msg{&channelTypes.MsgChannelCloseInit{
+			return []sdk.Msg{&channeltypes.MsgChannelCloseInit{
 				PortId:    PortIDForContract(sender),
 				ChannelId: msg.CloseChannel.ChannelID,
 				Signer:    sender.String(),
@@ -273,9 +273,9 @@ func EncodeIBCMsg(portSource types.ICS20TransferPortSource) func(ctx sdk.Context
 		case msg.Transfer != nil:
 			amount, err := convertWasmCoinToSdkCoin(msg.Transfer.Amount)
 			if err != nil {
-				return nil, sdkErrors.Wrap(err, "amount")
+				return nil, sdkerrors.Wrap(err, "amount")
 			}
-			msg := &ibcTransferTypes.MsgTransfer{
+			msg := &ibctransfertypes.MsgTransfer{
 				SourcePort:       portSource.GetPort(ctx),
 				SourceChannel:    msg.Transfer.ChannelID,
 				Token:            amount,
@@ -286,24 +286,24 @@ func EncodeIBCMsg(portSource types.ICS20TransferPortSource) func(ctx sdk.Context
 			}
 			return []sdk.Msg{msg}, nil
 		default:
-			return nil, sdkErrors.Wrap(types.ErrUnknownMsg, "Unknown variant of IBC")
+			return nil, sdkerrors.Wrap(types.ErrUnknownMsg, "Unknown variant of IBC")
 		}
 	}
 }
 
 func EncodeGovMsg(sender sdk.AccAddress, msg *wasmvmtypes.GovMsg) ([]sdk.Msg, error) {
-	var option govTypes.VoteOption
+	var option govtypes.VoteOption
 	switch msg.Vote.Vote {
 	case wasmvmtypes.Yes:
-		option = govTypes.OptionYes
+		option = govtypes.OptionYes
 	case wasmvmtypes.No:
-		option = govTypes.OptionNo
+		option = govtypes.OptionNo
 	case wasmvmtypes.NoWithVeto:
-		option = govTypes.OptionNoWithVeto
+		option = govtypes.OptionNoWithVeto
 	case wasmvmtypes.Abstain:
-		option = govTypes.OptionAbstain
+		option = govtypes.OptionAbstain
 	}
-	vote := &govTypes.MsgVote{
+	vote := &govtypes.MsgVote{
 		ProposalId: msg.Vote.ProposalId,
 		Voter:      sender.String(),
 		Option:     option,
@@ -311,11 +311,11 @@ func EncodeGovMsg(sender sdk.AccAddress, msg *wasmvmtypes.GovMsg) ([]sdk.Msg, er
 	return []sdk.Msg{vote}, nil
 }
 
-func convertWasmIBCTimeoutHeightToCosmosHeight(ibcTimeoutBlock *wasmvmtypes.IBCTimeoutBlock) ibcClientTypes.Height {
+func convertWasmIBCTimeoutHeightToCosmosHeight(ibcTimeoutBlock *wasmvmtypes.IBCTimeoutBlock) ibcclienttypes.Height {
 	if ibcTimeoutBlock == nil {
-		return ibcClientTypes.NewHeight(0, 0)
+		return ibcclienttypes.NewHeight(0, 0)
 	}
-	return ibcClientTypes.NewHeight(ibcTimeoutBlock.Revision, ibcTimeoutBlock.Height)
+	return ibcclienttypes.NewHeight(ibcTimeoutBlock.Revision, ibcTimeoutBlock.Height)
 }
 
 func convertWasmCoinsToSdkCoins(coins []wasmvmtypes.Coin) (sdk.Coins, error) {
@@ -333,7 +333,7 @@ func convertWasmCoinsToSdkCoins(coins []wasmvmtypes.Coin) (sdk.Coins, error) {
 func convertWasmCoinToSdkCoin(coin wasmvmtypes.Coin) (sdk.Coin, error) {
 	amount, ok := sdk.NewIntFromString(coin.Amount)
 	if !ok {
-		return sdk.Coin{}, sdkErrors.Wrap(sdkErrors.ErrInvalidCoins, coin.Amount+coin.Denom)
+		return sdk.Coin{}, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, coin.Amount+coin.Denom)
 	}
 	r := sdk.Coin{
 		Denom:  coin.Denom,

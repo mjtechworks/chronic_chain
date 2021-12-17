@@ -10,14 +10,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
 
-	wasmUtils "github.com/ChronicToken/cht/x/cht/client/utils"
+	"github.com/ChronicToken/cht/x/cht/client/utils"
 	"github.com/ChronicToken/cht/x/cht/types"
 )
 
 func registerTxRoutes(cliCtx client.Context, r *mux.Router) {
-	r.HandleFunc("/cht/code", storeCodeHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc("/cht/code/{codeId}", instantiateContractHandlerFn(cliCtx)).Methods("POST")
-	r.HandleFunc("/cht/contract/{contractAddr}", executeContractHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc("/wasm/code", storeCodeHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc("/wasm/code/{codeId}", instantiateContractHandlerFn(cliCtx)).Methods("POST")
+	r.HandleFunc("/wasm/contract/{contractAddr}", executeContractHandlerFn(cliCtx)).Methods("POST")
 }
 
 type storeCodeReq struct {
@@ -52,24 +52,24 @@ func storeCodeHandlerFn(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		var err error
-		wasm := req.WasmBytes
+		resp := req.WasmBytes
 
-		// gzip the cht file
-		if wasmUtils.IsWasm(wasm) {
-			wasm, err = wasmUtils.GzipIt(wasm)
+		// gzip the wasm file
+		if utils.IsCht(resp) {
+			resp, err = utils.GzipIt(resp)
 			if err != nil {
 				rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 				return
 			}
-		} else if !wasmUtils.IsGzip(wasm) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "Invalid input file, use cht binary or zip")
+		} else if !utils.IsGzip(resp) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Invalid input file, use chronic binary or zip")
 			return
 		}
 
 		// build and sign the transaction, then broadcast to Tendermint
 		msg := types.MsgStoreCode{
 			Sender:       req.BaseReq.From,
-			WASMByteCode: wasm,
+			WASMByteCode: resp,
 		}
 
 		if err := msg.ValidateBasic(); err != nil {

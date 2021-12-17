@@ -1,5 +1,13 @@
 /* eslint-disable */
 /* tslint:disable */
+/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
+ * ##                                                           ##
+ * ## AUTHOR: acacode                                           ##
+ * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
+ * ---------------------------------------------------------------
+ */
 export var ContentType;
 (function (ContentType) {
     ContentType["Json"] = "application/json";
@@ -18,6 +26,9 @@ export class HttpClient {
             redirect: "follow",
             referrerPolicy: "no-referrer",
         };
+        this.setSecurityData = (data) => {
+            this.securityData = data;
+        };
         this.contentFormatters = {
             [ContentType.Json]: (input) => input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
             [ContentType.FormData]: (input) => Object.keys(input || {}).reduce((data, key) => {
@@ -26,8 +37,17 @@ export class HttpClient {
             }, new FormData()),
             [ContentType.UrlEncoded]: (input) => this.toQueryString(input),
         };
-        this.setSecurityData = (data) => {
-            this.securityData = data;
+        this.createAbortSignal = (cancelToken) => {
+            if (this.abortControllers.has(cancelToken)) {
+                const abortController = this.abortControllers.get(cancelToken);
+                if (abortController) {
+                    return abortController.signal;
+                }
+                return void 0;
+            }
+            const abortController = new AbortController();
+            this.abortControllers.set(cancelToken, abortController);
+            return abortController.signal;
         };
         this.abortRequest = (cancelToken) => {
             const abortController = this.abortControllers.get(cancelToken);
@@ -75,19 +95,13 @@ export class HttpClient {
                 return data;
             });
         };
-        this.createAbortSignal = (cancelToken) => {
-            if (this.abortControllers.has(cancelToken)) {
-                const abortController = this.abortControllers.get(cancelToken);
-                if (abortController) {
-                    return abortController.signal;
-                }
-                return void 0;
-            }
-            const abortController = new AbortController();
-            this.abortControllers.set(cancelToken, abortController);
-            return abortController.signal;
-        };
         Object.assign(this, apiConfig);
+    }
+    addQueryParam(query, key) {
+        const value = query[key];
+        return (encodeURIComponent(key) +
+            "=" +
+            encodeURIComponent(Array.isArray(value) ? value.join(",") : typeof value === "number" ? value : `${value}`));
     }
     toQueryString(rawQuery) {
         const query = rawQuery || {};
@@ -101,12 +115,6 @@ export class HttpClient {
     addQueryParams(rawQuery) {
         const queryString = this.toQueryString(rawQuery);
         return queryString ? `?${queryString}` : "";
-    }
-    addQueryParam(query, key) {
-        const value = query[key];
-        return (encodeURIComponent(key) +
-            "=" +
-            encodeURIComponent(Array.isArray(value) ? value.join(",") : typeof value === "number" ? value : `${value}`));
     }
     mergeRequestParams(params1, params2) {
         return {

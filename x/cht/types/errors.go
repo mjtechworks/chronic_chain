@@ -1,12 +1,10 @@
 package types
 
-// DONTCOVER
-
 import (
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// Codes for cht contract errors
+// x/cht module sentinel errors
 var (
 	DefaultCodespace = ModuleName
 

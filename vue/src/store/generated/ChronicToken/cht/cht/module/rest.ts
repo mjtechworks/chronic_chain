@@ -610,41 +610,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryRawContractState
-   * @summary RawContractState gets single key from the raw store data of a contract
-   * @request GET:/cht/v1/contract/{address}/raw/{queryData}
-   */
-  queryRawContractState = (address: string, queryData: string, params: RequestParams = {}) =>
-    this.request<ChtQueryRawContractStateResponse, RpcStatus>({
-      path: `/cht/v1/contract/${address}/raw/${queryData}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QuerySmartContractState
-   * @summary SmartContractState get smart query result from the contract
-   * @request GET:/cht/v1/contract/{address}/smart/{queryData}
-   */
-  querySmartContractState = (address: string, queryData: string, params: RequestParams = {}) =>
-    this.request<ChtQuerySmartContractStateResponse, RpcStatus>({
-      path: `/cht/v1/contract/${address}/smart/${queryData}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryCodes
    * @summary Codes gets the metadata for all stored wasm codes
-   * @request GET:/cosmwasm/cht/v1/code
+   * @request GET:/cht/code
    */
   queryCodes = (
     query?: {
@@ -657,7 +625,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<ChtQueryCodesResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/code`,
+      path: `/cht/code`,
       method: "GET",
       query: query,
       format: "json",
@@ -670,11 +638,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryCode
    * @summary Code gets the binary code and metadata for a singe wasm code
-   * @request GET:/cosmwasm/cht/v1/code/{codeId}
+   * @request GET:/cht/code/{codeId}
    */
   queryCode = (codeId: string, params: RequestParams = {}) =>
     this.request<ChtQueryCodeResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/code/${codeId}`,
+      path: `/cht/code/${codeId}`,
       method: "GET",
       format: "json",
       ...params,
@@ -686,7 +654,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryContractsByCode
    * @summary ContractsByCode lists all smart contracts for a code id
-   * @request GET:/cosmwasm/cht/v1/code/{codeId}/contracts
+   * @request GET:/cht/code/{codeId}/contracts
    */
   queryContractsByCode = (
     codeId: string,
@@ -700,7 +668,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<ChtQueryContractsByCodeResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/code/${codeId}/contracts`,
+      path: `/cht/code/${codeId}/contracts`,
       method: "GET",
       query: query,
       format: "json",
@@ -713,7 +681,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryPinnedCodes
    * @summary PinnedCodes gets the pinned code ids
-   * @request GET:/cosmwasm/cht/v1/codes/pinned
+   * @request GET:/cht/codes/pinned
    */
   queryPinnedCodes = (
     query?: {
@@ -726,7 +694,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<ChtQueryPinnedCodesResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/codes/pinned`,
+      path: `/cht/codes/pinned`,
       method: "GET",
       query: query,
       format: "json",
@@ -739,11 +707,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryContractInfo
    * @summary ContractInfo gets the contract meta data
-   * @request GET:/cosmwasm/cht/v1/contract/{address}
+   * @request GET:/cht/contract/{address}
    */
   queryContractInfo = (address: string, params: RequestParams = {}) =>
     this.request<ChtQueryContractInfoResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/contract/${address}`,
+      path: `/cht/contract/${address}`,
       method: "GET",
       format: "json",
       ...params,
@@ -755,7 +723,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryContractHistory
    * @summary ContractHistory gets the contract code history
-   * @request GET:/cosmwasm/cht/v1/contract/{address}/history
+   * @request GET:/cht/contract/{address}/history
    */
   queryContractHistory = (
     address: string,
@@ -769,7 +737,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<ChtQueryContractHistoryResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/contract/${address}/history`,
+      path: `/cht/contract/${address}/history`,
       method: "GET",
       query: query,
       format: "json",
@@ -780,9 +748,41 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryRawContractState
+   * @summary RawContractState gets single key from the raw store data of a contract
+   * @request GET:/cht/contract/{address}/raw/{queryData}
+   */
+  queryRawContractState = (address: string, queryData: string, params: RequestParams = {}) =>
+    this.request<ChtQueryRawContractStateResponse, RpcStatus>({
+      path: `/cht/contract/${address}/raw/${queryData}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySmartContractState
+   * @summary SmartContractState get smart query result from the contract
+   * @request GET:/cht/contract/{address}/smart/{queryData}
+   */
+  querySmartContractState = (address: string, queryData: string, params: RequestParams = {}) =>
+    this.request<ChtQuerySmartContractStateResponse, RpcStatus>({
+      path: `/cht/contract/${address}/smart/${queryData}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryAllContractState
    * @summary AllContractState gets all raw store data for a single contract
-   * @request GET:/cosmwasm/cht/v1/contract/{address}/state
+   * @request GET:/cht/contract/{address}/state
    */
   queryAllContractState = (
     address: string,
@@ -796,7 +796,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<ChtQueryAllContractStateResponse, RpcStatus>({
-      path: `/cosmwasm/cht/v1/contract/${address}/state`,
+      path: `/cht/contract/${address}/state`,
       method: "GET",
       query: query,
       format: "json",

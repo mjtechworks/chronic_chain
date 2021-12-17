@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 )
 
-func RegisterCodec(cdc *codec.LegacyAmino) {
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgStoreCode{}, "cht/MsgStoreCode", nil)
 	cdc.RegisterConcrete(&MsgInstantiateContract{}, "cht/MsgInstantiateContract", nil)
 	cdc.RegisterConcrete(&MsgExecuteContract{}, "cht/MsgExecuteContract", nil)
@@ -58,11 +58,11 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 
 var (
 	amino     = codec.NewLegacyAmino()
-	ModuleCdc = codec.NewProtoCodec(cdctypes.NewInterfaceRegistry())
+	ModuleCdc = codec.NewAminoCodec(amino)
 )
 
 func init() {
-	RegisterCodec(amino)
+	RegisterLegacyAminoCodec(amino)
 	cryptocodec.RegisterCrypto(amino)
 	amino.Seal()
 }

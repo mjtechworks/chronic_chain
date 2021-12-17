@@ -1,7 +1,9 @@
-import { MissingWalletError, queryClient, txClient } from './module';
+import { txClient, queryClient, MissingWalletError } from './module';
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex';
-import { DenomTrace, FungibleTokenPacketData, Params } from "./module/types/ibc/applications/transfer/v1/transfer";
+import { FungibleTokenPacketData } from "./module/types/ibc/applications/transfer/v1/transfer";
+import { DenomTrace } from "./module/types/ibc/applications/transfer/v1/transfer";
+import { Params } from "./module/types/ibc/applications/transfer/v1/transfer";
 export { FungibleTokenPacketData, DenomTrace, Params };
 async function initTxClient(vuexGetters) {
     return await txClient(vuexGetters['common/wallet/signer'], {
@@ -120,10 +122,7 @@ export default {
                 let value = (await queryClient.queryDenomTrace(key.hash)).data;
                 commit('QUERY', { query: 'DenomTrace', key: { params: { ...key }, query }, value });
                 if (subscribe)
-                    commit('SUBSCRIBE', {
-                        action: 'QueryDenomTrace',
-                        payload: { options: { all }, params: { ...key }, query }
-                    });
+                    commit('SUBSCRIBE', { action: 'QueryDenomTrace', payload: { options: { all }, params: { ...key }, query } });
                 return getters['getDenomTrace']({ params: { ...key }, query }) ?? {};
             }
             catch (e) {
@@ -135,18 +134,12 @@ export default {
                 const queryClient = await initQueryClient(rootGetters);
                 let value = (await queryClient.queryDenomTraces(query)).data;
                 while (all && value.pagination && value.pagination.nextKey != null) {
-                    let next_values = (await queryClient.queryDenomTraces({
-                        ...query,
-                        'pagination.key': value.pagination.nextKey
-                    })).data;
+                    let next_values = (await queryClient.queryDenomTraces({ ...query, 'pagination.key': value.pagination.nextKey })).data;
                     value = mergeResults(value, next_values);
                 }
                 commit('QUERY', { query: 'DenomTraces', key: { params: { ...key }, query }, value });
                 if (subscribe)
-                    commit('SUBSCRIBE', {
-                        action: 'QueryDenomTraces',
-                        payload: { options: { all }, params: { ...key }, query }
-                    });
+                    commit('SUBSCRIBE', { action: 'QueryDenomTraces', payload: { options: { all }, params: { ...key }, query } });
                 return getters['getDenomTraces']({ params: { ...key }, query }) ?? {};
             }
             catch (e) {
@@ -170,12 +163,8 @@ export default {
             try {
                 const txClient = await initTxClient(rootGetters);
                 const msg = await txClient.msgTransfer(value);
-                const result = await txClient.signAndBroadcast([msg], {
-                    fee: {
-                        amount: fee,
-                        gas: "200000"
-                    }, memo
-                });
+                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
+                        gas: "200000" }, memo });
                 return result;
             }
             catch (e) {
