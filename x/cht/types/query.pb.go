@@ -1010,9 +1010,9 @@ type QueryClient interface {
 	RawContractState(ctx context.Context, in *QueryRawContractStateRequest, opts ...grpc.CallOption) (*QueryRawContractStateResponse, error)
 	// SmartContractState get smart query result from the contract
 	SmartContractState(ctx context.Context, in *QuerySmartContractStateRequest, opts ...grpc.CallOption) (*QuerySmartContractStateResponse, error)
-	// Code gets the binary code and metadata for a singe wasm code
+	// Code gets the binary code and metadata for a singe cht code
 	Code(ctx context.Context, in *QueryCodeRequest, opts ...grpc.CallOption) (*QueryCodeResponse, error)
-	// Codes gets the metadata for all stored wasm codes
+	// Codes gets the metadata for all stored cht codes
 	Codes(ctx context.Context, in *QueryCodesRequest, opts ...grpc.CallOption) (*QueryCodesResponse, error)
 	// PinnedCodes gets the pinned code ids
 	PinnedCodes(ctx context.Context, in *QueryPinnedCodesRequest, opts ...grpc.CallOption) (*QueryPinnedCodesResponse, error)
@@ -1121,9 +1121,9 @@ type QueryServer interface {
 	RawContractState(context.Context, *QueryRawContractStateRequest) (*QueryRawContractStateResponse, error)
 	// SmartContractState get smart query result from the contract
 	SmartContractState(context.Context, *QuerySmartContractStateRequest) (*QuerySmartContractStateResponse, error)
-	// Code gets the binary code and metadata for a singe wasm code
+	// Code gets the binary code and metadata for a singe cht code
 	Code(context.Context, *QueryCodeRequest) (*QueryCodeResponse, error)
-	// Codes gets the metadata for all stored wasm codes
+	// Codes gets the metadata for all stored cht codes
 	Codes(context.Context, *QueryCodesRequest) (*QueryCodesResponse, error)
 	// PinnedCodes gets the pinned code ids
 	PinnedCodes(context.Context, *QueryPinnedCodesRequest) (*QueryPinnedCodesResponse, error)

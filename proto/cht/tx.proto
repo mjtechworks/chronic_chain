@@ -10,7 +10,7 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the wasm Msg service.
 service Msg {
-  // StoreCode to submit Wasm code to the system
+  // StoreCode to submit cht code to the system
   rpc StoreCode(MsgStoreCode) returns (MsgStoreCodeResponse);
   //  Instantiate creates a new smart contract instance for the given code id.
   rpc InstantiateContract(MsgInstantiateContract)
@@ -25,7 +25,7 @@ service Msg {
   rpc ClearAdmin(MsgClearAdmin) returns (MsgClearAdminResponse);
 }
 
-// MsgStoreCode submit Wasm code to the system
+// MsgStoreCode submit cht code to the system
 message MsgStoreCode {
   // Sender is the that actor that signed the messages
   string sender = 1;
@@ -39,7 +39,7 @@ message MsgStoreCode {
 }
 // MsgStoreCodeResponse returns store result data.
 message MsgStoreCodeResponse {
-  // CodeID is the reference to the stored WASM code
+  // CodeID is the reference to the stored cht code
   uint64 code_id = 1 [ (gogoproto.customname) = "CodeID" ];
 }
 
@@ -50,7 +50,7 @@ message MsgInstantiateContract {
   string sender = 1;
   // Admin is an optional address that can execute migrations
   string admin = 2;
-  // CodeID is the reference to the stored WASM code
+  // CodeID is the reference to the stored cht code
   uint64 code_id = 3 [ (gogoproto.customname) = "CodeID" ];
   // Label is optional metadata to be stored with a contract instance.
   string label = 4;
@@ -97,7 +97,7 @@ message MsgMigrateContract {
   string sender = 1;
   // Contract is the address of the smart contract
   string contract = 2;
-  // CodeID references the new WASM code
+  // CodeID references the new cht code
   uint64 code_id = 3 [ (gogoproto.customname) = "CodeID" ];
   // Msg json encoded message to be passed to the contract on migration
   bytes msg = 4 [ (gogoproto.casttype) = "RawContractMessage" ];
@@ -105,7 +105,7 @@ message MsgMigrateContract {
 
 // MsgMigrateContractResponse returns contract migration result data.
 message MsgMigrateContractResponse {
-  // Data contains same raw bytes returned as data from the wasm contract.
+  // Data contains same raw bytes returned as data from the cht contract.
   // (May be empty)
   bytes data = 1;
 }

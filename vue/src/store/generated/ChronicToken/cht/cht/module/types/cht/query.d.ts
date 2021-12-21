@@ -304,9 +304,9 @@ export interface Query {
     RawContractState(request: QueryRawContractStateRequest): Promise<QueryRawContractStateResponse>;
     /** SmartContractState get smart query result from the contract */
     SmartContractState(request: QuerySmartContractStateRequest): Promise<QuerySmartContractStateResponse>;
-    /** Code gets the binary code and metadata for a singe wasm code */
+    /** Code gets the binary code and metadata for a singe cht code */
     Code(request: QueryCodeRequest): Promise<QueryCodeResponse>;
-    /** Codes gets the metadata for all stored wasm codes */
+    /** Codes gets the metadata for all stored cht codes */
     Codes(request: QueryCodesRequest): Promise<QueryCodesResponse>;
     /** PinnedCodes gets the pinned code ids */
     PinnedCodes(request: QueryPinnedCodesRequest): Promise<QueryPinnedCodesResponse>;

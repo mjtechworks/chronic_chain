@@ -15,6 +15,9 @@ faucet:
   name: bob
   coins: [ "5tcht", "100000cgas" ]
   coins_max: [ "10000tcht", "10000cgas" ]
+build:
+  proto:
+    third_party_paths: ["third_party/proto"]
 genesis:
   chain_id: "modified-grapes"
   app_state:

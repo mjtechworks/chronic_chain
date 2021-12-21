@@ -332,8 +332,6 @@ export interface V1Beta1PageRequest {
      * is set.
      */
     countTotal?: boolean;
-    /** reverse is set to true if results are to be returned in the descending order. */
-    reverse?: boolean;
 }
 /**
 * PageResponse is to be embedded in gRPC response messages where the
@@ -413,7 +411,7 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      *
      * @tags Query
      * @name QueryCodes
-     * @summary Codes gets the metadata for all stored wasm codes
+     * @summary Codes gets the metadata for all stored cht codes
      * @request GET:/cht/code
      */
     queryCodes: (query?: {
@@ -421,14 +419,13 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.offset"?: string;
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
-        "pagination.reverse"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<ChtQueryCodesResponse, RpcStatus>>;
     /**
      * No description
      *
      * @tags Query
      * @name QueryCode
-     * @summary Code gets the binary code and metadata for a singe wasm code
+     * @summary Code gets the binary code and metadata for a singe cht code
      * @request GET:/cht/code/{codeId}
      */
     queryCode: (codeId: string, params?: RequestParams) => Promise<HttpResponse<ChtQueryCodeResponse, RpcStatus>>;
@@ -445,7 +442,6 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.offset"?: string;
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
-        "pagination.reverse"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<ChtQueryContractsByCodeResponse, RpcStatus>>;
     /**
      * No description
@@ -460,7 +456,6 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.offset"?: string;
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
-        "pagination.reverse"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<ChtQueryPinnedCodesResponse, RpcStatus>>;
     /**
      * No description
@@ -484,7 +479,6 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.offset"?: string;
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
-        "pagination.reverse"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<ChtQueryContractHistoryResponse, RpcStatus>>;
     /**
      * No description
@@ -517,7 +511,6 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.offset"?: string;
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
-        "pagination.reverse"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<ChtQueryAllContractStateResponse, RpcStatus>>;
 }
 export {};

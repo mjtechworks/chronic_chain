@@ -45,11 +45,11 @@ service Query {
     option (google.api.http).get =
         "/cht/contract/{address}/smart/{query_data}";
   }
-  // Code gets the binary code and metadata for a singe wasm code
+  // Code gets the binary code and metadata for a singe cht code
   rpc Code(QueryCodeRequest) returns (QueryCodeResponse) {
     option (google.api.http).get = "/cht/code/{code_id}";
   }
-  // Codes gets the metadata for all stored wasm codes
+  // Codes gets the metadata for all stored cht codes
   rpc Codes(QueryCodesRequest) returns (QueryCodesResponse) {
     option (google.api.http).get = "/cht/code";
   }
