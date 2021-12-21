@@ -167,7 +167,7 @@ export class Api extends HttpClient {
          *
          * @tags Query
          * @name QueryCodes
-         * @summary Codes gets the metadata for all stored wasm codes
+         * @summary Codes gets the metadata for all stored cht codes
          * @request GET:/cht/code
          */
         this.queryCodes = (query, params = {}) => this.request({
@@ -182,7 +182,7 @@ export class Api extends HttpClient {
          *
          * @tags Query
          * @name QueryCode
-         * @summary Code gets the binary code and metadata for a singe wasm code
+         * @summary Code gets the binary code and metadata for a singe cht code
          * @request GET:/cht/code/{codeId}
          */
         this.queryCode = (codeId, params = {}) => this.request({

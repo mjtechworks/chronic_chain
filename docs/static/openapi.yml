@@ -6,7 +6,7 @@ info:
 paths:
   /cht/code:
     get:
-      summary: Codes gets the metadata for all stored wasm codes
+      summary: Codes gets the metadata for all stored cht codes
       operationId: ChtCodes
       responses:
         '200':
@@ -281,18 +281,11 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/cht/code/{codeId}':
     get:
-      summary: Code gets the binary code and metadata for a singe wasm code
+      summary: Code gets the binary code and metadata for a singe cht code
       operationId: ChtCode
       responses:
         '200':
@@ -784,13 +777,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   /cht/codes/pinned:
@@ -1058,13 +1044,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
           in: query
           required: false
           type: boolean
@@ -1817,13 +1796,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/cht/contract/{address}/raw/{queryData}':
@@ -2536,13 +2508,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
           in: query
           required: false
           type: boolean
@@ -15414,7 +15379,7 @@ definitions:
         type: string
         format: byte
         title: |-
-          Data contains same raw bytes returned as data from the wasm contract.
+          Data contains same raw bytes returned as data from the cht contract.
           (May be empty)
     description: MsgMigrateContractResponse returns contract migration result data.
   cht.MsgStoreCodeResponse:
@@ -15423,7 +15388,7 @@ definitions:
       codeId:
         type: string
         format: uint64
-        title: CodeID is the reference to the stored WASM code
+        title: CodeID is the reference to the stored cht code
     description: MsgStoreCodeResponse returns store result data.
   cht.MsgUpdateAdminResponse:
     type: object

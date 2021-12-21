@@ -30,7 +30,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgStoreCode submit Wasm code to the system
+// MsgStoreCode submit cht code to the system
 type MsgStoreCode struct {
 	// Sender is the that actor that signed the messages
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -76,7 +76,7 @@ var xxx_messageInfo_MsgStoreCode proto.InternalMessageInfo
 
 // MsgStoreCodeResponse returns store result data.
 type MsgStoreCodeResponse struct {
-	// CodeID is the reference to the stored WASM code
+	// CodeID is the reference to the stored cht code
 	CodeID uint64 `protobuf:"varint,1,opt,name=code_id,json=codeId,proto3" json:"code_id,omitempty"`
 }
 
@@ -120,7 +120,7 @@ type MsgInstantiateContract struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// Admin is an optional address that can execute migrations
 	Admin string `protobuf:"bytes,2,opt,name=admin,proto3" json:"admin,omitempty"`
-	// CodeID is the reference to the stored WASM code
+	// CodeID is the reference to the stored cht code
 	CodeID uint64 `protobuf:"varint,3,opt,name=code_id,json=codeId,proto3" json:"code_id,omitempty"`
 	// Label is optional metadata to be stored with a contract instance.
 	Label string `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
@@ -294,7 +294,7 @@ type MsgMigrateContract struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// Contract is the address of the smart contract
 	Contract string `protobuf:"bytes,2,opt,name=contract,proto3" json:"contract,omitempty"`
-	// CodeID references the new WASM code
+	// CodeID references the new cht code
 	CodeID uint64 `protobuf:"varint,3,opt,name=code_id,json=codeId,proto3" json:"code_id,omitempty"`
 	// Msg json encoded message to be passed to the contract on migration
 	Msg RawContractMessage `protobuf:"bytes,4,opt,name=msg,proto3,casttype=RawContractMessage" json:"msg,omitempty"`
@@ -335,7 +335,7 @@ var xxx_messageInfo_MsgMigrateContract proto.InternalMessageInfo
 
 // MsgMigrateContractResponse returns contract migration result data.
 type MsgMigrateContractResponse struct {
-	// Data contains same raw bytes returned as data from the wasm contract.
+	// Data contains same raw bytes returned as data from the cht contract.
 	// (May be empty)
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
@@ -611,7 +611,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// StoreCode to submit Wasm code to the system
+	// StoreCode to submit cht code to the system
 	StoreCode(ctx context.Context, in *MsgStoreCode, opts ...grpc.CallOption) (*MsgStoreCodeResponse, error)
 	//  Instantiate creates a new smart contract instance for the given code id.
 	InstantiateContract(ctx context.Context, in *MsgInstantiateContract, opts ...grpc.CallOption) (*MsgInstantiateContractResponse, error)
@@ -689,7 +689,7 @@ func (c *msgClient) ClearAdmin(ctx context.Context, in *MsgClearAdmin, opts ...g
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// StoreCode to submit Wasm code to the system
+	// StoreCode to submit cht code to the system
 	StoreCode(context.Context, *MsgStoreCode) (*MsgStoreCodeResponse, error)
 	//  Instantiate creates a new smart contract instance for the given code id.
 	InstantiateContract(context.Context, *MsgInstantiateContract) (*MsgInstantiateContractResponse, error)

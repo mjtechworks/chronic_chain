@@ -2,7 +2,7 @@ import { Reader, Writer } from 'protobufjs/minimal';
 import { AccessConfig } from '../cht/types';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 export declare const protobufPackage = "cht";
-/** MsgStoreCode submit Wasm code to the system */
+/** MsgStoreCode submit cht code to the system */
 export interface MsgStoreCode {
     /** Sender is the that actor that signed the messages */
     sender: string;
@@ -16,7 +16,7 @@ export interface MsgStoreCode {
 }
 /** MsgStoreCodeResponse returns store result data. */
 export interface MsgStoreCodeResponse {
-    /** CodeID is the reference to the stored WASM code */
+    /** CodeID is the reference to the stored cht code */
     codeId: number;
 }
 /**
@@ -28,7 +28,7 @@ export interface MsgInstantiateContract {
     sender: string;
     /** Admin is an optional address that can execute migrations */
     admin: string;
-    /** CodeID is the reference to the stored WASM code */
+    /** CodeID is the reference to the stored cht code */
     codeId: number;
     /** Label is optional metadata to be stored with a contract instance. */
     label: string;
@@ -66,7 +66,7 @@ export interface MsgMigrateContract {
     sender: string;
     /** Contract is the address of the smart contract */
     contract: string;
-    /** CodeID references the new WASM code */
+    /** CodeID references the new cht code */
     codeId: number;
     /** Msg json encoded message to be passed to the contract on migration */
     msg: Uint8Array;
@@ -74,7 +74,7 @@ export interface MsgMigrateContract {
 /** MsgMigrateContractResponse returns contract migration result data. */
 export interface MsgMigrateContractResponse {
     /**
-     * Data contains same raw bytes returned as data from the wasm contract.
+     * Data contains same raw bytes returned as data from the cht contract.
      * (May be empty)
      */
     data: Uint8Array;
@@ -187,7 +187,7 @@ export declare const MsgClearAdminResponse: {
 };
 /** Msg defines the wasm Msg service. */
 export interface Msg {
-    /** StoreCode to submit Wasm code to the system */
+    /** StoreCode to submit cht code to the system */
     StoreCode(request: MsgStoreCode): Promise<MsgStoreCodeResponse>;
     /** Instantiate creates a new smart contract instance for the given code id. */
     InstantiateContract(request: MsgInstantiateContract): Promise<MsgInstantiateContractResponse>;

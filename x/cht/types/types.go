@@ -307,7 +307,7 @@ type ChtConfig struct {
 	ContractDebugMode bool
 }
 
-// DefaultWasmConfig returns the default settings for WasmConfig
+// DefaultChtConfig returns the default settings for WasmConfig
 func DefaultChtConfig() ChtConfig {
 	return ChtConfig{
 		SmartQueryGasLimit: defaultSmartQueryGasLimit,
