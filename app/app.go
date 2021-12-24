@@ -1,7 +1,12 @@
 package app
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/ChronicToken/cht/docs"
+	chtmodule "github.com/ChronicToken/cht/x/cht"
+	chtClient "github.com/ChronicToken/cht/x/cht/client"
+	chtmoduletypes "github.com/ChronicToken/cht/x/cht/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -71,30 +76,25 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/modules/core"
 	ibcclient "github.com/cosmos/ibc-go/modules/core/02-client"
+	ibcclienttypes "github.com/cosmos/ibc-go/modules/core/02-client/types"
 	ibcporttypes "github.com/cosmos/ibc-go/modules/core/05-port/types"
 	ibchost "github.com/cosmos/ibc-go/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/modules/core/keeper"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
+	"github.com/tendermint/spm/openapiconsole"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
+	"html/template"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
-
-	"github.com/tendermint/spm/openapiconsole"
-
-	"github.com/ChronicToken/cht/docs"
-
-	chtmodule "github.com/ChronicToken/cht/x/cht"
-	chtClient "github.com/ChronicToken/cht/x/cht/client"
-	chtmoduletypes "github.com/ChronicToken/cht/x/cht/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -346,6 +346,7 @@ func New(
 	govRouter.AddRoute(govtypes.RouterKey, govtypes.ProposalHandler).
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
+		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 
@@ -488,7 +489,7 @@ func New(
 	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
 
 	// add test gRPC service for testing gRPC queries in isolation
-	// testdata.RegisterTestServiceServer(app.GRPCQueryRouter(), testdata.QueryImpl{}) // TODO: this is testdata !!!!
+	// testdata.RegisterTestServiceServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//
@@ -660,10 +661,45 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 	// register app's OpenAPI routes.
 	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
 	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(Name, "/static/openapi.yml"))
+	//apiSvr.Router.Handle("/swagger", http.FileServer(http.Dir("./swagger-ui/")))
+	//apiSvr.Router.HandleFunc("/", HandlerSwaggerTemplate)
 	// register swagger API from root so that other applications can override easily
 
 	RegisterSwaggerAPI(clientCtx, apiSvr.Router)
 
+}
+
+func HandlerSwaggerTemplate(w http.ResponseWriter, r *http.Request) {
+	http.FileServer(http.Dir("./swagger-ui/"))
+	//push(w, "/swagger-ui/swagger-ui-bundle.js")
+	//push(w, "/swagger-ui/swagger-ui-standalone-preset.js")
+	//push(w, "/swagger-ui/swagger.yaml")
+	//push(w, "/swagger-ui/favicon-32x32.png")
+	//push(w, "/swagger-ui/favicon-16x16.png")
+	//w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	//render(w, r, template.Must(template.New("second_view").Parse(string(MustAsset(name)))), "index", nil)
+}
+
+func render(w http.ResponseWriter, r *http.Request, tpl *template.Template, name string, data interface{}) {
+	buf := new(bytes.Buffer)
+	if err := tpl.ExecuteTemplate(buf, name, data); err != nil {
+		fmt.Printf("\nRender Error: %v\n", err)
+		return
+	}
+
+	if _, err := w.Write(buf.Bytes()); err != nil {
+		return
+	}
+}
+
+func push(w http.ResponseWriter, resource string) {
+	pusher, ok := w.(http.Pusher)
+	if ok {
+		if err := pusher.Push(resource, nil); err == nil {
+			return
+		}
+	}
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.

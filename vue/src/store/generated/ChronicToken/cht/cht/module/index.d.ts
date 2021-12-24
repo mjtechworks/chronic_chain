@@ -1,15 +1,16 @@
 import { StdFee } from "@cosmjs/launchpad";
-import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
+import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgUpdateAdmin } from "./types/cht/tx";
 import { MsgMigrateContract } from "./types/cht/tx";
-import { MsgIBCSend } from "./types/cht/ibc";
 import { MsgExecuteContract } from "./types/cht/tx";
-import { MsgStoreCode } from "./types/cht/tx";
 import { MsgInstantiateContract } from "./types/cht/tx";
+import { MsgUpdateAdmin } from "./types/cht/tx";
+import { MsgStoreCode } from "./types/cht/tx";
+import { MsgIBCSend } from "./types/cht/ibc";
 import { MsgClearAdmin } from "./types/cht/tx";
 import { MsgIBCCloseChannel } from "./types/cht/ibc";
 export declare const MissingWalletError: Error;
+export declare const registry: Registry;
 interface TxClientOptions {
     addr: string;
 }
@@ -18,13 +19,13 @@ interface SignAndBroadcastOptions {
     memo?: string;
 }
 declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions) => Promise<{
-    signAndBroadcast: (msgs: EncodeObject[], { fee, memo }?: SignAndBroadcastOptions) => Promise<import("@cosmjs/stargate").BroadcastTxResponse>;
-    msgUpdateAdmin: (data: MsgUpdateAdmin) => EncodeObject;
+    signAndBroadcast: (msgs: EncodeObject[], { fee, memo }?: SignAndBroadcastOptions) => any;
     msgMigrateContract: (data: MsgMigrateContract) => EncodeObject;
-    msgIBCSend: (data: MsgIBCSend) => EncodeObject;
     msgExecuteContract: (data: MsgExecuteContract) => EncodeObject;
-    msgStoreCode: (data: MsgStoreCode) => EncodeObject;
     msgInstantiateContract: (data: MsgInstantiateContract) => EncodeObject;
+    msgUpdateAdmin: (data: MsgUpdateAdmin) => EncodeObject;
+    msgStoreCode: (data: MsgStoreCode) => EncodeObject;
+    msgIBCSend: (data: MsgIBCSend) => EncodeObject;
     msgClearAdmin: (data: MsgClearAdmin) => EncodeObject;
     msgIBCCloseChannel: (data: MsgIBCCloseChannel) => EncodeObject;
 }>;

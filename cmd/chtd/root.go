@@ -11,7 +11,6 @@ import (
 	chtkeeper "github.com/ChronicToken/cht/x/cht/keeper"
 
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	vestingcli "github.com/cosmos/cosmos-sdk/x/auth/vesting/client/cli"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -161,7 +160,7 @@ func txCommand() *cobra.Command {
 		authcmd.GetEncodeCommand(),
 		authcmd.GetDecodeCommand(),
 		flags.LineBreak,
-		vestingcli.GetTxCmd(),
+		//vestingcli.GetTxCmd(),
 	)
 
 	// add modules' tx commands
