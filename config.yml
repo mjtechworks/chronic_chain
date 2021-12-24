@@ -15,9 +15,12 @@ faucet:
   name: bob
   coins: [ "5tcht", "100000cgas" ]
   coins_max: [ "10000tcht", "10000cgas" ]
-build:
-  proto:
-    third_party_paths: ["third_party/proto"]
+#host:
+#  rpc: ":26659"
+#  p2p: ":26658"
+#  prof: ":6060"
+#  grpc: ":9090"
+#  api: ":1318"
 genesis:
   chain_id: "modified-grapes"
   app_state:
