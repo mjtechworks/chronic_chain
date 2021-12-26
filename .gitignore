@@ -4,3 +4,15 @@ release/
 .idea
 go.sum
 vue/package-lock.json
+flutter/.dart_tool
+flutter/.idea
+flutter/pubspec.lock
+flutter/.flutter-plugins
+flutter/.flutter-plugins-dependencies
+flutter/.packages
+flutter/ios/.symlinks
+flutter/ios/Gemfile.lock
+flutter/ios/Podfile.lock
+flutter/ios/Pods
+flutter/build
+flutter/lib/generated
