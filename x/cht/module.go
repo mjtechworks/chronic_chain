@@ -18,6 +18,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/ChronicToken/cht/x/cht/client/cli"
 	"github.com/ChronicToken/cht/x/cht/client/rest"
@@ -48,7 +49,7 @@ func (b AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) { //n
 func (b AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, serveMux *runtime.ServeMux) {
 	err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(clientCtx))
 	if err != nil {
-		panic(err)
+		log.NewNopLogger().Error(err.Error())
 	}
 }
 
@@ -105,10 +106,6 @@ type AppModule struct {
 	validatorSetSource keeper.ValidatorSetSource
 }
 
-func (am AppModule) ConsensusVersion() uint64 {
-	return 2
-}
-
 // NewAppModule creates a new AppModule object
 func NewAppModule(cdc codec.Codec, keeper *Keeper, validatorSetSource keeper.ValidatorSetSource) AppModule {
 	return AppModule{
@@ -124,7 +121,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterQueryServer(cfg.QueryServer(), NewQuerier(am.keeper))
 }
 
-func (am AppModule) LegacyQuerierHandler(amino *codec.LegacyAmino) sdk.Querier { //nolint:staticcheck
+func (am AppModule) LegacyQuerierHandler(amino *codec.LegacyAmino) sdk.Querier {
 	return keeper.NewLegacyQuerier(am.keeper, am.keeper.QueryGasLimit())
 }
 
@@ -169,8 +166,6 @@ func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.Validato
 	return []abci.ValidatorUpdate{}
 }
 
-// ____________________________________________________________________________
-
 // AppModuleSimulation functions
 
 // GenerateGenesisState creates a randomized GenState of the bank module.
@@ -196,8 +191,6 @@ func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	return nil
 }
-
-// ____________________________________________________________________________
 
 // AddModuleInitFlags implements servertypes.ModuleInitFlags interface.
 func AddModuleInitFlags(startCmd *cobra.Command) {
@@ -238,3 +231,6 @@ func ReadChtConfig(opts servertypes.AppOptions) (types.ChtConfig, error) {
 	}
 	return cfg, nil
 }
+
+// ConsensusVersion implements AppModule/ConsensusVersion.
+func (AppModule) ConsensusVersion() uint64 { return 1 }

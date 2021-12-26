@@ -4,25 +4,25 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgMigrateContract } from "./types/cht/tx";
-import { MsgExecuteContract } from "./types/cht/tx";
 import { MsgInstantiateContract } from "./types/cht/tx";
 import { MsgUpdateAdmin } from "./types/cht/tx";
 import { MsgStoreCode } from "./types/cht/tx";
-import { MsgIBCSend } from "./types/cht/ibc";
-import { MsgClearAdmin } from "./types/cht/tx";
 import { MsgIBCCloseChannel } from "./types/cht/ibc";
+import { MsgExecuteContract } from "./types/cht/tx";
+import { MsgIBCSend } from "./types/cht/ibc";
+import { MsgMigrateContract } from "./types/cht/tx";
+import { MsgClearAdmin } from "./types/cht/tx";
 
 
 const types = [
-  ["/cht.MsgMigrateContract", MsgMigrateContract],
-  ["/cht.MsgExecuteContract", MsgExecuteContract],
   ["/cht.MsgInstantiateContract", MsgInstantiateContract],
   ["/cht.MsgUpdateAdmin", MsgUpdateAdmin],
   ["/cht.MsgStoreCode", MsgStoreCode],
-  ["/cht.MsgIBCSend", MsgIBCSend],
-  ["/cht.MsgClearAdmin", MsgClearAdmin],
   ["/cht.MsgIBCCloseChannel", MsgIBCCloseChannel],
+  ["/cht.MsgExecuteContract", MsgExecuteContract],
+  ["/cht.MsgIBCSend", MsgIBCSend],
+  ["/cht.MsgMigrateContract", MsgMigrateContract],
+  ["/cht.MsgClearAdmin", MsgClearAdmin],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -55,14 +55,14 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgMigrateContract: (data: MsgMigrateContract): EncodeObject => ({ typeUrl: "/cht.MsgMigrateContract", value: MsgMigrateContract.fromPartial( data ) }),
-    msgExecuteContract: (data: MsgExecuteContract): EncodeObject => ({ typeUrl: "/cht.MsgExecuteContract", value: MsgExecuteContract.fromPartial( data ) }),
     msgInstantiateContract: (data: MsgInstantiateContract): EncodeObject => ({ typeUrl: "/cht.MsgInstantiateContract", value: MsgInstantiateContract.fromPartial( data ) }),
     msgUpdateAdmin: (data: MsgUpdateAdmin): EncodeObject => ({ typeUrl: "/cht.MsgUpdateAdmin", value: MsgUpdateAdmin.fromPartial( data ) }),
     msgStoreCode: (data: MsgStoreCode): EncodeObject => ({ typeUrl: "/cht.MsgStoreCode", value: MsgStoreCode.fromPartial( data ) }),
-    msgIBCSend: (data: MsgIBCSend): EncodeObject => ({ typeUrl: "/cht.MsgIBCSend", value: MsgIBCSend.fromPartial( data ) }),
-    msgClearAdmin: (data: MsgClearAdmin): EncodeObject => ({ typeUrl: "/cht.MsgClearAdmin", value: MsgClearAdmin.fromPartial( data ) }),
     msgIBCCloseChannel: (data: MsgIBCCloseChannel): EncodeObject => ({ typeUrl: "/cht.MsgIBCCloseChannel", value: MsgIBCCloseChannel.fromPartial( data ) }),
+    msgExecuteContract: (data: MsgExecuteContract): EncodeObject => ({ typeUrl: "/cht.MsgExecuteContract", value: MsgExecuteContract.fromPartial( data ) }),
+    msgIBCSend: (data: MsgIBCSend): EncodeObject => ({ typeUrl: "/cht.MsgIBCSend", value: MsgIBCSend.fromPartial( data ) }),
+    msgMigrateContract: (data: MsgMigrateContract): EncodeObject => ({ typeUrl: "/cht.MsgMigrateContract", value: MsgMigrateContract.fromPartial( data ) }),
+    msgClearAdmin: (data: MsgClearAdmin): EncodeObject => ({ typeUrl: "/cht.MsgClearAdmin", value: MsgClearAdmin.fromPartial( data ) }),
     
   };
 };

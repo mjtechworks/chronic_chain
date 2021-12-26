@@ -179,7 +179,7 @@ func (q grpcQuerier) SmartContractState(c context.Context, req *types.QuerySmart
 			switch rType := r.(type) {
 			case sdk.ErrorOutOfGas:
 				err = sdkerrors.Wrapf(sdkerrors.ErrOutOfGas,
-					"out of gas in location: %v; gasWanted: %d, gasUsed: %d",
+					"out of cgas in location: %v; cgasWanted: %d, cgasUsed: %d",
 					rType.Descriptor, ctx.GasMeter().Limit(), ctx.GasMeter().GasConsumed(),
 				)
 			default:

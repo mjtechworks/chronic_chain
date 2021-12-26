@@ -5,8 +5,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	channelkeeper "github.com/cosmos/ibc-go/modules/core/04-channel/keeper"
-	ibcante "github.com/cosmos/ibc-go/modules/core/ante"
+	channelkeeper "github.com/cosmos/ibc-go/v2/modules/core/04-channel/keeper"
+	ibcante "github.com/cosmos/ibc-go/v2/modules/core/ante"
 
 	chtTypes "github.com/ChronicToken/cht/x/cht/types"
 
@@ -26,7 +26,6 @@ func NewAnteHandler(
 	channelKeeper channelkeeper.Keeper,
 	chtConfig chtTypes.ChtConfig,
 ) sdk.AnteHandler {
-	// copied sdk https://github.com/cosmos/cosmos-sdk/blob/v0.42.9/x/auth/ante/ante.go
 	return sdk.ChainAnteDecorators(
 		ante.NewSetUpContextDecorator(),                                        // outermost AnteDecorator. SetUpContext must be called first
 		chtkeeper.NewLimitSimulationGasDecorator(chtConfig.SimulationGasLimit), // after setup context to enforce limits early
