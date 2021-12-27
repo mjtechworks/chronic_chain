@@ -8,9 +8,8 @@ import (
 	channelkeeper "github.com/cosmos/ibc-go/v2/modules/core/04-channel/keeper"
 	ibcante "github.com/cosmos/ibc-go/v2/modules/core/ante"
 
-	chtTypes "github.com/ChronicToken/cht/x/cht/types"
-
 	chtkeeper "github.com/ChronicToken/cht/x/cht/keeper"
+	chtTypes "github.com/ChronicToken/cht/x/cht/types"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence

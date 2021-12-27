@@ -717,9 +717,9 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 	//apiSvr.Router.Handle("/swagger", http.FileServer(http.Dir("./swagger-ui/")))
 	//apiSvr.Router.HandleFunc("/", HandlerSwaggerTemplate)
 	// register swagger API from root so that other applications can override easily
-	if apiConfig.Swagger {
-		RegisterSwaggerAPI(clientCtx, apiSvr.Router)
-	}
+	//if apiConfig.Swagger {
+	RegisterSwaggerAPI(clientCtx, apiSvr.Router)
+	//}
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.

@@ -40,7 +40,6 @@ import (
 
 	"github.com/ChronicToken/cht/app"
 	"github.com/ChronicToken/cht/x/cht"
-	clientcodec "github.com/ChronicToken/cht/x/cht/client/codec"
 )
 
 // NewRootCmd creates a new root command for chtd. It is called once in the
@@ -60,7 +59,7 @@ func NewRootCmd() (*cobra.Command, app.EncodingConfig) {
 	config.Seal()
 
 	initClientCtx := client.Context{}.
-		WithCodec(clientcodec.NewProtoCodec(encodingConfig.Codec, encodingConfig.InterfaceRegistry)).
+		WithCodec(encodingConfig.Codec).
 		WithInterfaceRegistry(encodingConfig.InterfaceRegistry).
 		WithTxConfig(encodingConfig.TxConfig).
 		WithLegacyAmino(encodingConfig.Amino).
