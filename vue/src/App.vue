@@ -1,22 +1,17 @@
 <template>
-  <div v-if="initialized">
-    <SpWallet ref="wallet" v-on:dropdown-opened="$refs.menu.closeDropdown()" />
-    <SpLayout>
+  <div v-if="initialized" class="app-container">
+    <img src="./assets/logo.svg" class="app-logo" />
+    <sp-wallet ref="wallet" v-on:dropdown-opened="$refs.menu.closeDropdown()" />
+    <sp-layout>
       <template v-slot:sidebar>
         <Sidebar />
       </template>
       <template v-slot:content>
         <router-view />
       </template>
-    </SpLayout>
+    </sp-layout>
   </div>
 </template>
-
-<style>
-body {
-  margin: 0;
-}
-</style>
 
 <script>
 import './scss/app.scss'
@@ -41,9 +36,33 @@ export default {
     await this.$store.dispatch('common/env/init')
     this.initialized = true
   },
-  errorCaptured(err) {
-    console.log(err)
-    return false
-  },
 }
 </script>
+
+<style>
+body {
+  margin: 0;
+}
+
+.app-container {
+  background-image: url('assets/coin.svg');
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+.app-logo {
+  position: fixed;
+  top: 3.2rem;
+  left: clamp(25rem, 24vw, 30rem);
+  z-index: 90;
+  max-height: 3.2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .app-logo {
+    left: 8.5rem;
+    right: auto;
+  }
+}
+</style>
