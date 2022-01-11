@@ -1,8 +1,8 @@
 /* eslint-disable */
-import * as Long from 'long';
-import { util, configure, Writer, Reader } from 'protobufjs/minimal';
-import { Any } from '../google/protobuf/any';
-export const protobufPackage = 'cht';
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
+import { Any } from "../google/protobuf/any";
+export const protobufPackage = "cht";
 /** AccessType permission types */
 export var AccessType;
 (function (AccessType) {
@@ -19,19 +19,19 @@ export var AccessType;
 export function accessTypeFromJSON(object) {
     switch (object) {
         case 0:
-        case 'ACCESS_TYPE_UNSPECIFIED':
+        case "ACCESS_TYPE_UNSPECIFIED":
             return AccessType.ACCESS_TYPE_UNSPECIFIED;
         case 1:
-        case 'ACCESS_TYPE_NOBODY':
+        case "ACCESS_TYPE_NOBODY":
             return AccessType.ACCESS_TYPE_NOBODY;
         case 2:
-        case 'ACCESS_TYPE_ONLY_ADDRESS':
+        case "ACCESS_TYPE_ONLY_ADDRESS":
             return AccessType.ACCESS_TYPE_ONLY_ADDRESS;
         case 3:
-        case 'ACCESS_TYPE_EVERYBODY':
+        case "ACCESS_TYPE_EVERYBODY":
             return AccessType.ACCESS_TYPE_EVERYBODY;
         case -1:
-        case 'UNRECOGNIZED':
+        case "UNRECOGNIZED":
         default:
             return AccessType.UNRECOGNIZED;
     }
@@ -39,15 +39,15 @@ export function accessTypeFromJSON(object) {
 export function accessTypeToJSON(object) {
     switch (object) {
         case AccessType.ACCESS_TYPE_UNSPECIFIED:
-            return 'ACCESS_TYPE_UNSPECIFIED';
+            return "ACCESS_TYPE_UNSPECIFIED";
         case AccessType.ACCESS_TYPE_NOBODY:
-            return 'ACCESS_TYPE_NOBODY';
+            return "ACCESS_TYPE_NOBODY";
         case AccessType.ACCESS_TYPE_ONLY_ADDRESS:
-            return 'ACCESS_TYPE_ONLY_ADDRESS';
+            return "ACCESS_TYPE_ONLY_ADDRESS";
         case AccessType.ACCESS_TYPE_EVERYBODY:
-            return 'ACCESS_TYPE_EVERYBODY';
+            return "ACCESS_TYPE_EVERYBODY";
         default:
-            return 'UNKNOWN';
+            return "UNKNOWN";
     }
 }
 /** ContractCodeHistoryOperationType actions that caused a code change */
@@ -66,19 +66,19 @@ export var ContractCodeHistoryOperationType;
 export function contractCodeHistoryOperationTypeFromJSON(object) {
     switch (object) {
         case 0:
-        case 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED':
+        case "CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED":
             return ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED;
         case 1:
-        case 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT':
+        case "CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT":
             return ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT;
         case 2:
-        case 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE':
+        case "CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE":
             return ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE;
         case 3:
-        case 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS':
+        case "CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS":
             return ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS;
         case -1:
-        case 'UNRECOGNIZED':
+        case "UNRECOGNIZED":
         default:
             return ContractCodeHistoryOperationType.UNRECOGNIZED;
     }
@@ -86,15 +86,15 @@ export function contractCodeHistoryOperationTypeFromJSON(object) {
 export function contractCodeHistoryOperationTypeToJSON(object) {
     switch (object) {
         case ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED:
-            return 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED';
+            return "CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED";
         case ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT:
-            return 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT';
+            return "CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT";
         case ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE:
-            return 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE';
+            return "CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE";
         case ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS:
-            return 'CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS';
+            return "CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS";
         default:
-            return 'UNKNOWN';
+            return "UNKNOWN";
     }
 }
 const baseAccessTypeParam = { value: 0 };
@@ -134,7 +134,8 @@ export const AccessTypeParam = {
     },
     toJSON(message) {
         const obj = {};
-        message.value !== undefined && (obj.value = accessTypeToJSON(message.value));
+        message.value !== undefined &&
+            (obj.value = accessTypeToJSON(message.value));
         return obj;
     },
     fromPartial(object) {
@@ -146,15 +147,15 @@ export const AccessTypeParam = {
             message.value = 0;
         }
         return message;
-    }
+    },
 };
-const baseAccessConfig = { permission: 0, address: '' };
+const baseAccessConfig = { permission: 0, address: "" };
 export const AccessConfig = {
     encode(message, writer = Writer.create()) {
         if (message.permission !== 0) {
             writer.uint32(8).int32(message.permission);
         }
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(18).string(message.address);
         }
         return writer;
@@ -191,13 +192,14 @@ export const AccessConfig = {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.permission !== undefined && (obj.permission = accessTypeToJSON(message.permission));
+        message.permission !== undefined &&
+            (obj.permission = accessTypeToJSON(message.permission));
         message.address !== undefined && (obj.address = message.address);
         return obj;
     },
@@ -213,12 +215,15 @@ export const AccessConfig = {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         return message;
-    }
+    },
 };
-const baseParams = { instantiateDefaultPermission: 0, maxWasmCodeSize: 0 };
+const baseParams = {
+    instantiateDefaultPermission: 0,
+    maxWasmCodeSize: 0,
+};
 export const Params = {
     encode(message, writer = Writer.create()) {
         if (message.codeUploadAccess !== undefined) {
@@ -257,19 +262,22 @@ export const Params = {
     },
     fromJSON(object) {
         const message = { ...baseParams };
-        if (object.codeUploadAccess !== undefined && object.codeUploadAccess !== null) {
+        if (object.codeUploadAccess !== undefined &&
+            object.codeUploadAccess !== null) {
             message.codeUploadAccess = AccessConfig.fromJSON(object.codeUploadAccess);
         }
         else {
             message.codeUploadAccess = undefined;
         }
-        if (object.instantiateDefaultPermission !== undefined && object.instantiateDefaultPermission !== null) {
+        if (object.instantiateDefaultPermission !== undefined &&
+            object.instantiateDefaultPermission !== null) {
             message.instantiateDefaultPermission = accessTypeFromJSON(object.instantiateDefaultPermission);
         }
         else {
             message.instantiateDefaultPermission = 0;
         }
-        if (object.maxWasmCodeSize !== undefined && object.maxWasmCodeSize !== null) {
+        if (object.maxWasmCodeSize !== undefined &&
+            object.maxWasmCodeSize !== null) {
             message.maxWasmCodeSize = Number(object.maxWasmCodeSize);
         }
         else {
@@ -279,41 +287,50 @@ export const Params = {
     },
     toJSON(message) {
         const obj = {};
-        message.codeUploadAccess !== undefined && (obj.codeUploadAccess = message.codeUploadAccess ? AccessConfig.toJSON(message.codeUploadAccess) : undefined);
-        message.instantiateDefaultPermission !== undefined && (obj.instantiateDefaultPermission = accessTypeToJSON(message.instantiateDefaultPermission));
-        message.maxWasmCodeSize !== undefined && (obj.maxWasmCodeSize = message.maxWasmCodeSize);
+        message.codeUploadAccess !== undefined &&
+            (obj.codeUploadAccess = message.codeUploadAccess
+                ? AccessConfig.toJSON(message.codeUploadAccess)
+                : undefined);
+        message.instantiateDefaultPermission !== undefined &&
+            (obj.instantiateDefaultPermission = accessTypeToJSON(message.instantiateDefaultPermission));
+        message.maxWasmCodeSize !== undefined &&
+            (obj.maxWasmCodeSize = message.maxWasmCodeSize);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseParams };
-        if (object.codeUploadAccess !== undefined && object.codeUploadAccess !== null) {
+        if (object.codeUploadAccess !== undefined &&
+            object.codeUploadAccess !== null) {
             message.codeUploadAccess = AccessConfig.fromPartial(object.codeUploadAccess);
         }
         else {
             message.codeUploadAccess = undefined;
         }
-        if (object.instantiateDefaultPermission !== undefined && object.instantiateDefaultPermission !== null) {
-            message.instantiateDefaultPermission = object.instantiateDefaultPermission;
+        if (object.instantiateDefaultPermission !== undefined &&
+            object.instantiateDefaultPermission !== null) {
+            message.instantiateDefaultPermission =
+                object.instantiateDefaultPermission;
         }
         else {
             message.instantiateDefaultPermission = 0;
         }
-        if (object.maxWasmCodeSize !== undefined && object.maxWasmCodeSize !== null) {
+        if (object.maxWasmCodeSize !== undefined &&
+            object.maxWasmCodeSize !== null) {
             message.maxWasmCodeSize = object.maxWasmCodeSize;
         }
         else {
             message.maxWasmCodeSize = 0;
         }
         return message;
-    }
+    },
 };
-const baseCodeInfo = { creator: '' };
+const baseCodeInfo = { creator: "" };
 export const CodeInfo = {
     encode(message, writer = Writer.create()) {
         if (message.codeHash.length !== 0) {
             writer.uint32(10).bytes(message.codeHash);
         }
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(18).string(message.creator);
         }
         if (message.instantiateConfig !== undefined) {
@@ -353,9 +370,10 @@ export const CodeInfo = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
-        if (object.instantiateConfig !== undefined && object.instantiateConfig !== null) {
+        if (object.instantiateConfig !== undefined &&
+            object.instantiateConfig !== null) {
             message.instantiateConfig = AccessConfig.fromJSON(object.instantiateConfig);
         }
         else {
@@ -365,9 +383,13 @@ export const CodeInfo = {
     },
     toJSON(message) {
         const obj = {};
-        message.codeHash !== undefined && (obj.codeHash = base64FromBytes(message.codeHash !== undefined ? message.codeHash : new Uint8Array()));
+        message.codeHash !== undefined &&
+            (obj.codeHash = base64FromBytes(message.codeHash !== undefined ? message.codeHash : new Uint8Array()));
         message.creator !== undefined && (obj.creator = message.creator);
-        message.instantiateConfig !== undefined && (obj.instantiateConfig = message.instantiateConfig ? AccessConfig.toJSON(message.instantiateConfig) : undefined);
+        message.instantiateConfig !== undefined &&
+            (obj.instantiateConfig = message.instantiateConfig
+                ? AccessConfig.toJSON(message.instantiateConfig)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -382,36 +404,43 @@ export const CodeInfo = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
-        if (object.instantiateConfig !== undefined && object.instantiateConfig !== null) {
+        if (object.instantiateConfig !== undefined &&
+            object.instantiateConfig !== null) {
             message.instantiateConfig = AccessConfig.fromPartial(object.instantiateConfig);
         }
         else {
             message.instantiateConfig = undefined;
         }
         return message;
-    }
+    },
 };
-const baseContractInfo = { codeId: 0, creator: '', admin: '', label: '', ibcPortId: '' };
+const baseContractInfo = {
+    codeId: 0,
+    creator: "",
+    admin: "",
+    label: "",
+    ibcPortId: "",
+};
 export const ContractInfo = {
     encode(message, writer = Writer.create()) {
         if (message.codeId !== 0) {
             writer.uint32(8).uint64(message.codeId);
         }
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(18).string(message.creator);
         }
-        if (message.admin !== '') {
+        if (message.admin !== "") {
             writer.uint32(26).string(message.admin);
         }
-        if (message.label !== '') {
+        if (message.label !== "") {
             writer.uint32(34).string(message.label);
         }
         if (message.created !== undefined) {
             AbsoluteTxPosition.encode(message.created, writer.uint32(42).fork()).ldelim();
         }
-        if (message.ibcPortId !== '') {
+        if (message.ibcPortId !== "") {
             writer.uint32(50).string(message.ibcPortId);
         }
         if (message.extension !== undefined) {
@@ -466,19 +495,19 @@ export const ContractInfo = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = String(object.admin);
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.label !== undefined && object.label !== null) {
             message.label = String(object.label);
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.created !== undefined && object.created !== null) {
             message.created = AbsoluteTxPosition.fromJSON(object.created);
@@ -490,7 +519,7 @@ export const ContractInfo = {
             message.ibcPortId = String(object.ibcPortId);
         }
         else {
-            message.ibcPortId = '';
+            message.ibcPortId = "";
         }
         if (object.extension !== undefined && object.extension !== null) {
             message.extension = Any.fromJSON(object.extension);
@@ -506,9 +535,15 @@ export const ContractInfo = {
         message.creator !== undefined && (obj.creator = message.creator);
         message.admin !== undefined && (obj.admin = message.admin);
         message.label !== undefined && (obj.label = message.label);
-        message.created !== undefined && (obj.created = message.created ? AbsoluteTxPosition.toJSON(message.created) : undefined);
+        message.created !== undefined &&
+            (obj.created = message.created
+                ? AbsoluteTxPosition.toJSON(message.created)
+                : undefined);
         message.ibcPortId !== undefined && (obj.ibcPortId = message.ibcPortId);
-        message.extension !== undefined && (obj.extension = message.extension ? Any.toJSON(message.extension) : undefined);
+        message.extension !== undefined &&
+            (obj.extension = message.extension
+                ? Any.toJSON(message.extension)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -523,19 +558,19 @@ export const ContractInfo = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = object.admin;
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.label !== undefined && object.label !== null) {
             message.label = object.label;
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.created !== undefined && object.created !== null) {
             message.created = AbsoluteTxPosition.fromPartial(object.created);
@@ -547,7 +582,7 @@ export const ContractInfo = {
             message.ibcPortId = object.ibcPortId;
         }
         else {
-            message.ibcPortId = '';
+            message.ibcPortId = "";
         }
         if (object.extension !== undefined && object.extension !== null) {
             message.extension = Any.fromPartial(object.extension);
@@ -556,7 +591,7 @@ export const ContractInfo = {
             message.extension = undefined;
         }
         return message;
-    }
+    },
 };
 const baseContractCodeHistoryEntry = { operation: 0, codeId: 0 };
 export const ContractCodeHistoryEntry = {
@@ -578,7 +613,9 @@ export const ContractCodeHistoryEntry = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseContractCodeHistoryEntry };
+        const message = {
+            ...baseContractCodeHistoryEntry,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -602,7 +639,9 @@ export const ContractCodeHistoryEntry = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseContractCodeHistoryEntry };
+        const message = {
+            ...baseContractCodeHistoryEntry,
+        };
         if (object.operation !== undefined && object.operation !== null) {
             message.operation = contractCodeHistoryOperationTypeFromJSON(object.operation);
         }
@@ -628,14 +667,21 @@ export const ContractCodeHistoryEntry = {
     },
     toJSON(message) {
         const obj = {};
-        message.operation !== undefined && (obj.operation = contractCodeHistoryOperationTypeToJSON(message.operation));
+        message.operation !== undefined &&
+            (obj.operation = contractCodeHistoryOperationTypeToJSON(message.operation));
         message.codeId !== undefined && (obj.codeId = message.codeId);
-        message.updated !== undefined && (obj.updated = message.updated ? AbsoluteTxPosition.toJSON(message.updated) : undefined);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.updated !== undefined &&
+            (obj.updated = message.updated
+                ? AbsoluteTxPosition.toJSON(message.updated)
+                : undefined);
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseContractCodeHistoryEntry };
+        const message = {
+            ...baseContractCodeHistoryEntry,
+        };
         if (object.operation !== undefined && object.operation !== null) {
             message.operation = object.operation;
         }
@@ -661,7 +707,7 @@ export const ContractCodeHistoryEntry = {
             message.msg = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseAbsoluteTxPosition = { blockHeight: 0, txIndex: 0 };
 export const AbsoluteTxPosition = {
@@ -712,7 +758,8 @@ export const AbsoluteTxPosition = {
     },
     toJSON(message) {
         const obj = {};
-        message.blockHeight !== undefined && (obj.blockHeight = message.blockHeight);
+        message.blockHeight !== undefined &&
+            (obj.blockHeight = message.blockHeight);
         message.txIndex !== undefined && (obj.txIndex = message.txIndex);
         return obj;
     },
@@ -731,7 +778,7 @@ export const AbsoluteTxPosition = {
             message.txIndex = 0;
         }
         return message;
-    }
+    },
 };
 const baseModel = {};
 export const Model = {
@@ -776,8 +823,10 @@ export const Model = {
     },
     toJSON(message) {
         const obj = {};
-        message.key !== undefined && (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
-        message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
+        message.key !== undefined &&
+            (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
+        message.value !== undefined &&
+            (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
@@ -795,20 +844,21 @@ export const Model = {
             message.value = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -817,17 +867,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }

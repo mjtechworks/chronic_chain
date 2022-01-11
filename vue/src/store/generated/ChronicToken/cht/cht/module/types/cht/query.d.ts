@@ -1,6 +1,6 @@
-import { Reader, Writer } from 'protobufjs/minimal';
-import { ContractInfo, ContractCodeHistoryEntry, Model } from '../cht/types';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
+import { Reader, Writer } from "protobufjs/minimal";
+import { ContractInfo, ContractCodeHistoryEntry, Model } from "../cht/types";
+import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
 export declare const protobufPackage = "cht";
 /**
  * QueryContractInfoRequest is the request type for the Query/ContractInfo RPC

@@ -1,13 +1,13 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal';
-import * as Long from 'long';
-import { AccessConfig } from '../cht/types';
-import { Coin } from '../cosmos/base/v1beta1/coin';
-export const protobufPackage = 'cht';
-const baseMsgStoreCode = { sender: '' };
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
+import { AccessConfig } from "../cht/types";
+import { Coin } from "../cosmos/base/v1beta1/coin";
+export const protobufPackage = "cht";
+const baseMsgStoreCode = { sender: "" };
 export const MsgStoreCode = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
         if (message.wasmByteCode.length !== 0) {
@@ -47,12 +47,13 @@ export const MsgStoreCode = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
             message.wasmByteCode = bytesFromBase64(object.wasmByteCode);
         }
-        if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+        if (object.instantiatePermission !== undefined &&
+            object.instantiatePermission !== null) {
             message.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
         }
         else {
@@ -63,9 +64,14 @@ export const MsgStoreCode = {
     toJSON(message) {
         const obj = {};
         message.sender !== undefined && (obj.sender = message.sender);
-        message.wasmByteCode !== undefined && (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined ? message.wasmByteCode : new Uint8Array()));
+        message.wasmByteCode !== undefined &&
+            (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined
+                ? message.wasmByteCode
+                : new Uint8Array()));
         message.instantiatePermission !== undefined &&
-            (obj.instantiatePermission = message.instantiatePermission ? AccessConfig.toJSON(message.instantiatePermission) : undefined);
+            (obj.instantiatePermission = message.instantiatePermission
+                ? AccessConfig.toJSON(message.instantiatePermission)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -74,7 +80,7 @@ export const MsgStoreCode = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
             message.wasmByteCode = object.wasmByteCode;
@@ -82,14 +88,15 @@ export const MsgStoreCode = {
         else {
             message.wasmByteCode = new Uint8Array();
         }
-        if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+        if (object.instantiatePermission !== undefined &&
+            object.instantiatePermission !== null) {
             message.instantiatePermission = AccessConfig.fromPartial(object.instantiatePermission);
         }
         else {
             message.instantiatePermission = undefined;
         }
         return message;
-    }
+    },
 };
 const baseMsgStoreCodeResponse = { codeId: 0 };
 export const MsgStoreCodeResponse = {
@@ -140,21 +147,26 @@ export const MsgStoreCodeResponse = {
             message.codeId = 0;
         }
         return message;
-    }
+    },
 };
-const baseMsgInstantiateContract = { sender: '', admin: '', codeId: 0, label: '' };
+const baseMsgInstantiateContract = {
+    sender: "",
+    admin: "",
+    codeId: 0,
+    label: "",
+};
 export const MsgInstantiateContract = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
-        if (message.admin !== '') {
+        if (message.admin !== "") {
             writer.uint32(18).string(message.admin);
         }
         if (message.codeId !== 0) {
             writer.uint32(24).uint64(message.codeId);
         }
-        if (message.label !== '') {
+        if (message.label !== "") {
             writer.uint32(34).string(message.label);
         }
         if (message.msg.length !== 0) {
@@ -205,13 +217,13 @@ export const MsgInstantiateContract = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = String(object.admin);
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = Number(object.codeId);
@@ -223,7 +235,7 @@ export const MsgInstantiateContract = {
             message.label = String(object.label);
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = bytesFromBase64(object.msg);
@@ -241,7 +253,8 @@ export const MsgInstantiateContract = {
         message.admin !== undefined && (obj.admin = message.admin);
         message.codeId !== undefined && (obj.codeId = message.codeId);
         message.label !== undefined && (obj.label = message.label);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         if (message.funds) {
             obj.funds = message.funds.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -257,13 +270,13 @@ export const MsgInstantiateContract = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = object.admin;
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = object.codeId;
@@ -275,7 +288,7 @@ export const MsgInstantiateContract = {
             message.label = object.label;
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
@@ -289,12 +302,12 @@ export const MsgInstantiateContract = {
             }
         }
         return message;
-    }
+    },
 };
-const baseMsgInstantiateContractResponse = { address: '' };
+const baseMsgInstantiateContractResponse = { address: "" };
 export const MsgInstantiateContractResponse = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.data.length !== 0) {
@@ -305,7 +318,9 @@ export const MsgInstantiateContractResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgInstantiateContractResponse };
+        const message = {
+            ...baseMsgInstantiateContractResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -323,12 +338,14 @@ export const MsgInstantiateContractResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMsgInstantiateContractResponse };
+        const message = {
+            ...baseMsgInstantiateContractResponse,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.data !== undefined && object.data !== null) {
             message.data = bytesFromBase64(object.data);
@@ -338,16 +355,19 @@ export const MsgInstantiateContractResponse = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMsgInstantiateContractResponse };
+        const message = {
+            ...baseMsgInstantiateContractResponse,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.data !== undefined && object.data !== null) {
             message.data = object.data;
@@ -356,15 +376,15 @@ export const MsgInstantiateContractResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseMsgExecuteContract = { sender: '', contract: '' };
+const baseMsgExecuteContract = { sender: "", contract: "" };
 export const MsgExecuteContract = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(18).string(message.contract);
         }
         if (message.msg.length !== 0) {
@@ -409,13 +429,13 @@ export const MsgExecuteContract = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = bytesFromBase64(object.msg);
@@ -431,7 +451,8 @@ export const MsgExecuteContract = {
         const obj = {};
         message.sender !== undefined && (obj.sender = message.sender);
         message.contract !== undefined && (obj.contract = message.contract);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         if (message.funds) {
             obj.funds = message.funds.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -447,13 +468,13 @@ export const MsgExecuteContract = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
@@ -467,7 +488,7 @@ export const MsgExecuteContract = {
             }
         }
         return message;
-    }
+    },
 };
 const baseMsgExecuteContractResponse = {};
 export const MsgExecuteContractResponse = {
@@ -480,7 +501,9 @@ export const MsgExecuteContractResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgExecuteContractResponse };
+        const message = {
+            ...baseMsgExecuteContractResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -495,7 +518,9 @@ export const MsgExecuteContractResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMsgExecuteContractResponse };
+        const message = {
+            ...baseMsgExecuteContractResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = bytesFromBase64(object.data);
         }
@@ -503,11 +528,14 @@ export const MsgExecuteContractResponse = {
     },
     toJSON(message) {
         const obj = {};
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMsgExecuteContractResponse };
+        const message = {
+            ...baseMsgExecuteContractResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = object.data;
         }
@@ -515,15 +543,15 @@ export const MsgExecuteContractResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseMsgMigrateContract = { sender: '', contract: '', codeId: 0 };
+const baseMsgMigrateContract = { sender: "", contract: "", codeId: 0 };
 export const MsgMigrateContract = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(18).string(message.contract);
         }
         if (message.codeId !== 0) {
@@ -566,13 +594,13 @@ export const MsgMigrateContract = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = Number(object.codeId);
@@ -590,7 +618,8 @@ export const MsgMigrateContract = {
         message.sender !== undefined && (obj.sender = message.sender);
         message.contract !== undefined && (obj.contract = message.contract);
         message.codeId !== undefined && (obj.codeId = message.codeId);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
@@ -599,13 +628,13 @@ export const MsgMigrateContract = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = object.codeId;
@@ -620,7 +649,7 @@ export const MsgMigrateContract = {
             message.msg = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseMsgMigrateContractResponse = {};
 export const MsgMigrateContractResponse = {
@@ -633,7 +662,9 @@ export const MsgMigrateContractResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgMigrateContractResponse };
+        const message = {
+            ...baseMsgMigrateContractResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -648,7 +679,9 @@ export const MsgMigrateContractResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMsgMigrateContractResponse };
+        const message = {
+            ...baseMsgMigrateContractResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = bytesFromBase64(object.data);
         }
@@ -656,11 +689,14 @@ export const MsgMigrateContractResponse = {
     },
     toJSON(message) {
         const obj = {};
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMsgMigrateContractResponse };
+        const message = {
+            ...baseMsgMigrateContractResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = object.data;
         }
@@ -668,18 +704,18 @@ export const MsgMigrateContractResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseMsgUpdateAdmin = { sender: '', newAdmin: '', contract: '' };
+const baseMsgUpdateAdmin = { sender: "", newAdmin: "", contract: "" };
 export const MsgUpdateAdmin = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
-        if (message.newAdmin !== '') {
+        if (message.newAdmin !== "") {
             writer.uint32(18).string(message.newAdmin);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(26).string(message.contract);
         }
         return writer;
@@ -713,19 +749,19 @@ export const MsgUpdateAdmin = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.newAdmin !== undefined && object.newAdmin !== null) {
             message.newAdmin = String(object.newAdmin);
         }
         else {
-            message.newAdmin = '';
+            message.newAdmin = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
     },
@@ -742,22 +778,22 @@ export const MsgUpdateAdmin = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.newAdmin !== undefined && object.newAdmin !== null) {
             message.newAdmin = object.newAdmin;
         }
         else {
-            message.newAdmin = '';
+            message.newAdmin = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
-    }
+    },
 };
 const baseMsgUpdateAdminResponse = {};
 export const MsgUpdateAdminResponse = {
@@ -789,15 +825,15 @@ export const MsgUpdateAdminResponse = {
     fromPartial(_) {
         const message = { ...baseMsgUpdateAdminResponse };
         return message;
-    }
+    },
 };
-const baseMsgClearAdmin = { sender: '', contract: '' };
+const baseMsgClearAdmin = { sender: "", contract: "" };
 export const MsgClearAdmin = {
     encode(message, writer = Writer.create()) {
-        if (message.sender !== '') {
+        if (message.sender !== "") {
             writer.uint32(10).string(message.sender);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(26).string(message.contract);
         }
         return writer;
@@ -828,13 +864,13 @@ export const MsgClearAdmin = {
             message.sender = String(object.sender);
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
     },
@@ -850,16 +886,16 @@ export const MsgClearAdmin = {
             message.sender = object.sender;
         }
         else {
-            message.sender = '';
+            message.sender = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
-    }
+    },
 };
 const baseMsgClearAdminResponse = {};
 export const MsgClearAdminResponse = {
@@ -891,7 +927,7 @@ export const MsgClearAdminResponse = {
     fromPartial(_) {
         const message = { ...baseMsgClearAdminResponse };
         return message;
-    }
+    },
 };
 export class MsgClientImpl {
     constructor(rpc) {
@@ -899,47 +935,48 @@ export class MsgClientImpl {
     }
     StoreCode(request) {
         const data = MsgStoreCode.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'StoreCode', data);
+        const promise = this.rpc.request("cht.Msg", "StoreCode", data);
         return promise.then((data) => MsgStoreCodeResponse.decode(new Reader(data)));
     }
     InstantiateContract(request) {
         const data = MsgInstantiateContract.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'InstantiateContract', data);
+        const promise = this.rpc.request("cht.Msg", "InstantiateContract", data);
         return promise.then((data) => MsgInstantiateContractResponse.decode(new Reader(data)));
     }
     ExecuteContract(request) {
         const data = MsgExecuteContract.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'ExecuteContract', data);
+        const promise = this.rpc.request("cht.Msg", "ExecuteContract", data);
         return promise.then((data) => MsgExecuteContractResponse.decode(new Reader(data)));
     }
     MigrateContract(request) {
         const data = MsgMigrateContract.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'MigrateContract', data);
+        const promise = this.rpc.request("cht.Msg", "MigrateContract", data);
         return promise.then((data) => MsgMigrateContractResponse.decode(new Reader(data)));
     }
     UpdateAdmin(request) {
         const data = MsgUpdateAdmin.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'UpdateAdmin', data);
+        const promise = this.rpc.request("cht.Msg", "UpdateAdmin", data);
         return promise.then((data) => MsgUpdateAdminResponse.decode(new Reader(data)));
     }
     ClearAdmin(request) {
         const data = MsgClearAdmin.encode(request).finish();
-        const promise = this.rpc.request('cht.Msg', 'ClearAdmin', data);
+        const promise = this.rpc.request("cht.Msg", "ClearAdmin", data);
         return promise.then((data) => MsgClearAdminResponse.decode(new Reader(data)));
     }
 }
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -948,17 +985,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }
