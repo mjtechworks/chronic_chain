@@ -1,6 +1,6 @@
-import { Reader, Writer } from 'protobufjs/minimal';
-import { AccessConfig } from '../cht/types';
-import { Coin } from '../cosmos/base/v1beta1/coin';
+import { Reader, Writer } from "protobufjs/minimal";
+import { AccessConfig } from "../cht/types";
+import { Coin } from "../cosmos/base/v1beta1/coin";
 export declare const protobufPackage = "cht";
 /** MsgStoreCode submit cht code to the system */
 export interface MsgStoreCode {

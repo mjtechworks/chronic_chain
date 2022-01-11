@@ -1,23 +1,23 @@
 /* eslint-disable */
-import * as Long from 'long'
-import { util, configure, Writer, Reader } from 'protobufjs/minimal'
-import { AccessConfig } from '../cht/types'
-import { Coin } from '../cosmos/base/v1beta1/coin'
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
+import { AccessConfig } from "../cht/types";
+import { Coin } from "../cosmos/base/v1beta1/coin";
 
-export const protobufPackage = 'cht'
+export const protobufPackage = "cht";
 
 /** StoreCodeProposal gov proposal content type to submit WASM code to the system */
 export interface StoreCodeProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** RunAs is the address that is passed to the contract's environment as sender */
-  runAs: string
+  runAs: string;
   /** WASMByteCode can be raw or gzip compressed */
-  wasmByteCode: Uint8Array
+  wasmByteCode: Uint8Array;
   /** InstantiatePermission to apply on contract creation, optional */
-  instantiatePermission: AccessConfig | undefined
+  instantiatePermission: AccessConfig | undefined;
 }
 
 /**
@@ -26,49 +26,49 @@ export interface StoreCodeProposal {
  */
 export interface InstantiateContractProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** RunAs is the address that is passed to the contract's environment as sender */
-  runAs: string
+  runAs: string;
   /** Admin is an optional address that can execute migrations */
-  admin: string
+  admin: string;
   /** CodeID is the reference to the stored WASM code */
-  codeId: number
+  codeId: number;
   /** Label is optional metadata to be stored with a constract instance. */
-  label: string
+  label: string;
   /** Msg json encoded message to be passed to the contract on instantiation */
-  msg: Uint8Array
+  msg: Uint8Array;
   /** Funds coins that are transferred to the contract on instantiation */
-  funds: Coin[]
+  funds: Coin[];
 }
 
 /** MigrateContractProposal gov proposal content type to migrate a contract. */
 export interface MigrateContractProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** RunAs is the address that is passed to the contract's environment as sender */
-  runAs: string
+  runAs: string;
   /** Contract is the address of the smart contract */
-  contract: string
+  contract: string;
   /** CodeID references the new WASM code */
-  codeId: number
+  codeId: number;
   /** Msg json encoded message to be passed to the contract on migration */
-  msg: Uint8Array
+  msg: Uint8Array;
 }
 
 /** UpdateAdminProposal gov proposal content type to set an admin for a contract. */
 export interface UpdateAdminProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** NewAdmin address to be set */
-  newAdmin: string
+  newAdmin: string;
   /** Contract is the address of the smart contract */
-  contract: string
+  contract: string;
 }
 
 /**
@@ -77,11 +77,11 @@ export interface UpdateAdminProposal {
  */
 export interface ClearAdminProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** Contract is the address of the smart contract */
-  contract: string
+  contract: string;
 }
 
 /**
@@ -90,11 +90,11 @@ export interface ClearAdminProposal {
  */
 export interface PinCodesProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** CodeIDs references the new WASM codes */
-  codeIds: number[]
+  codeIds: number[];
 }
 
 /**
@@ -103,887 +103,987 @@ export interface PinCodesProposal {
  */
 export interface UnpinCodesProposal {
   /** Title is a short summary */
-  title: string
+  title: string;
   /** Description is a human readable text */
-  description: string
+  description: string;
   /** CodeIDs references the WASM codes */
-  codeIds: number[]
+  codeIds: number[];
 }
 
-const baseStoreCodeProposal: object = { title: '', description: '', runAs: '' }
+const baseStoreCodeProposal: object = { title: "", description: "", runAs: "" };
 
 export const StoreCodeProposal = {
   encode(message: StoreCodeProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    if (message.runAs !== '') {
-      writer.uint32(26).string(message.runAs)
+    if (message.runAs !== "") {
+      writer.uint32(26).string(message.runAs);
     }
     if (message.wasmByteCode.length !== 0) {
-      writer.uint32(34).bytes(message.wasmByteCode)
+      writer.uint32(34).bytes(message.wasmByteCode);
     }
     if (message.instantiatePermission !== undefined) {
-      AccessConfig.encode(message.instantiatePermission, writer.uint32(58).fork()).ldelim()
+      AccessConfig.encode(
+        message.instantiatePermission,
+        writer.uint32(58).fork()
+      ).ldelim();
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): StoreCodeProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseStoreCodeProposal } as StoreCodeProposal
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseStoreCodeProposal } as StoreCodeProposal;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
-          message.runAs = reader.string()
-          break
+          message.runAs = reader.string();
+          break;
         case 4:
-          message.wasmByteCode = reader.bytes()
-          break
+          message.wasmByteCode = reader.bytes();
+          break;
         case 7:
-          message.instantiatePermission = AccessConfig.decode(reader, reader.uint32())
-          break
+          message.instantiatePermission = AccessConfig.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): StoreCodeProposal {
-    const message = { ...baseStoreCodeProposal } as StoreCodeProposal
+    const message = { ...baseStoreCodeProposal } as StoreCodeProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = String(object.runAs)
+      message.runAs = String(object.runAs);
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
-      message.wasmByteCode = bytesFromBase64(object.wasmByteCode)
+      message.wasmByteCode = bytesFromBase64(object.wasmByteCode);
     }
-    if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
-      message.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission)
+    if (
+      object.instantiatePermission !== undefined &&
+      object.instantiatePermission !== null
+    ) {
+      message.instantiatePermission = AccessConfig.fromJSON(
+        object.instantiatePermission
+      );
     } else {
-      message.instantiatePermission = undefined
+      message.instantiatePermission = undefined;
     }
-    return message
+    return message;
   },
 
   toJSON(message: StoreCodeProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
-    message.runAs !== undefined && (obj.runAs = message.runAs)
-    message.wasmByteCode !== undefined && (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined ? message.wasmByteCode : new Uint8Array()))
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.runAs !== undefined && (obj.runAs = message.runAs);
+    message.wasmByteCode !== undefined &&
+      (obj.wasmByteCode = base64FromBytes(
+        message.wasmByteCode !== undefined
+          ? message.wasmByteCode
+          : new Uint8Array()
+      ));
     message.instantiatePermission !== undefined &&
-      (obj.instantiatePermission = message.instantiatePermission ? AccessConfig.toJSON(message.instantiatePermission) : undefined)
-    return obj
+      (obj.instantiatePermission = message.instantiatePermission
+        ? AccessConfig.toJSON(message.instantiatePermission)
+        : undefined);
+    return obj;
   },
 
   fromPartial(object: DeepPartial<StoreCodeProposal>): StoreCodeProposal {
-    const message = { ...baseStoreCodeProposal } as StoreCodeProposal
+    const message = { ...baseStoreCodeProposal } as StoreCodeProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = object.runAs
+      message.runAs = object.runAs;
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
-      message.wasmByteCode = object.wasmByteCode
+      message.wasmByteCode = object.wasmByteCode;
     } else {
-      message.wasmByteCode = new Uint8Array()
+      message.wasmByteCode = new Uint8Array();
     }
-    if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
-      message.instantiatePermission = AccessConfig.fromPartial(object.instantiatePermission)
+    if (
+      object.instantiatePermission !== undefined &&
+      object.instantiatePermission !== null
+    ) {
+      message.instantiatePermission = AccessConfig.fromPartial(
+        object.instantiatePermission
+      );
     } else {
-      message.instantiatePermission = undefined
+      message.instantiatePermission = undefined;
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseInstantiateContractProposal: object = { title: '', description: '', runAs: '', admin: '', codeId: 0, label: '' }
+const baseInstantiateContractProposal: object = {
+  title: "",
+  description: "",
+  runAs: "",
+  admin: "",
+  codeId: 0,
+  label: "",
+};
 
 export const InstantiateContractProposal = {
-  encode(message: InstantiateContractProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+  encode(
+    message: InstantiateContractProposal,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    if (message.runAs !== '') {
-      writer.uint32(26).string(message.runAs)
+    if (message.runAs !== "") {
+      writer.uint32(26).string(message.runAs);
     }
-    if (message.admin !== '') {
-      writer.uint32(34).string(message.admin)
+    if (message.admin !== "") {
+      writer.uint32(34).string(message.admin);
     }
     if (message.codeId !== 0) {
-      writer.uint32(40).uint64(message.codeId)
+      writer.uint32(40).uint64(message.codeId);
     }
-    if (message.label !== '') {
-      writer.uint32(50).string(message.label)
+    if (message.label !== "") {
+      writer.uint32(50).string(message.label);
     }
     if (message.msg.length !== 0) {
-      writer.uint32(58).bytes(message.msg)
+      writer.uint32(58).bytes(message.msg);
     }
     for (const v of message.funds) {
-      Coin.encode(v!, writer.uint32(66).fork()).ldelim()
+      Coin.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    return writer
+    return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): InstantiateContractProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseInstantiateContractProposal } as InstantiateContractProposal
-    message.funds = []
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): InstantiateContractProposal {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseInstantiateContractProposal,
+    } as InstantiateContractProposal;
+    message.funds = [];
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
-          message.runAs = reader.string()
-          break
+          message.runAs = reader.string();
+          break;
         case 4:
-          message.admin = reader.string()
-          break
+          message.admin = reader.string();
+          break;
         case 5:
-          message.codeId = longToNumber(reader.uint64() as Long)
-          break
+          message.codeId = longToNumber(reader.uint64() as Long);
+          break;
         case 6:
-          message.label = reader.string()
-          break
+          message.label = reader.string();
+          break;
         case 7:
-          message.msg = reader.bytes()
-          break
+          message.msg = reader.bytes();
+          break;
         case 8:
-          message.funds.push(Coin.decode(reader, reader.uint32()))
-          break
+          message.funds.push(Coin.decode(reader, reader.uint32()));
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): InstantiateContractProposal {
-    const message = { ...baseInstantiateContractProposal } as InstantiateContractProposal
-    message.funds = []
+    const message = {
+      ...baseInstantiateContractProposal,
+    } as InstantiateContractProposal;
+    message.funds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = String(object.runAs)
+      message.runAs = String(object.runAs);
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.admin !== undefined && object.admin !== null) {
-      message.admin = String(object.admin)
+      message.admin = String(object.admin);
     } else {
-      message.admin = ''
+      message.admin = "";
     }
     if (object.codeId !== undefined && object.codeId !== null) {
-      message.codeId = Number(object.codeId)
+      message.codeId = Number(object.codeId);
     } else {
-      message.codeId = 0
+      message.codeId = 0;
     }
     if (object.label !== undefined && object.label !== null) {
-      message.label = String(object.label)
+      message.label = String(object.label);
     } else {
-      message.label = ''
+      message.label = "";
     }
     if (object.msg !== undefined && object.msg !== null) {
-      message.msg = bytesFromBase64(object.msg)
+      message.msg = bytesFromBase64(object.msg);
     }
     if (object.funds !== undefined && object.funds !== null) {
       for (const e of object.funds) {
-        message.funds.push(Coin.fromJSON(e))
+        message.funds.push(Coin.fromJSON(e));
       }
     }
-    return message
+    return message;
   },
 
   toJSON(message: InstantiateContractProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
-    message.runAs !== undefined && (obj.runAs = message.runAs)
-    message.admin !== undefined && (obj.admin = message.admin)
-    message.codeId !== undefined && (obj.codeId = message.codeId)
-    message.label !== undefined && (obj.label = message.label)
-    message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()))
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.runAs !== undefined && (obj.runAs = message.runAs);
+    message.admin !== undefined && (obj.admin = message.admin);
+    message.codeId !== undefined && (obj.codeId = message.codeId);
+    message.label !== undefined && (obj.label = message.label);
+    message.msg !== undefined &&
+      (obj.msg = base64FromBytes(
+        message.msg !== undefined ? message.msg : new Uint8Array()
+      ));
     if (message.funds) {
-      obj.funds = message.funds.map((e) => (e ? Coin.toJSON(e) : undefined))
+      obj.funds = message.funds.map((e) => (e ? Coin.toJSON(e) : undefined));
     } else {
-      obj.funds = []
+      obj.funds = [];
     }
-    return obj
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<InstantiateContractProposal>): InstantiateContractProposal {
-    const message = { ...baseInstantiateContractProposal } as InstantiateContractProposal
-    message.funds = []
+  fromPartial(
+    object: DeepPartial<InstantiateContractProposal>
+  ): InstantiateContractProposal {
+    const message = {
+      ...baseInstantiateContractProposal,
+    } as InstantiateContractProposal;
+    message.funds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = object.runAs
+      message.runAs = object.runAs;
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.admin !== undefined && object.admin !== null) {
-      message.admin = object.admin
+      message.admin = object.admin;
     } else {
-      message.admin = ''
+      message.admin = "";
     }
     if (object.codeId !== undefined && object.codeId !== null) {
-      message.codeId = object.codeId
+      message.codeId = object.codeId;
     } else {
-      message.codeId = 0
+      message.codeId = 0;
     }
     if (object.label !== undefined && object.label !== null) {
-      message.label = object.label
+      message.label = object.label;
     } else {
-      message.label = ''
+      message.label = "";
     }
     if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg
+      message.msg = object.msg;
     } else {
-      message.msg = new Uint8Array()
+      message.msg = new Uint8Array();
     }
     if (object.funds !== undefined && object.funds !== null) {
       for (const e of object.funds) {
-        message.funds.push(Coin.fromPartial(e))
+        message.funds.push(Coin.fromPartial(e));
       }
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseMigrateContractProposal: object = { title: '', description: '', runAs: '', contract: '', codeId: 0 }
+const baseMigrateContractProposal: object = {
+  title: "",
+  description: "",
+  runAs: "",
+  contract: "",
+  codeId: 0,
+};
 
 export const MigrateContractProposal = {
-  encode(message: MigrateContractProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+  encode(
+    message: MigrateContractProposal,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    if (message.runAs !== '') {
-      writer.uint32(26).string(message.runAs)
+    if (message.runAs !== "") {
+      writer.uint32(26).string(message.runAs);
     }
-    if (message.contract !== '') {
-      writer.uint32(34).string(message.contract)
+    if (message.contract !== "") {
+      writer.uint32(34).string(message.contract);
     }
     if (message.codeId !== 0) {
-      writer.uint32(40).uint64(message.codeId)
+      writer.uint32(40).uint64(message.codeId);
     }
     if (message.msg.length !== 0) {
-      writer.uint32(50).bytes(message.msg)
+      writer.uint32(50).bytes(message.msg);
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): MigrateContractProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMigrateContractProposal } as MigrateContractProposal
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMigrateContractProposal,
+    } as MigrateContractProposal;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
-          message.runAs = reader.string()
-          break
+          message.runAs = reader.string();
+          break;
         case 4:
-          message.contract = reader.string()
-          break
+          message.contract = reader.string();
+          break;
         case 5:
-          message.codeId = longToNumber(reader.uint64() as Long)
-          break
+          message.codeId = longToNumber(reader.uint64() as Long);
+          break;
         case 6:
-          message.msg = reader.bytes()
-          break
+          message.msg = reader.bytes();
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): MigrateContractProposal {
-    const message = { ...baseMigrateContractProposal } as MigrateContractProposal
+    const message = {
+      ...baseMigrateContractProposal,
+    } as MigrateContractProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = String(object.runAs)
+      message.runAs = String(object.runAs);
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = String(object.contract)
+      message.contract = String(object.contract);
     } else {
-      message.contract = ''
+      message.contract = "";
     }
     if (object.codeId !== undefined && object.codeId !== null) {
-      message.codeId = Number(object.codeId)
+      message.codeId = Number(object.codeId);
     } else {
-      message.codeId = 0
+      message.codeId = 0;
     }
     if (object.msg !== undefined && object.msg !== null) {
-      message.msg = bytesFromBase64(object.msg)
+      message.msg = bytesFromBase64(object.msg);
     }
-    return message
+    return message;
   },
 
   toJSON(message: MigrateContractProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
-    message.runAs !== undefined && (obj.runAs = message.runAs)
-    message.contract !== undefined && (obj.contract = message.contract)
-    message.codeId !== undefined && (obj.codeId = message.codeId)
-    message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()))
-    return obj
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.runAs !== undefined && (obj.runAs = message.runAs);
+    message.contract !== undefined && (obj.contract = message.contract);
+    message.codeId !== undefined && (obj.codeId = message.codeId);
+    message.msg !== undefined &&
+      (obj.msg = base64FromBytes(
+        message.msg !== undefined ? message.msg : new Uint8Array()
+      ));
+    return obj;
   },
 
-  fromPartial(object: DeepPartial<MigrateContractProposal>): MigrateContractProposal {
-    const message = { ...baseMigrateContractProposal } as MigrateContractProposal
+  fromPartial(
+    object: DeepPartial<MigrateContractProposal>
+  ): MigrateContractProposal {
+    const message = {
+      ...baseMigrateContractProposal,
+    } as MigrateContractProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.runAs !== undefined && object.runAs !== null) {
-      message.runAs = object.runAs
+      message.runAs = object.runAs;
     } else {
-      message.runAs = ''
+      message.runAs = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = object.contract
+      message.contract = object.contract;
     } else {
-      message.contract = ''
+      message.contract = "";
     }
     if (object.codeId !== undefined && object.codeId !== null) {
-      message.codeId = object.codeId
+      message.codeId = object.codeId;
     } else {
-      message.codeId = 0
+      message.codeId = 0;
     }
     if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg
+      message.msg = object.msg;
     } else {
-      message.msg = new Uint8Array()
+      message.msg = new Uint8Array();
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseUpdateAdminProposal: object = { title: '', description: '', newAdmin: '', contract: '' }
+const baseUpdateAdminProposal: object = {
+  title: "",
+  description: "",
+  newAdmin: "",
+  contract: "",
+};
 
 export const UpdateAdminProposal = {
-  encode(message: UpdateAdminProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+  encode(
+    message: UpdateAdminProposal,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    if (message.newAdmin !== '') {
-      writer.uint32(26).string(message.newAdmin)
+    if (message.newAdmin !== "") {
+      writer.uint32(26).string(message.newAdmin);
     }
-    if (message.contract !== '') {
-      writer.uint32(34).string(message.contract)
+    if (message.contract !== "") {
+      writer.uint32(34).string(message.contract);
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): UpdateAdminProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
-          message.newAdmin = reader.string()
-          break
+          message.newAdmin = reader.string();
+          break;
         case 4:
-          message.contract = reader.string()
-          break
+          message.contract = reader.string();
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): UpdateAdminProposal {
-    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal
+    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.newAdmin !== undefined && object.newAdmin !== null) {
-      message.newAdmin = String(object.newAdmin)
+      message.newAdmin = String(object.newAdmin);
     } else {
-      message.newAdmin = ''
+      message.newAdmin = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = String(object.contract)
+      message.contract = String(object.contract);
     } else {
-      message.contract = ''
+      message.contract = "";
     }
-    return message
+    return message;
   },
 
   toJSON(message: UpdateAdminProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
-    message.newAdmin !== undefined && (obj.newAdmin = message.newAdmin)
-    message.contract !== undefined && (obj.contract = message.contract)
-    return obj
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.newAdmin !== undefined && (obj.newAdmin = message.newAdmin);
+    message.contract !== undefined && (obj.contract = message.contract);
+    return obj;
   },
 
   fromPartial(object: DeepPartial<UpdateAdminProposal>): UpdateAdminProposal {
-    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal
+    const message = { ...baseUpdateAdminProposal } as UpdateAdminProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.newAdmin !== undefined && object.newAdmin !== null) {
-      message.newAdmin = object.newAdmin
+      message.newAdmin = object.newAdmin;
     } else {
-      message.newAdmin = ''
+      message.newAdmin = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = object.contract
+      message.contract = object.contract;
     } else {
-      message.contract = ''
+      message.contract = "";
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseClearAdminProposal: object = { title: '', description: '', contract: '' }
+const baseClearAdminProposal: object = {
+  title: "",
+  description: "",
+  contract: "",
+};
 
 export const ClearAdminProposal = {
-  encode(message: ClearAdminProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+  encode(
+    message: ClearAdminProposal,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    if (message.contract !== '') {
-      writer.uint32(26).string(message.contract)
+    if (message.contract !== "") {
+      writer.uint32(26).string(message.contract);
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ClearAdminProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseClearAdminProposal } as ClearAdminProposal
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseClearAdminProposal } as ClearAdminProposal;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
-          message.contract = reader.string()
-          break
+          message.contract = reader.string();
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): ClearAdminProposal {
-    const message = { ...baseClearAdminProposal } as ClearAdminProposal
+    const message = { ...baseClearAdminProposal } as ClearAdminProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = String(object.contract)
+      message.contract = String(object.contract);
     } else {
-      message.contract = ''
+      message.contract = "";
     }
-    return message
+    return message;
   },
 
   toJSON(message: ClearAdminProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
-    message.contract !== undefined && (obj.contract = message.contract)
-    return obj
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.contract !== undefined && (obj.contract = message.contract);
+    return obj;
   },
 
   fromPartial(object: DeepPartial<ClearAdminProposal>): ClearAdminProposal {
-    const message = { ...baseClearAdminProposal } as ClearAdminProposal
+    const message = { ...baseClearAdminProposal } as ClearAdminProposal;
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.contract !== undefined && object.contract !== null) {
-      message.contract = object.contract
+      message.contract = object.contract;
     } else {
-      message.contract = ''
+      message.contract = "";
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const basePinCodesProposal: object = { title: '', description: '', codeIds: 0 }
+const basePinCodesProposal: object = { title: "", description: "", codeIds: 0 };
 
 export const PinCodesProposal = {
   encode(message: PinCodesProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    writer.uint32(26).fork()
+    writer.uint32(26).fork();
     for (const v of message.codeIds) {
-      writer.uint64(v)
+      writer.uint64(v);
     }
-    writer.ldelim()
-    return writer
+    writer.ldelim();
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PinCodesProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...basePinCodesProposal } as PinCodesProposal
-    message.codeIds = []
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...basePinCodesProposal } as PinCodesProposal;
+    message.codeIds = [];
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
           if ((tag & 7) === 2) {
-            const end2 = reader.uint32() + reader.pos
+            const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.codeIds.push(longToNumber(reader.uint64() as Long))
+              message.codeIds.push(longToNumber(reader.uint64() as Long));
             }
           } else {
-            message.codeIds.push(longToNumber(reader.uint64() as Long))
+            message.codeIds.push(longToNumber(reader.uint64() as Long));
           }
-          break
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): PinCodesProposal {
-    const message = { ...basePinCodesProposal } as PinCodesProposal
-    message.codeIds = []
+    const message = { ...basePinCodesProposal } as PinCodesProposal;
+    message.codeIds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.codeIds !== undefined && object.codeIds !== null) {
       for (const e of object.codeIds) {
-        message.codeIds.push(Number(e))
+        message.codeIds.push(Number(e));
       }
     }
-    return message
+    return message;
   },
 
   toJSON(message: PinCodesProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.codeIds) {
-      obj.codeIds = message.codeIds.map((e) => e)
+      obj.codeIds = message.codeIds.map((e) => e);
     } else {
-      obj.codeIds = []
+      obj.codeIds = [];
     }
-    return obj
+    return obj;
   },
 
   fromPartial(object: DeepPartial<PinCodesProposal>): PinCodesProposal {
-    const message = { ...basePinCodesProposal } as PinCodesProposal
-    message.codeIds = []
+    const message = { ...basePinCodesProposal } as PinCodesProposal;
+    message.codeIds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.codeIds !== undefined && object.codeIds !== null) {
       for (const e of object.codeIds) {
-        message.codeIds.push(e)
+        message.codeIds.push(e);
       }
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseUnpinCodesProposal: object = { title: '', description: '', codeIds: 0 }
+const baseUnpinCodesProposal: object = {
+  title: "",
+  description: "",
+  codeIds: 0,
+};
 
 export const UnpinCodesProposal = {
-  encode(message: UnpinCodesProposal, writer: Writer = Writer.create()): Writer {
-    if (message.title !== '') {
-      writer.uint32(10).string(message.title)
+  encode(
+    message: UnpinCodesProposal,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
     }
-    if (message.description !== '') {
-      writer.uint32(18).string(message.description)
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
     }
-    writer.uint32(26).fork()
+    writer.uint32(26).fork();
     for (const v of message.codeIds) {
-      writer.uint64(v)
+      writer.uint64(v);
     }
-    writer.ldelim()
-    return writer
+    writer.ldelim();
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): UnpinCodesProposal {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal
-    message.codeIds = []
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal;
+    message.codeIds = [];
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.title = reader.string()
-          break
+          message.title = reader.string();
+          break;
         case 2:
-          message.description = reader.string()
-          break
+          message.description = reader.string();
+          break;
         case 3:
           if ((tag & 7) === 2) {
-            const end2 = reader.uint32() + reader.pos
+            const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.codeIds.push(longToNumber(reader.uint64() as Long))
+              message.codeIds.push(longToNumber(reader.uint64() as Long));
             }
           } else {
-            message.codeIds.push(longToNumber(reader.uint64() as Long))
+            message.codeIds.push(longToNumber(reader.uint64() as Long));
           }
-          break
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): UnpinCodesProposal {
-    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal
-    message.codeIds = []
+    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal;
+    message.codeIds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = String(object.title)
+      message.title = String(object.title);
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description)
+      message.description = String(object.description);
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.codeIds !== undefined && object.codeIds !== null) {
       for (const e of object.codeIds) {
-        message.codeIds.push(Number(e))
+        message.codeIds.push(Number(e));
       }
     }
-    return message
+    return message;
   },
 
   toJSON(message: UnpinCodesProposal): unknown {
-    const obj: any = {}
-    message.title !== undefined && (obj.title = message.title)
-    message.description !== undefined && (obj.description = message.description)
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.codeIds) {
-      obj.codeIds = message.codeIds.map((e) => e)
+      obj.codeIds = message.codeIds.map((e) => e);
     } else {
-      obj.codeIds = []
+      obj.codeIds = [];
     }
-    return obj
+    return obj;
   },
 
   fromPartial(object: DeepPartial<UnpinCodesProposal>): UnpinCodesProposal {
-    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal
-    message.codeIds = []
+    const message = { ...baseUnpinCodesProposal } as UnpinCodesProposal;
+    message.codeIds = [];
     if (object.title !== undefined && object.title !== null) {
-      message.title = object.title
+      message.title = object.title;
     } else {
-      message.title = ''
+      message.title = "";
     }
     if (object.description !== undefined && object.description !== null) {
-      message.description = object.description
+      message.description = object.description;
     } else {
-      message.description = ''
+      message.description = "";
     }
     if (object.codeIds !== undefined && object.codeIds !== null) {
       for (const e of object.codeIds) {
-        message.codeIds.push(e)
+        message.codeIds.push(e);
       }
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-declare var self: any | undefined
-declare var window: any | undefined
+declare var self: any | undefined;
+declare var window: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
-const atob: (b64: string) => string = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'))
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64)
-  const arr = new Uint8Array(bin.length)
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i)
+    arr[i] = bin.charCodeAt(i);
   }
-  return arr
+  return arr;
 }
 
-const btoa: (bin: string) => string = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'))
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = []
+  const bin: string[] = [];
   for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]))
+    bin.push(String.fromCharCode(arr[i]));
   }
-  return btoa(bin.join(''))
+  return btoa(bin.join(""));
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -992,16 +1092,16 @@ export type DeepPartial<T> = T extends Builtin
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+  : Partial<T>;
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
-  return long.toNumber()
+  return long.toNumber();
 }
 
 if (util.Long !== Long) {
-  util.Long = Long as any
-  configure()
+  util.Long = Long as any;
+  configure();
 }

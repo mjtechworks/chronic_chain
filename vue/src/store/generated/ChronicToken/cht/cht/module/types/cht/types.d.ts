@@ -1,5 +1,5 @@
-import { Writer, Reader } from 'protobufjs/minimal';
-import { Any } from '../google/protobuf/any';
+import { Writer, Reader } from "protobufjs/minimal";
+import { Any } from "../google/protobuf/any";
 export declare const protobufPackage = "cht";
 /** AccessType permission types */
 export declare enum AccessType {

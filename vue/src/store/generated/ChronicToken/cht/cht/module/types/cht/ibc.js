@@ -1,11 +1,15 @@
 /* eslint-disable */
-import * as Long from 'long';
-import { util, configure, Writer, Reader } from 'protobufjs/minimal';
-export const protobufPackage = 'cht';
-const baseMsgIBCSend = { channel: '', timeoutHeight: 0, timeoutTimestamp: 0 };
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
+export const protobufPackage = "cht";
+const baseMsgIBCSend = {
+    channel: "",
+    timeoutHeight: 0,
+    timeoutTimestamp: 0,
+};
 export const MsgIBCSend = {
     encode(message, writer = Writer.create()) {
-        if (message.channel !== '') {
+        if (message.channel !== "") {
             writer.uint32(18).string(message.channel);
         }
         if (message.timeoutHeight !== 0) {
@@ -51,7 +55,7 @@ export const MsgIBCSend = {
             message.channel = String(object.channel);
         }
         else {
-            message.channel = '';
+            message.channel = "";
         }
         if (object.timeoutHeight !== undefined && object.timeoutHeight !== null) {
             message.timeoutHeight = Number(object.timeoutHeight);
@@ -59,7 +63,8 @@ export const MsgIBCSend = {
         else {
             message.timeoutHeight = 0;
         }
-        if (object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null) {
+        if (object.timeoutTimestamp !== undefined &&
+            object.timeoutTimestamp !== null) {
             message.timeoutTimestamp = Number(object.timeoutTimestamp);
         }
         else {
@@ -73,9 +78,12 @@ export const MsgIBCSend = {
     toJSON(message) {
         const obj = {};
         message.channel !== undefined && (obj.channel = message.channel);
-        message.timeoutHeight !== undefined && (obj.timeoutHeight = message.timeoutHeight);
-        message.timeoutTimestamp !== undefined && (obj.timeoutTimestamp = message.timeoutTimestamp);
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.timeoutHeight !== undefined &&
+            (obj.timeoutHeight = message.timeoutHeight);
+        message.timeoutTimestamp !== undefined &&
+            (obj.timeoutTimestamp = message.timeoutTimestamp);
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
@@ -84,7 +92,7 @@ export const MsgIBCSend = {
             message.channel = object.channel;
         }
         else {
-            message.channel = '';
+            message.channel = "";
         }
         if (object.timeoutHeight !== undefined && object.timeoutHeight !== null) {
             message.timeoutHeight = object.timeoutHeight;
@@ -92,7 +100,8 @@ export const MsgIBCSend = {
         else {
             message.timeoutHeight = 0;
         }
-        if (object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null) {
+        if (object.timeoutTimestamp !== undefined &&
+            object.timeoutTimestamp !== null) {
             message.timeoutTimestamp = object.timeoutTimestamp;
         }
         else {
@@ -105,12 +114,12 @@ export const MsgIBCSend = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseMsgIBCCloseChannel = { channel: '' };
+const baseMsgIBCCloseChannel = { channel: "" };
 export const MsgIBCCloseChannel = {
     encode(message, writer = Writer.create()) {
-        if (message.channel !== '') {
+        if (message.channel !== "") {
             writer.uint32(18).string(message.channel);
         }
         return writer;
@@ -138,7 +147,7 @@ export const MsgIBCCloseChannel = {
             message.channel = String(object.channel);
         }
         else {
-            message.channel = '';
+            message.channel = "";
         }
         return message;
     },
@@ -153,23 +162,24 @@ export const MsgIBCCloseChannel = {
             message.channel = object.channel;
         }
         else {
-            message.channel = '';
+            message.channel = "";
         }
         return message;
-    }
+    },
 };
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -178,17 +188,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }

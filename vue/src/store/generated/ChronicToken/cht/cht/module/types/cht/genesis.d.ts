@@ -1,6 +1,6 @@
-import { Writer, Reader } from 'protobufjs/minimal';
-import { Params, CodeInfo, ContractInfo, Model } from '../cht/types';
-import { MsgStoreCode, MsgInstantiateContract, MsgExecuteContract } from '../cht/tx';
+import { Writer, Reader } from "protobufjs/minimal";
+import { Params, CodeInfo, ContractInfo, Model } from "../cht/types";
+import { MsgStoreCode, MsgInstantiateContract, MsgExecuteContract } from "../cht/tx";
 export declare const protobufPackage = "cht";
 /** GenesisState - genesis state of x/wasm */
 export interface GenesisState {

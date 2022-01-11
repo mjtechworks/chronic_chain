@@ -1,6 +1,6 @@
-import { Writer, Reader } from 'protobufjs/minimal';
-import { AccessConfig } from '../cht/types';
-import { Coin } from '../cosmos/base/v1beta1/coin';
+import { Writer, Reader } from "protobufjs/minimal";
+import { AccessConfig } from "../cht/types";
+import { Coin } from "../cosmos/base/v1beta1/coin";
 export declare const protobufPackage = "cht";
 /** StoreCodeProposal gov proposal content type to submit WASM code to the system */
 export interface StoreCodeProposal {

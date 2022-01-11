@@ -1,9 +1,9 @@
 /* eslint-disable */
-import * as Long from 'long';
-import { util, configure, Writer, Reader } from 'protobufjs/minimal';
-import { Params, CodeInfo, ContractInfo, Model } from '../cht/types';
-import { MsgStoreCode, MsgInstantiateContract, MsgExecuteContract } from '../cht/tx';
-export const protobufPackage = 'cht';
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
+import { Params, CodeInfo, ContractInfo, Model } from "../cht/types";
+import { MsgStoreCode, MsgInstantiateContract, MsgExecuteContract, } from "../cht/tx";
+export const protobufPackage = "cht";
 const baseGenesisState = {};
 export const GenesisState = {
     encode(message, writer = Writer.create()) {
@@ -93,7 +93,8 @@ export const GenesisState = {
     },
     toJSON(message) {
         const obj = {};
-        message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+        message.params !== undefined &&
+            (obj.params = message.params ? Params.toJSON(message.params) : undefined);
         if (message.codes) {
             obj.codes = message.codes.map((e) => (e ? Code.toJSON(e) : undefined));
         }
@@ -101,19 +102,19 @@ export const GenesisState = {
             obj.codes = [];
         }
         if (message.contracts) {
-            obj.contracts = message.contracts.map((e) => (e ? Contract.toJSON(e) : undefined));
+            obj.contracts = message.contracts.map((e) => e ? Contract.toJSON(e) : undefined);
         }
         else {
             obj.contracts = [];
         }
         if (message.sequences) {
-            obj.sequences = message.sequences.map((e) => (e ? Sequence.toJSON(e) : undefined));
+            obj.sequences = message.sequences.map((e) => e ? Sequence.toJSON(e) : undefined);
         }
         else {
             obj.sequences = [];
         }
         if (message.genMsgs) {
-            obj.genMsgs = message.genMsgs.map((e) => (e ? GenesisState_GenMsgs.toJSON(e) : undefined));
+            obj.genMsgs = message.genMsgs.map((e) => e ? GenesisState_GenMsgs.toJSON(e) : undefined);
         }
         else {
             obj.genMsgs = [];
@@ -153,7 +154,7 @@ export const GenesisState = {
             }
         }
         return message;
-    }
+    },
 };
 const baseGenesisState_GenMsgs = {};
 export const GenesisState_GenMsgs = {
@@ -200,13 +201,15 @@ export const GenesisState_GenMsgs = {
         else {
             message.storeCode = undefined;
         }
-        if (object.instantiateContract !== undefined && object.instantiateContract !== null) {
+        if (object.instantiateContract !== undefined &&
+            object.instantiateContract !== null) {
             message.instantiateContract = MsgInstantiateContract.fromJSON(object.instantiateContract);
         }
         else {
             message.instantiateContract = undefined;
         }
-        if (object.executeContract !== undefined && object.executeContract !== null) {
+        if (object.executeContract !== undefined &&
+            object.executeContract !== null) {
             message.executeContract = MsgExecuteContract.fromJSON(object.executeContract);
         }
         else {
@@ -216,10 +219,18 @@ export const GenesisState_GenMsgs = {
     },
     toJSON(message) {
         const obj = {};
-        message.storeCode !== undefined && (obj.storeCode = message.storeCode ? MsgStoreCode.toJSON(message.storeCode) : undefined);
+        message.storeCode !== undefined &&
+            (obj.storeCode = message.storeCode
+                ? MsgStoreCode.toJSON(message.storeCode)
+                : undefined);
         message.instantiateContract !== undefined &&
-            (obj.instantiateContract = message.instantiateContract ? MsgInstantiateContract.toJSON(message.instantiateContract) : undefined);
-        message.executeContract !== undefined && (obj.executeContract = message.executeContract ? MsgExecuteContract.toJSON(message.executeContract) : undefined);
+            (obj.instantiateContract = message.instantiateContract
+                ? MsgInstantiateContract.toJSON(message.instantiateContract)
+                : undefined);
+        message.executeContract !== undefined &&
+            (obj.executeContract = message.executeContract
+                ? MsgExecuteContract.toJSON(message.executeContract)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -230,20 +241,22 @@ export const GenesisState_GenMsgs = {
         else {
             message.storeCode = undefined;
         }
-        if (object.instantiateContract !== undefined && object.instantiateContract !== null) {
+        if (object.instantiateContract !== undefined &&
+            object.instantiateContract !== null) {
             message.instantiateContract = MsgInstantiateContract.fromPartial(object.instantiateContract);
         }
         else {
             message.instantiateContract = undefined;
         }
-        if (object.executeContract !== undefined && object.executeContract !== null) {
+        if (object.executeContract !== undefined &&
+            object.executeContract !== null) {
             message.executeContract = MsgExecuteContract.fromPartial(object.executeContract);
         }
         else {
             message.executeContract = undefined;
         }
         return message;
-    }
+    },
 };
 const baseCode = { codeId: 0, pinned: false };
 export const Code = {
@@ -316,8 +329,12 @@ export const Code = {
     toJSON(message) {
         const obj = {};
         message.codeId !== undefined && (obj.codeId = message.codeId);
-        message.codeInfo !== undefined && (obj.codeInfo = message.codeInfo ? CodeInfo.toJSON(message.codeInfo) : undefined);
-        message.codeBytes !== undefined && (obj.codeBytes = base64FromBytes(message.codeBytes !== undefined ? message.codeBytes : new Uint8Array()));
+        message.codeInfo !== undefined &&
+            (obj.codeInfo = message.codeInfo
+                ? CodeInfo.toJSON(message.codeInfo)
+                : undefined);
+        message.codeBytes !== undefined &&
+            (obj.codeBytes = base64FromBytes(message.codeBytes !== undefined ? message.codeBytes : new Uint8Array()));
         message.pinned !== undefined && (obj.pinned = message.pinned);
         return obj;
     },
@@ -348,12 +365,12 @@ export const Code = {
             message.pinned = false;
         }
         return message;
-    }
+    },
 };
-const baseContract = { contractAddress: '' };
+const baseContract = { contractAddress: "" };
 export const Contract = {
     encode(message, writer = Writer.create()) {
-        if (message.contractAddress !== '') {
+        if (message.contractAddress !== "") {
             writer.uint32(10).string(message.contractAddress);
         }
         if (message.contractInfo !== undefined) {
@@ -391,11 +408,12 @@ export const Contract = {
     fromJSON(object) {
         const message = { ...baseContract };
         message.contractState = [];
-        if (object.contractAddress !== undefined && object.contractAddress !== null) {
+        if (object.contractAddress !== undefined &&
+            object.contractAddress !== null) {
             message.contractAddress = String(object.contractAddress);
         }
         else {
-            message.contractAddress = '';
+            message.contractAddress = "";
         }
         if (object.contractInfo !== undefined && object.contractInfo !== null) {
             message.contractInfo = ContractInfo.fromJSON(object.contractInfo);
@@ -412,10 +430,14 @@ export const Contract = {
     },
     toJSON(message) {
         const obj = {};
-        message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
-        message.contractInfo !== undefined && (obj.contractInfo = message.contractInfo ? ContractInfo.toJSON(message.contractInfo) : undefined);
+        message.contractAddress !== undefined &&
+            (obj.contractAddress = message.contractAddress);
+        message.contractInfo !== undefined &&
+            (obj.contractInfo = message.contractInfo
+                ? ContractInfo.toJSON(message.contractInfo)
+                : undefined);
         if (message.contractState) {
-            obj.contractState = message.contractState.map((e) => (e ? Model.toJSON(e) : undefined));
+            obj.contractState = message.contractState.map((e) => e ? Model.toJSON(e) : undefined);
         }
         else {
             obj.contractState = [];
@@ -425,11 +447,12 @@ export const Contract = {
     fromPartial(object) {
         const message = { ...baseContract };
         message.contractState = [];
-        if (object.contractAddress !== undefined && object.contractAddress !== null) {
+        if (object.contractAddress !== undefined &&
+            object.contractAddress !== null) {
             message.contractAddress = object.contractAddress;
         }
         else {
-            message.contractAddress = '';
+            message.contractAddress = "";
         }
         if (object.contractInfo !== undefined && object.contractInfo !== null) {
             message.contractInfo = ContractInfo.fromPartial(object.contractInfo);
@@ -443,7 +466,7 @@ export const Contract = {
             }
         }
         return message;
-    }
+    },
 };
 const baseSequence = { value: 0 };
 export const Sequence = {
@@ -491,7 +514,8 @@ export const Sequence = {
     },
     toJSON(message) {
         const obj = {};
-        message.idKey !== undefined && (obj.idKey = base64FromBytes(message.idKey !== undefined ? message.idKey : new Uint8Array()));
+        message.idKey !== undefined &&
+            (obj.idKey = base64FromBytes(message.idKey !== undefined ? message.idKey : new Uint8Array()));
         message.value !== undefined && (obj.value = message.value);
         return obj;
     },
@@ -510,20 +534,21 @@ export const Sequence = {
             message.value = 0;
         }
         return message;
-    }
+    },
 };
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -532,17 +557,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }

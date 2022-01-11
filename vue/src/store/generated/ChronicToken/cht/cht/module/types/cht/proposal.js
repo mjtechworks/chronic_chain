@@ -1,19 +1,19 @@
 /* eslint-disable */
-import * as Long from 'long';
-import { util, configure, Writer, Reader } from 'protobufjs/minimal';
-import { AccessConfig } from '../cht/types';
-import { Coin } from '../cosmos/base/v1beta1/coin';
-export const protobufPackage = 'cht';
-const baseStoreCodeProposal = { title: '', description: '', runAs: '' };
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
+import { AccessConfig } from "../cht/types";
+import { Coin } from "../cosmos/base/v1beta1/coin";
+export const protobufPackage = "cht";
+const baseStoreCodeProposal = { title: "", description: "", runAs: "" };
 export const StoreCodeProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
-        if (message.runAs !== '') {
+        if (message.runAs !== "") {
             writer.uint32(26).string(message.runAs);
         }
         if (message.wasmByteCode.length !== 0) {
@@ -59,24 +59,25 @@ export const StoreCodeProposal = {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = String(object.runAs);
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
             message.wasmByteCode = bytesFromBase64(object.wasmByteCode);
         }
-        if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+        if (object.instantiatePermission !== undefined &&
+            object.instantiatePermission !== null) {
             message.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
         }
         else {
@@ -87,11 +88,17 @@ export const StoreCodeProposal = {
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         message.runAs !== undefined && (obj.runAs = message.runAs);
-        message.wasmByteCode !== undefined && (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined ? message.wasmByteCode : new Uint8Array()));
+        message.wasmByteCode !== undefined &&
+            (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined
+                ? message.wasmByteCode
+                : new Uint8Array()));
         message.instantiatePermission !== undefined &&
-            (obj.instantiatePermission = message.instantiatePermission ? AccessConfig.toJSON(message.instantiatePermission) : undefined);
+            (obj.instantiatePermission = message.instantiatePermission
+                ? AccessConfig.toJSON(message.instantiatePermission)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -100,19 +107,19 @@ export const StoreCodeProposal = {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = object.runAs;
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.wasmByteCode !== undefined && object.wasmByteCode !== null) {
             message.wasmByteCode = object.wasmByteCode;
@@ -120,34 +127,42 @@ export const StoreCodeProposal = {
         else {
             message.wasmByteCode = new Uint8Array();
         }
-        if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+        if (object.instantiatePermission !== undefined &&
+            object.instantiatePermission !== null) {
             message.instantiatePermission = AccessConfig.fromPartial(object.instantiatePermission);
         }
         else {
             message.instantiatePermission = undefined;
         }
         return message;
-    }
+    },
 };
-const baseInstantiateContractProposal = { title: '', description: '', runAs: '', admin: '', codeId: 0, label: '' };
+const baseInstantiateContractProposal = {
+    title: "",
+    description: "",
+    runAs: "",
+    admin: "",
+    codeId: 0,
+    label: "",
+};
 export const InstantiateContractProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
-        if (message.runAs !== '') {
+        if (message.runAs !== "") {
             writer.uint32(26).string(message.runAs);
         }
-        if (message.admin !== '') {
+        if (message.admin !== "") {
             writer.uint32(34).string(message.admin);
         }
         if (message.codeId !== 0) {
             writer.uint32(40).uint64(message.codeId);
         }
-        if (message.label !== '') {
+        if (message.label !== "") {
             writer.uint32(50).string(message.label);
         }
         if (message.msg.length !== 0) {
@@ -161,7 +176,9 @@ export const InstantiateContractProposal = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseInstantiateContractProposal };
+        const message = {
+            ...baseInstantiateContractProposal,
+        };
         message.funds = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -198,31 +215,33 @@ export const InstantiateContractProposal = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseInstantiateContractProposal };
+        const message = {
+            ...baseInstantiateContractProposal,
+        };
         message.funds = [];
         if (object.title !== undefined && object.title !== null) {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = String(object.runAs);
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = String(object.admin);
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = Number(object.codeId);
@@ -234,7 +253,7 @@ export const InstantiateContractProposal = {
             message.label = String(object.label);
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = bytesFromBase64(object.msg);
@@ -249,12 +268,14 @@ export const InstantiateContractProposal = {
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         message.runAs !== undefined && (obj.runAs = message.runAs);
         message.admin !== undefined && (obj.admin = message.admin);
         message.codeId !== undefined && (obj.codeId = message.codeId);
         message.label !== undefined && (obj.label = message.label);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         if (message.funds) {
             obj.funds = message.funds.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -264,31 +285,33 @@ export const InstantiateContractProposal = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseInstantiateContractProposal };
+        const message = {
+            ...baseInstantiateContractProposal,
+        };
         message.funds = [];
         if (object.title !== undefined && object.title !== null) {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = object.runAs;
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.admin !== undefined && object.admin !== null) {
             message.admin = object.admin;
         }
         else {
-            message.admin = '';
+            message.admin = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = object.codeId;
@@ -300,7 +323,7 @@ export const InstantiateContractProposal = {
             message.label = object.label;
         }
         else {
-            message.label = '';
+            message.label = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
@@ -314,21 +337,27 @@ export const InstantiateContractProposal = {
             }
         }
         return message;
-    }
+    },
 };
-const baseMigrateContractProposal = { title: '', description: '', runAs: '', contract: '', codeId: 0 };
+const baseMigrateContractProposal = {
+    title: "",
+    description: "",
+    runAs: "",
+    contract: "",
+    codeId: 0,
+};
 export const MigrateContractProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
-        if (message.runAs !== '') {
+        if (message.runAs !== "") {
             writer.uint32(26).string(message.runAs);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(34).string(message.contract);
         }
         if (message.codeId !== 0) {
@@ -342,7 +371,9 @@ export const MigrateContractProposal = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMigrateContractProposal };
+        const message = {
+            ...baseMigrateContractProposal,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -372,30 +403,32 @@ export const MigrateContractProposal = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMigrateContractProposal };
+        const message = {
+            ...baseMigrateContractProposal,
+        };
         if (object.title !== undefined && object.title !== null) {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = String(object.runAs);
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = Number(object.codeId);
@@ -411,38 +444,42 @@ export const MigrateContractProposal = {
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         message.runAs !== undefined && (obj.runAs = message.runAs);
         message.contract !== undefined && (obj.contract = message.contract);
         message.codeId !== undefined && (obj.codeId = message.codeId);
-        message.msg !== undefined && (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
+        message.msg !== undefined &&
+            (obj.msg = base64FromBytes(message.msg !== undefined ? message.msg : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMigrateContractProposal };
+        const message = {
+            ...baseMigrateContractProposal,
+        };
         if (object.title !== undefined && object.title !== null) {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.runAs !== undefined && object.runAs !== null) {
             message.runAs = object.runAs;
         }
         else {
-            message.runAs = '';
+            message.runAs = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = object.codeId;
@@ -457,21 +494,26 @@ export const MigrateContractProposal = {
             message.msg = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseUpdateAdminProposal = { title: '', description: '', newAdmin: '', contract: '' };
+const baseUpdateAdminProposal = {
+    title: "",
+    description: "",
+    newAdmin: "",
+    contract: "",
+};
 export const UpdateAdminProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
-        if (message.newAdmin !== '') {
+        if (message.newAdmin !== "") {
             writer.uint32(26).string(message.newAdmin);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(34).string(message.contract);
         }
         return writer;
@@ -508,32 +550,33 @@ export const UpdateAdminProposal = {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.newAdmin !== undefined && object.newAdmin !== null) {
             message.newAdmin = String(object.newAdmin);
         }
         else {
-            message.newAdmin = '';
+            message.newAdmin = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         message.newAdmin !== undefined && (obj.newAdmin = message.newAdmin);
         message.contract !== undefined && (obj.contract = message.contract);
         return obj;
@@ -544,39 +587,43 @@ export const UpdateAdminProposal = {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.newAdmin !== undefined && object.newAdmin !== null) {
             message.newAdmin = object.newAdmin;
         }
         else {
-            message.newAdmin = '';
+            message.newAdmin = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
-    }
+    },
 };
-const baseClearAdminProposal = { title: '', description: '', contract: '' };
+const baseClearAdminProposal = {
+    title: "",
+    description: "",
+    contract: "",
+};
 export const ClearAdminProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
-        if (message.contract !== '') {
+        if (message.contract !== "") {
             writer.uint32(26).string(message.contract);
         }
         return writer;
@@ -610,26 +657,27 @@ export const ClearAdminProposal = {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = String(object.contract);
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         message.contract !== undefined && (obj.contract = message.contract);
         return obj;
     },
@@ -639,30 +687,30 @@ export const ClearAdminProposal = {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.contract !== undefined && object.contract !== null) {
             message.contract = object.contract;
         }
         else {
-            message.contract = '';
+            message.contract = "";
         }
         return message;
-    }
+    },
 };
-const basePinCodesProposal = { title: '', description: '', codeIds: 0 };
+const basePinCodesProposal = { title: "", description: "", codeIds: 0 };
 export const PinCodesProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
         writer.uint32(26).fork();
@@ -711,13 +759,13 @@ export const PinCodesProposal = {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -729,7 +777,8 @@ export const PinCodesProposal = {
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         if (message.codeIds) {
             obj.codeIds = message.codeIds.map((e) => e);
         }
@@ -745,13 +794,13 @@ export const PinCodesProposal = {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -759,15 +808,19 @@ export const PinCodesProposal = {
             }
         }
         return message;
-    }
+    },
 };
-const baseUnpinCodesProposal = { title: '', description: '', codeIds: 0 };
+const baseUnpinCodesProposal = {
+    title: "",
+    description: "",
+    codeIds: 0,
+};
 export const UnpinCodesProposal = {
     encode(message, writer = Writer.create()) {
-        if (message.title !== '') {
+        if (message.title !== "") {
             writer.uint32(10).string(message.title);
         }
-        if (message.description !== '') {
+        if (message.description !== "") {
             writer.uint32(18).string(message.description);
         }
         writer.uint32(26).fork();
@@ -816,13 +869,13 @@ export const UnpinCodesProposal = {
             message.title = String(object.title);
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = String(object.description);
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -834,7 +887,8 @@ export const UnpinCodesProposal = {
     toJSON(message) {
         const obj = {};
         message.title !== undefined && (obj.title = message.title);
-        message.description !== undefined && (obj.description = message.description);
+        message.description !== undefined &&
+            (obj.description = message.description);
         if (message.codeIds) {
             obj.codeIds = message.codeIds.map((e) => e);
         }
@@ -850,13 +904,13 @@ export const UnpinCodesProposal = {
             message.title = object.title;
         }
         else {
-            message.title = '';
+            message.title = "";
         }
         if (object.description !== undefined && object.description !== null) {
             message.description = object.description;
         }
         else {
-            message.description = '';
+            message.description = "";
         }
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -864,20 +918,21 @@ export const UnpinCodesProposal = {
             }
         }
         return message;
-    }
+    },
 };
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -886,17 +941,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }

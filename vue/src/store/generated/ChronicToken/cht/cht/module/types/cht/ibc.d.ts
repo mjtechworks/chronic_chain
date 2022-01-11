@@ -1,4 +1,4 @@
-import { Writer, Reader } from 'protobufjs/minimal';
+import { Writer, Reader } from "protobufjs/minimal";
 export declare const protobufPackage = "cht";
 /** MsgIBCSend */
 export interface MsgIBCSend {

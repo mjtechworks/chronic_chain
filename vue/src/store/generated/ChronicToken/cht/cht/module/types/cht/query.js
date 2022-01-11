@@ -1,13 +1,13 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal';
-import * as Long from 'long';
-import { ContractInfo, ContractCodeHistoryEntry, Model } from '../cht/types';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
-export const protobufPackage = 'cht';
-const baseQueryContractInfoRequest = { address: '' };
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
+import { ContractInfo, ContractCodeHistoryEntry, Model } from "../cht/types";
+import { PageRequest, PageResponse, } from "../cosmos/base/query/v1beta1/pagination";
+export const protobufPackage = "cht";
+const baseQueryContractInfoRequest = { address: "" };
 export const QueryContractInfoRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         return writer;
@@ -15,7 +15,9 @@ export const QueryContractInfoRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractInfoRequest };
+        const message = {
+            ...baseQueryContractInfoRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -30,12 +32,14 @@ export const QueryContractInfoRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractInfoRequest };
+        const message = {
+            ...baseQueryContractInfoRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         return message;
     },
@@ -45,20 +49,22 @@ export const QueryContractInfoRequest = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractInfoRequest };
+        const message = {
+            ...baseQueryContractInfoRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         return message;
-    }
+    },
 };
-const baseQueryContractInfoResponse = { address: '' };
+const baseQueryContractInfoResponse = { address: "" };
 export const QueryContractInfoResponse = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.contractInfo !== undefined) {
@@ -69,7 +75,9 @@ export const QueryContractInfoResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractInfoResponse };
+        const message = {
+            ...baseQueryContractInfoResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -87,12 +95,14 @@ export const QueryContractInfoResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractInfoResponse };
+        const message = {
+            ...baseQueryContractInfoResponse,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.contractInfo !== undefined && object.contractInfo !== null) {
             message.contractInfo = ContractInfo.fromJSON(object.contractInfo);
@@ -105,16 +115,21 @@ export const QueryContractInfoResponse = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.contractInfo !== undefined && (obj.contractInfo = message.contractInfo ? ContractInfo.toJSON(message.contractInfo) : undefined);
+        message.contractInfo !== undefined &&
+            (obj.contractInfo = message.contractInfo
+                ? ContractInfo.toJSON(message.contractInfo)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractInfoResponse };
+        const message = {
+            ...baseQueryContractInfoResponse,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.contractInfo !== undefined && object.contractInfo !== null) {
             message.contractInfo = ContractInfo.fromPartial(object.contractInfo);
@@ -123,12 +138,12 @@ export const QueryContractInfoResponse = {
             message.contractInfo = undefined;
         }
         return message;
-    }
+    },
 };
-const baseQueryContractHistoryRequest = { address: '' };
+const baseQueryContractHistoryRequest = { address: "" };
 export const QueryContractHistoryRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.pagination !== undefined) {
@@ -139,7 +154,9 @@ export const QueryContractHistoryRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractHistoryRequest };
+        const message = {
+            ...baseQueryContractHistoryRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -157,12 +174,14 @@ export const QueryContractHistoryRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractHistoryRequest };
+        const message = {
+            ...baseQueryContractHistoryRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromJSON(object.pagination);
@@ -175,16 +194,21 @@ export const QueryContractHistoryRequest = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractHistoryRequest };
+        const message = {
+            ...baseQueryContractHistoryRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromPartial(object.pagination);
@@ -193,7 +217,7 @@ export const QueryContractHistoryRequest = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryContractHistoryResponse = {};
 export const QueryContractHistoryResponse = {
@@ -209,7 +233,9 @@ export const QueryContractHistoryResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractHistoryResponse };
+        const message = {
+            ...baseQueryContractHistoryResponse,
+        };
         message.entries = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -228,7 +254,9 @@ export const QueryContractHistoryResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractHistoryResponse };
+        const message = {
+            ...baseQueryContractHistoryResponse,
+        };
         message.entries = [];
         if (object.entries !== undefined && object.entries !== null) {
             for (const e of object.entries) {
@@ -246,16 +274,21 @@ export const QueryContractHistoryResponse = {
     toJSON(message) {
         const obj = {};
         if (message.entries) {
-            obj.entries = message.entries.map((e) => (e ? ContractCodeHistoryEntry.toJSON(e) : undefined));
+            obj.entries = message.entries.map((e) => e ? ContractCodeHistoryEntry.toJSON(e) : undefined);
         }
         else {
             obj.entries = [];
         }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageResponse.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractHistoryResponse };
+        const message = {
+            ...baseQueryContractHistoryResponse,
+        };
         message.entries = [];
         if (object.entries !== undefined && object.entries !== null) {
             for (const e of object.entries) {
@@ -269,7 +302,7 @@ export const QueryContractHistoryResponse = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryContractsByCodeRequest = { codeId: 0 };
 export const QueryContractsByCodeRequest = {
@@ -285,7 +318,9 @@ export const QueryContractsByCodeRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractsByCodeRequest };
+        const message = {
+            ...baseQueryContractsByCodeRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -303,7 +338,9 @@ export const QueryContractsByCodeRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractsByCodeRequest };
+        const message = {
+            ...baseQueryContractsByCodeRequest,
+        };
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = Number(object.codeId);
         }
@@ -321,11 +358,16 @@ export const QueryContractsByCodeRequest = {
     toJSON(message) {
         const obj = {};
         message.codeId !== undefined && (obj.codeId = message.codeId);
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractsByCodeRequest };
+        const message = {
+            ...baseQueryContractsByCodeRequest,
+        };
         if (object.codeId !== undefined && object.codeId !== null) {
             message.codeId = object.codeId;
         }
@@ -339,9 +381,9 @@ export const QueryContractsByCodeRequest = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
-const baseQueryContractsByCodeResponse = { contracts: '' };
+const baseQueryContractsByCodeResponse = { contracts: "" };
 export const QueryContractsByCodeResponse = {
     encode(message, writer = Writer.create()) {
         for (const v of message.contracts) {
@@ -355,7 +397,9 @@ export const QueryContractsByCodeResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryContractsByCodeResponse };
+        const message = {
+            ...baseQueryContractsByCodeResponse,
+        };
         message.contracts = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -374,7 +418,9 @@ export const QueryContractsByCodeResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryContractsByCodeResponse };
+        const message = {
+            ...baseQueryContractsByCodeResponse,
+        };
         message.contracts = [];
         if (object.contracts !== undefined && object.contracts !== null) {
             for (const e of object.contracts) {
@@ -397,11 +443,16 @@ export const QueryContractsByCodeResponse = {
         else {
             obj.contracts = [];
         }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageResponse.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryContractsByCodeResponse };
+        const message = {
+            ...baseQueryContractsByCodeResponse,
+        };
         message.contracts = [];
         if (object.contracts !== undefined && object.contracts !== null) {
             for (const e of object.contracts) {
@@ -415,12 +466,12 @@ export const QueryContractsByCodeResponse = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
-const baseQueryAllContractStateRequest = { address: '' };
+const baseQueryAllContractStateRequest = { address: "" };
 export const QueryAllContractStateRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.pagination !== undefined) {
@@ -431,7 +482,9 @@ export const QueryAllContractStateRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllContractStateRequest };
+        const message = {
+            ...baseQueryAllContractStateRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -449,12 +502,14 @@ export const QueryAllContractStateRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryAllContractStateRequest };
+        const message = {
+            ...baseQueryAllContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromJSON(object.pagination);
@@ -467,16 +522,21 @@ export const QueryAllContractStateRequest = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryAllContractStateRequest };
+        const message = {
+            ...baseQueryAllContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromPartial(object.pagination);
@@ -485,7 +545,7 @@ export const QueryAllContractStateRequest = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryAllContractStateResponse = {};
 export const QueryAllContractStateResponse = {
@@ -501,7 +561,9 @@ export const QueryAllContractStateResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllContractStateResponse };
+        const message = {
+            ...baseQueryAllContractStateResponse,
+        };
         message.models = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -520,7 +582,9 @@ export const QueryAllContractStateResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryAllContractStateResponse };
+        const message = {
+            ...baseQueryAllContractStateResponse,
+        };
         message.models = [];
         if (object.models !== undefined && object.models !== null) {
             for (const e of object.models) {
@@ -543,11 +607,16 @@ export const QueryAllContractStateResponse = {
         else {
             obj.models = [];
         }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageResponse.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryAllContractStateResponse };
+        const message = {
+            ...baseQueryAllContractStateResponse,
+        };
         message.models = [];
         if (object.models !== undefined && object.models !== null) {
             for (const e of object.models) {
@@ -561,12 +630,12 @@ export const QueryAllContractStateResponse = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
-const baseQueryRawContractStateRequest = { address: '' };
+const baseQueryRawContractStateRequest = { address: "" };
 export const QueryRawContractStateRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.queryData.length !== 0) {
@@ -577,7 +646,9 @@ export const QueryRawContractStateRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryRawContractStateRequest };
+        const message = {
+            ...baseQueryRawContractStateRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -595,12 +666,14 @@ export const QueryRawContractStateRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryRawContractStateRequest };
+        const message = {
+            ...baseQueryRawContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.queryData !== undefined && object.queryData !== null) {
             message.queryData = bytesFromBase64(object.queryData);
@@ -610,16 +683,19 @@ export const QueryRawContractStateRequest = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.queryData !== undefined && (obj.queryData = base64FromBytes(message.queryData !== undefined ? message.queryData : new Uint8Array()));
+        message.queryData !== undefined &&
+            (obj.queryData = base64FromBytes(message.queryData !== undefined ? message.queryData : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryRawContractStateRequest };
+        const message = {
+            ...baseQueryRawContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.queryData !== undefined && object.queryData !== null) {
             message.queryData = object.queryData;
@@ -628,7 +704,7 @@ export const QueryRawContractStateRequest = {
             message.queryData = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseQueryRawContractStateResponse = {};
 export const QueryRawContractStateResponse = {
@@ -641,7 +717,9 @@ export const QueryRawContractStateResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryRawContractStateResponse };
+        const message = {
+            ...baseQueryRawContractStateResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -656,7 +734,9 @@ export const QueryRawContractStateResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryRawContractStateResponse };
+        const message = {
+            ...baseQueryRawContractStateResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = bytesFromBase64(object.data);
         }
@@ -664,11 +744,14 @@ export const QueryRawContractStateResponse = {
     },
     toJSON(message) {
         const obj = {};
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryRawContractStateResponse };
+        const message = {
+            ...baseQueryRawContractStateResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = object.data;
         }
@@ -676,12 +759,12 @@ export const QueryRawContractStateResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
-const baseQuerySmartContractStateRequest = { address: '' };
+const baseQuerySmartContractStateRequest = { address: "" };
 export const QuerySmartContractStateRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.address !== '') {
+        if (message.address !== "") {
             writer.uint32(10).string(message.address);
         }
         if (message.queryData.length !== 0) {
@@ -692,7 +775,9 @@ export const QuerySmartContractStateRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQuerySmartContractStateRequest };
+        const message = {
+            ...baseQuerySmartContractStateRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -710,12 +795,14 @@ export const QuerySmartContractStateRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQuerySmartContractStateRequest };
+        const message = {
+            ...baseQuerySmartContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = String(object.address);
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.queryData !== undefined && object.queryData !== null) {
             message.queryData = bytesFromBase64(object.queryData);
@@ -725,16 +812,19 @@ export const QuerySmartContractStateRequest = {
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
-        message.queryData !== undefined && (obj.queryData = base64FromBytes(message.queryData !== undefined ? message.queryData : new Uint8Array()));
+        message.queryData !== undefined &&
+            (obj.queryData = base64FromBytes(message.queryData !== undefined ? message.queryData : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQuerySmartContractStateRequest };
+        const message = {
+            ...baseQuerySmartContractStateRequest,
+        };
         if (object.address !== undefined && object.address !== null) {
             message.address = object.address;
         }
         else {
-            message.address = '';
+            message.address = "";
         }
         if (object.queryData !== undefined && object.queryData !== null) {
             message.queryData = object.queryData;
@@ -743,7 +833,7 @@ export const QuerySmartContractStateRequest = {
             message.queryData = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseQuerySmartContractStateResponse = {};
 export const QuerySmartContractStateResponse = {
@@ -756,7 +846,9 @@ export const QuerySmartContractStateResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQuerySmartContractStateResponse };
+        const message = {
+            ...baseQuerySmartContractStateResponse,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -771,7 +863,9 @@ export const QuerySmartContractStateResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQuerySmartContractStateResponse };
+        const message = {
+            ...baseQuerySmartContractStateResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = bytesFromBase64(object.data);
         }
@@ -779,11 +873,14 @@ export const QuerySmartContractStateResponse = {
     },
     toJSON(message) {
         const obj = {};
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQuerySmartContractStateResponse };
+        const message = {
+            ...baseQuerySmartContractStateResponse,
+        };
         if (object.data !== undefined && object.data !== null) {
             message.data = object.data;
         }
@@ -791,7 +888,7 @@ export const QuerySmartContractStateResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseQueryCodeRequest = { codeId: 0 };
 export const QueryCodeRequest = {
@@ -842,15 +939,15 @@ export const QueryCodeRequest = {
             message.codeId = 0;
         }
         return message;
-    }
+    },
 };
-const baseCodeInfoResponse = { codeId: 0, creator: '' };
+const baseCodeInfoResponse = { codeId: 0, creator: "" };
 export const CodeInfoResponse = {
     encode(message, writer = Writer.create()) {
         if (message.codeId !== 0) {
             writer.uint32(8).uint64(message.codeId);
         }
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(18).string(message.creator);
         }
         if (message.dataHash.length !== 0) {
@@ -893,7 +990,7 @@ export const CodeInfoResponse = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.dataHash !== undefined && object.dataHash !== null) {
             message.dataHash = bytesFromBase64(object.dataHash);
@@ -904,7 +1001,8 @@ export const CodeInfoResponse = {
         const obj = {};
         message.codeId !== undefined && (obj.codeId = message.codeId);
         message.creator !== undefined && (obj.creator = message.creator);
-        message.dataHash !== undefined && (obj.dataHash = base64FromBytes(message.dataHash !== undefined ? message.dataHash : new Uint8Array()));
+        message.dataHash !== undefined &&
+            (obj.dataHash = base64FromBytes(message.dataHash !== undefined ? message.dataHash : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
@@ -919,7 +1017,7 @@ export const CodeInfoResponse = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.dataHash !== undefined && object.dataHash !== null) {
             message.dataHash = object.dataHash;
@@ -928,7 +1026,7 @@ export const CodeInfoResponse = {
             message.dataHash = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseQueryCodeResponse = {};
 export const QueryCodeResponse = {
@@ -976,8 +1074,12 @@ export const QueryCodeResponse = {
     },
     toJSON(message) {
         const obj = {};
-        message.codeInfo !== undefined && (obj.codeInfo = message.codeInfo ? CodeInfoResponse.toJSON(message.codeInfo) : undefined);
-        message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+        message.codeInfo !== undefined &&
+            (obj.codeInfo = message.codeInfo
+                ? CodeInfoResponse.toJSON(message.codeInfo)
+                : undefined);
+        message.data !== undefined &&
+            (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
@@ -995,7 +1097,7 @@ export const QueryCodeResponse = {
             message.data = new Uint8Array();
         }
         return message;
-    }
+    },
 };
 const baseQueryCodesRequest = {};
 export const QueryCodesRequest = {
@@ -1034,7 +1136,10 @@ export const QueryCodesRequest = {
     },
     toJSON(message) {
         const obj = {};
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -1046,7 +1151,7 @@ export const QueryCodesRequest = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryCodesResponse = {};
 export const QueryCodesResponse = {
@@ -1099,12 +1204,15 @@ export const QueryCodesResponse = {
     toJSON(message) {
         const obj = {};
         if (message.codeInfos) {
-            obj.codeInfos = message.codeInfos.map((e) => (e ? CodeInfoResponse.toJSON(e) : undefined));
+            obj.codeInfos = message.codeInfos.map((e) => e ? CodeInfoResponse.toJSON(e) : undefined);
         }
         else {
             obj.codeInfos = [];
         }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageResponse.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -1122,7 +1230,7 @@ export const QueryCodesResponse = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryPinnedCodesRequest = {};
 export const QueryPinnedCodesRequest = {
@@ -1135,7 +1243,9 @@ export const QueryPinnedCodesRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryPinnedCodesRequest };
+        const message = {
+            ...baseQueryPinnedCodesRequest,
+        };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -1150,7 +1260,9 @@ export const QueryPinnedCodesRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryPinnedCodesRequest };
+        const message = {
+            ...baseQueryPinnedCodesRequest,
+        };
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromJSON(object.pagination);
         }
@@ -1161,11 +1273,16 @@ export const QueryPinnedCodesRequest = {
     },
     toJSON(message) {
         const obj = {};
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageRequest.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryPinnedCodesRequest };
+        const message = {
+            ...baseQueryPinnedCodesRequest,
+        };
         if (object.pagination !== undefined && object.pagination !== null) {
             message.pagination = PageRequest.fromPartial(object.pagination);
         }
@@ -1173,7 +1290,7 @@ export const QueryPinnedCodesRequest = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 const baseQueryPinnedCodesResponse = { codeIds: 0 };
 export const QueryPinnedCodesResponse = {
@@ -1191,7 +1308,9 @@ export const QueryPinnedCodesResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryPinnedCodesResponse };
+        const message = {
+            ...baseQueryPinnedCodesResponse,
+        };
         message.codeIds = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -1218,7 +1337,9 @@ export const QueryPinnedCodesResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryPinnedCodesResponse };
+        const message = {
+            ...baseQueryPinnedCodesResponse,
+        };
         message.codeIds = [];
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -1241,11 +1362,16 @@ export const QueryPinnedCodesResponse = {
         else {
             obj.codeIds = [];
         }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        message.pagination !== undefined &&
+            (obj.pagination = message.pagination
+                ? PageResponse.toJSON(message.pagination)
+                : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryPinnedCodesResponse };
+        const message = {
+            ...baseQueryPinnedCodesResponse,
+        };
         message.codeIds = [];
         if (object.codeIds !== undefined && object.codeIds !== null) {
             for (const e of object.codeIds) {
@@ -1259,7 +1385,7 @@ export const QueryPinnedCodesResponse = {
             message.pagination = undefined;
         }
         return message;
-    }
+    },
 };
 export class QueryClientImpl {
     constructor(rpc) {
@@ -1267,62 +1393,63 @@ export class QueryClientImpl {
     }
     ContractInfo(request) {
         const data = QueryContractInfoRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'ContractInfo', data);
+        const promise = this.rpc.request("cht.Query", "ContractInfo", data);
         return promise.then((data) => QueryContractInfoResponse.decode(new Reader(data)));
     }
     ContractHistory(request) {
         const data = QueryContractHistoryRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'ContractHistory', data);
+        const promise = this.rpc.request("cht.Query", "ContractHistory", data);
         return promise.then((data) => QueryContractHistoryResponse.decode(new Reader(data)));
     }
     ContractsByCode(request) {
         const data = QueryContractsByCodeRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'ContractsByCode', data);
+        const promise = this.rpc.request("cht.Query", "ContractsByCode", data);
         return promise.then((data) => QueryContractsByCodeResponse.decode(new Reader(data)));
     }
     AllContractState(request) {
         const data = QueryAllContractStateRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'AllContractState', data);
+        const promise = this.rpc.request("cht.Query", "AllContractState", data);
         return promise.then((data) => QueryAllContractStateResponse.decode(new Reader(data)));
     }
     RawContractState(request) {
         const data = QueryRawContractStateRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'RawContractState', data);
+        const promise = this.rpc.request("cht.Query", "RawContractState", data);
         return promise.then((data) => QueryRawContractStateResponse.decode(new Reader(data)));
     }
     SmartContractState(request) {
         const data = QuerySmartContractStateRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'SmartContractState', data);
+        const promise = this.rpc.request("cht.Query", "SmartContractState", data);
         return promise.then((data) => QuerySmartContractStateResponse.decode(new Reader(data)));
     }
     Code(request) {
         const data = QueryCodeRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'Code', data);
+        const promise = this.rpc.request("cht.Query", "Code", data);
         return promise.then((data) => QueryCodeResponse.decode(new Reader(data)));
     }
     Codes(request) {
         const data = QueryCodesRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'Codes', data);
+        const promise = this.rpc.request("cht.Query", "Codes", data);
         return promise.then((data) => QueryCodesResponse.decode(new Reader(data)));
     }
     PinnedCodes(request) {
         const data = QueryPinnedCodesRequest.encode(request).finish();
-        const promise = this.rpc.request('cht.Query', 'PinnedCodes', data);
+        const promise = this.rpc.request("cht.Query", "PinnedCodes", data);
         return promise.then((data) => QueryPinnedCodesResponse.decode(new Reader(data)));
     }
 }
 var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
+    if (typeof globalThis !== "undefined")
         return globalThis;
-    if (typeof self !== 'undefined')
+    if (typeof self !== "undefined")
         return self;
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
         return window;
-    if (typeof global !== 'undefined')
+    if (typeof global !== "undefined")
         return global;
-    throw 'Unable to locate global object';
+    throw "Unable to locate global object";
 })();
-const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+const atob = globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64) {
     const bin = atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -1331,17 +1458,18 @@ function bytesFromBase64(b64) {
     }
     return arr;
 }
-const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+const btoa = globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr) {
     const bin = [];
     for (let i = 0; i < arr.byteLength; ++i) {
         bin.push(String.fromCharCode(arr[i]));
     }
-    return btoa(bin.join(''));
+    return btoa(bin.join(""));
 }
 function longToNumber(long) {
     if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
     }
     return long.toNumber();
 }
