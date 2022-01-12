@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <SpTokenSend :address="address" refresh="true" />
+      <SpTokenSend :address="address" :refresh="true" />
       <SpTransferList :address="address" />
     </div>
   </div>

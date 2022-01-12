@@ -14,7 +14,7 @@ window.onload = async () => {
     alert('Please install keplr extension.')
   } else {
     const chainId = process.env.VUE_APP_CHAIN_ID
-
+    console.log(process.env)
     // Enabling before using the Keplr is recommended.
     // This method will ask the user whether to allow access if they haven't visited this website.
     // Also, it will request that the user unlock the wallet if the wallet is locked.

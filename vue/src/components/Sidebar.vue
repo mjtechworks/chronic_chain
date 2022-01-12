@@ -1,11 +1,14 @@
 <template>
   <SpSidebar v-on:sidebar-open="sidebarOpen = true" v-on:sidebar-close="sidebarOpen = false">
     <template v-slot:default>
+      <img src="../assets/logo.svg" class="app-logo" alt="logo" />
       <SpLinkIcon link="/" text="Dashboard" icon="Dashboard" />
-      <SpLinkIcon link="/types" text="Custom Type" icon="Form" />
-      <SpLinkIcon link="/relayers" text="Relayers" icon="Transactions" />
+      <SpLinkIcon link="/my-nft" text="My NFT's" icon="Form" />
+      <SpLinkIcon link="/block-explorer" text="Block Explorer" icon="Form" />
+      <SpLinkIcon link="/types" text="Buy Now" icon="Form" />
+      <!--      <SpLinkIcon link="/relayers" text="Relayers" icon="Transactions" />-->
       <div class="sp-dash"></div>
-      <SpLinkIcon href="https://github.com/tendermint/starport" target="_blank" text="Documentation" icon="Docs" />
+      <!--      <SpLinkIcon href="https://github.com/tendermint/starport" target="_blank" text="Documentation" icon="Docs" />-->
     </template>
     <!--    <template v-slot:footer>-->
     <!--      <SpStatusAPI :showText="sidebarOpen" />-->
@@ -61,6 +64,18 @@
   color: #555e75;
   opacity: 0.9;
 }
+
+.app-logo {
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+/*@media screen and (max-width: 768px) {*/
+/*  .app-logo {*/
+/*    left: 8.5rem;*/
+/*    right: auto;*/
+/*  }*/
+/*}*/
 </style>
 <script>
 export default {
