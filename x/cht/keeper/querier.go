@@ -310,5 +310,4 @@ func (q grpcQuerier) PinnedCodes(c context.Context, req *types.QueryPinnedCodesR
 		CodeIDs:    r,
 		Pagination: pageRes,
 	}, nil
-
 }
