@@ -1,4 +1,5 @@
 declare const _default: {
+    ChronicTokenChtChronicTokenChtCht: (store: any) => void;
     ChronicTokenChtCht: (store: any) => void;
     CosmosCosmosSdkCosmosAuthzV1Beta1: (store: any) => void;
     CosmosCosmosSdkCosmosBankV1Beta1: (store: any) => void;

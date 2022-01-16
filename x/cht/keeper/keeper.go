@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
 	"fmt"
 	"math"
@@ -17,7 +18,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -169,7 +169,7 @@ func (k Keeper) create(ctx sdk.Context, creator sdk.AccAddress, chtCode []byte, 
 	if err != nil {
 		return 0, sdkerrors.Wrap(types.ErrCreateFailed, err.Error())
 	}
-	ctx.GasMeter().ConsumeGas(k.gasRegister.CompileCosts(len(chtCode)), "Compiling WASM Bytecode")
+	ctx.GasMeter().ConsumeGas(k.gasRegister.CompileCosts(len(chtCode)), "Compiling CHT Bytecode")
 
 	checksum, err := k.wasmVM.Create(chtCode)
 	if err != nil {
@@ -230,7 +230,7 @@ func (k Keeper) importCode(ctx sdk.Context, codeID uint64, codeInfo types.CodeIn
 }
 
 func (k Keeper) instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.AccAddress, initMsg []byte, label string, deposit sdk.Coins, authZ AuthorizationPolicy) (sdk.AccAddress, []byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "instantiate")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "instantiate")
 
 	instanceCosts := k.gasRegister.NewContractInstanceCosts(k.IsPinnedCode(ctx, codeID), len(initMsg))
 	ctx.GasMeter().ConsumeGas(instanceCosts, "Loading CosmWasm module: instantiate")
@@ -328,7 +328,7 @@ func (k Keeper) instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.A
 
 // Execute executes the contract instance
 func (k Keeper) execute(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, msg []byte, coins sdk.Coins) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "execute")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "execute")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddress)
 	if err != nil {
 		return nil, err
@@ -370,7 +370,7 @@ func (k Keeper) execute(ctx sdk.Context, contractAddress sdk.AccAddress, caller 
 }
 
 func (k Keeper) migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, newCodeID uint64, msg []byte, authZ AuthorizationPolicy) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "migrate")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "migrate")
 	migrateSetupCosts := k.gasRegister.InstantiateContractCosts(k.IsPinnedCode(ctx, newCodeID), len(msg))
 	ctx.GasMeter().ConsumeGas(migrateSetupCosts, "Loading CosmWasm module: migrate")
 
@@ -443,7 +443,7 @@ func (k Keeper) migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller 
 // another native Go module directly. Thus, the keeper doesn't place any access controls on it, that is the
 // responsibility or the app developer (who passes the wasm.Keeper in app.go)
 func (k Keeper) Sudo(ctx sdk.Context, contractAddress sdk.AccAddress, msg []byte) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "sudo")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "sudo")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddress)
 	if err != nil {
 		return nil, err
@@ -589,7 +589,7 @@ func (k Keeper) getLastContractHistoryEntry(ctx sdk.Context, contractAddr sdk.Ac
 
 // QuerySmart queries the smart contract itself.
 func (k Keeper) QuerySmart(ctx sdk.Context, contractAddr sdk.AccAddress, req []byte) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "query-smart")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "query-smart")
 	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
 	if err != nil {
 		return nil, err
@@ -612,7 +612,7 @@ func (k Keeper) QuerySmart(ctx sdk.Context, contractAddr sdk.AccAddress, req []b
 
 // QueryRaw returns the contract's state for give key. Returns `nil` when key is `nil`.
 func (k Keeper) QueryRaw(ctx sdk.Context, contractAddress sdk.AccAddress, key []byte) []byte {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "query-raw")
+	defer telemetry.MeasureSince(time.Now(), "cht", "contract", "query-raw")
 	if key == nil {
 		return nil
 	}
@@ -857,7 +857,7 @@ func (k Keeper) runtimeGasForContract(ctx sdk.Context) uint64 {
 
 func (k Keeper) consumeRuntimeGas(ctx sdk.Context, gas uint64) {
 	consumed := k.gasRegister.FromWasmVMGas(gas)
-	ctx.GasMeter().ConsumeGas(consumed, "wasm contract")
+	ctx.GasMeter().ConsumeGas(consumed, "cht contract")
 	// throw OutOfGas error if we ran out (got exactly to zero due to better limit enforcing)
 	if ctx.GasMeter().IsOutOfGas() {
 		panic(sdk.ErrorOutOfGas{Descriptor: "Wasmer function execution"})
@@ -875,7 +875,42 @@ func BuildContractAddress(codeID, instanceID uint64) sdk.AccAddress {
 	contractID := make([]byte, 16)
 	binary.BigEndian.PutUint64(contractID[:8], codeID)
 	binary.BigEndian.PutUint64(contractID[8:], instanceID)
-	return sdkaddress.Module(types.ModuleName, contractID)
+	// 20 bytes to work with Cosmos SDK 0.42 (0.43 pushes for 32 bytes)
+	// TODO: remove truncate if we update to 0.43 before wasmd 1.0
+	return Module(types.ModuleName, contractID)[:20]
+}
+
+// Hash and Module is taken from https://github.com/cosmos/cosmos-sdk/blob/v0.43.0-rc2/types/address/hash.go
+// (PR #9088 included in Cosmos SDK 0.43 - can be swapped out for the sdk version when we upgrade)
+
+// Hash creates a new address from address type and key
+func Hash(typ string, key []byte) []byte {
+	hasher := sha256.New()
+	_, err := hasher.Write([]byte(typ))
+	// the error always nil, it's here only to satisfy the io.Writer interface
+	assertNil(err)
+	th := hasher.Sum(nil)
+
+	hasher.Reset()
+	_, err = hasher.Write(th)
+	assertNil(err)
+	_, err = hasher.Write(key)
+	assertNil(err)
+	return hasher.Sum(nil)
+}
+
+// Module is a specialized version of a composed address for modules. Each module account
+// is constructed from a module name and module account key.
+func Module(moduleName string, key []byte) []byte {
+	mKey := append([]byte(moduleName), 0)
+	return Hash("module", append(mKey, key...))
+}
+
+// Also from the 0.43 Cosmos SDK... sigh (sdkerrors.AssertNil)
+func assertNil(err error) {
+	if err != nil {
+		panic(fmt.Errorf("logic error - this should never happen. %w", err))
+	}
 }
 
 func (k Keeper) autoIncrementID(ctx sdk.Context, lastIDKey []byte) uint64 {

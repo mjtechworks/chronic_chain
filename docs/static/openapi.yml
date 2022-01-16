@@ -7,7 +7,7 @@ paths:
   /cht/code:
     get:
       summary: Codes gets the metadata for all stored cht codes
-      operationId: ChtCodes
+      operationId: ChronicTokenChtChtCodes
       responses:
         '200':
           description: A successful response.
@@ -296,7 +296,7 @@ paths:
   '/cht/code/{codeId}':
     get:
       summary: Code gets the binary code and metadata for a singe cht code
-      operationId: ChtCode
+      operationId: ChronicTokenChtChtCode
       responses:
         '200':
           description: A successful response.
@@ -517,7 +517,7 @@ paths:
   '/cht/code/{codeId}/contracts':
     get:
       summary: ContractsByCode lists all smart contracts for a code id
-      operationId: ChtContractsByCode
+      operationId: ChronicTokenChtChtContractsByCode
       responses:
         '200':
           description: A successful response.
@@ -802,7 +802,7 @@ paths:
   /cht/codes/pinned:
     get:
       summary: PinnedCodes gets the pinned code ids
-      operationId: ChtPinnedCodes
+      operationId: ChronicTokenChtChtPinnedCodes
       responses:
         '200':
           description: A successful response.
@@ -1082,7 +1082,7 @@ paths:
   '/cht/contract/{address}':
     get:
       summary: ContractInfo gets the contract meta data
-      operationId: ChtContractInfo
+      operationId: ChronicTokenChtChtContractInfo
       responses:
         '200':
           description: A successful response.
@@ -1514,7 +1514,7 @@ paths:
   '/cht/contract/{address}/history':
     get:
       summary: ContractHistory gets the contract code history
-      operationId: ChtContractHistory
+      operationId: ChronicTokenChtChtContractHistory
       responses:
         '200':
           description: A successful response.
@@ -1841,7 +1841,7 @@ paths:
   '/cht/contract/{address}/raw/{queryData}':
     get:
       summary: RawContractState gets single key from the raw store data of a contract
-      operationId: ChtRawContractState
+      operationId: ChronicTokenChtChtRawContractState
       responses:
         '200':
           description: A successful response.
@@ -2056,7 +2056,7 @@ paths:
   '/cht/contract/{address}/smart/{queryData}':
     get:
       summary: SmartContractState get smart query result from the contract
-      operationId: ChtSmartContractState
+      operationId: ChronicTokenChtChtSmartContractState
       responses:
         '200':
           description: A successful response.
@@ -2272,7 +2272,7 @@ paths:
   '/cht/contract/{address}/state':
     get:
       summary: AllContractState gets all raw store data for a single contract
-      operationId: ChtAllContractState
+      operationId: ChronicTokenChtChtAllContractState
       responses:
         '200':
           description: A successful response.
@@ -15134,7 +15134,7 @@ paths:
       tags:
         - Query
 definitions:
-  cht.AbsoluteTxPosition:
+  ChronicToken.cht.cht.AbsoluteTxPosition:
     type: object
     properties:
       blockHeight:
@@ -15152,7 +15152,7 @@ definitions:
     description: |-
       AbsoluteTxPosition is a unique transaction position that allows for global
       ordering of transactions.
-  cht.AccessConfig:
+  ChronicToken.cht.cht.AccessConfig:
     type: object
     properties:
       permission:
@@ -15173,7 +15173,7 @@ definitions:
       address:
         type: string
     description: AccessConfig access control type.
-  cht.AccessType:
+  ChronicToken.cht.cht.AccessType:
     type: string
     enum:
       - ACCESS_TYPE_UNSPECIFIED
@@ -15188,7 +15188,7 @@ definitions:
        - ACCESS_TYPE_ONLY_ADDRESS: AccessTypeOnlyAddress restricted to an address
        - ACCESS_TYPE_EVERYBODY: AccessTypeEverybody unrestricted
     title: AccessType permission types
-  cht.CodeInfoResponse:
+  ChronicToken.cht.cht.CodeInfoResponse:
     type: object
     properties:
       codeId:
@@ -15200,7 +15200,7 @@ definitions:
         type: string
         format: byte
     title: CodeInfoResponse contains code meta data from CodeInfo
-  cht.ContractCodeHistoryEntry:
+  ChronicToken.cht.cht.ContractCodeHistoryEntry:
     type: object
     properties:
       operation:
@@ -15243,7 +15243,7 @@ definitions:
         type: string
         format: byte
     description: ContractCodeHistoryEntry metadata to a contract.
-  cht.ContractCodeHistoryOperationType:
+  ChronicToken.cht.cht.ContractCodeHistoryOperationType:
     type: string
     enum:
       - CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED
@@ -15258,7 +15258,7 @@ definitions:
        - CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE: ContractCodeHistoryOperationTypeMigrate code migration
        - CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS: ContractCodeHistoryOperationTypeGenesis based on genesis data
     title: ContractCodeHistoryOperationType actions that caused a code change
-  cht.ContractInfo:
+  ChronicToken.cht.cht.ContractInfo:
     type: object
     properties:
       codeId:
@@ -15461,7 +15461,7 @@ definitions:
                 "value": "1.212s"
               }
     title: ContractInfo stores a WASM contract instance
-  cht.Model:
+  ChronicToken.cht.cht.Model:
     type: object
     properties:
       key:
@@ -15473,10 +15473,10 @@ definitions:
         format: byte
         title: base64-encode raw value
     title: Model is a struct that holds a KV pair
-  cht.MsgClearAdminResponse:
+  ChronicToken.cht.cht.MsgClearAdminResponse:
     type: object
     title: MsgClearAdminResponse returns empty data
-  cht.MsgExecuteContractResponse:
+  ChronicToken.cht.cht.MsgExecuteContractResponse:
     type: object
     properties:
       data:
@@ -15484,7 +15484,7 @@ definitions:
         format: byte
         title: Data contains base64-encoded bytes to returned from the contract
     description: MsgExecuteContractResponse returns execution result data.
-  cht.MsgInstantiateContractResponse:
+  ChronicToken.cht.cht.MsgInstantiateContractResponse:
     type: object
     properties:
       address:
@@ -15495,7 +15495,7 @@ definitions:
         format: byte
         title: Data contains base64-encoded bytes to returned from the contract
     title: MsgInstantiateContractResponse return instantiation result data
-  cht.MsgMigrateContractResponse:
+  ChronicToken.cht.cht.MsgMigrateContractResponse:
     type: object
     properties:
       data:
@@ -15505,7 +15505,7 @@ definitions:
           Data contains same raw bytes returned as data from the cht contract.
           (May be empty)
     description: MsgMigrateContractResponse returns contract migration result data.
-  cht.MsgStoreCodeResponse:
+  ChronicToken.cht.cht.MsgStoreCodeResponse:
     type: object
     properties:
       codeId:
@@ -15513,10 +15513,10 @@ definitions:
         format: uint64
         title: CodeID is the reference to the stored cht code
     description: MsgStoreCodeResponse returns store result data.
-  cht.MsgUpdateAdminResponse:
+  ChronicToken.cht.cht.MsgUpdateAdminResponse:
     type: object
     title: MsgUpdateAdminResponse returns empty data
-  cht.QueryAllContractStateResponse:
+  ChronicToken.cht.cht.QueryAllContractStateResponse:
     type: object
     properties:
       models:
@@ -15554,7 +15554,7 @@ definitions:
     title: |-
       QueryAllContractStateResponse is the response type for the
       Query/AllContractState RPC method
-  cht.QueryCodeResponse:
+  ChronicToken.cht.cht.QueryCodeResponse:
     type: object
     properties:
       codeInfo:
@@ -15573,7 +15573,7 @@ definitions:
         type: string
         format: byte
     title: QueryCodeResponse is the response type for the Query/Code RPC method
-  cht.QueryCodesResponse:
+  ChronicToken.cht.cht.QueryCodesResponse:
     type: object
     properties:
       codeInfos:
@@ -15609,7 +15609,7 @@ definitions:
 
               was set, its value is undefined otherwise
     title: QueryCodesResponse is the response type for the Query/Codes RPC method
-  cht.QueryContractHistoryResponse:
+  ChronicToken.cht.cht.QueryContractHistoryResponse:
     type: object
     properties:
       entries:
@@ -15680,7 +15680,7 @@ definitions:
     title: |-
       QueryContractHistoryResponse is the response type for the
       Query/ContractHistory RPC method
-  cht.QueryContractInfoResponse:
+  ChronicToken.cht.cht.QueryContractInfoResponse:
     type: object
     properties:
       address:
@@ -15900,7 +15900,7 @@ definitions:
       RPC
 
       method
-  cht.QueryContractsByCodeResponse:
+  ChronicToken.cht.cht.QueryContractsByCodeResponse:
     type: object
     properties:
       contracts:
@@ -15929,7 +15929,7 @@ definitions:
     title: |-
       QueryContractsByCodeResponse is the response type for the
       Query/ContractsByCode RPC method
-  cht.QueryPinnedCodesResponse:
+  ChronicToken.cht.cht.QueryPinnedCodesResponse:
     type: object
     properties:
       codeIds:
@@ -15958,7 +15958,7 @@ definitions:
     title: |-
       QueryPinnedCodesResponse is the response type for the
       Query/PinnedCodes RPC method
-  cht.QueryRawContractStateResponse:
+  ChronicToken.cht.cht.QueryRawContractStateResponse:
     type: object
     properties:
       data:
@@ -15968,7 +15968,7 @@ definitions:
     title: |-
       QueryRawContractStateResponse is the response type for the
       Query/RawContractState RPC method
-  cht.QuerySmartContractStateResponse:
+  ChronicToken.cht.cht.QuerySmartContractStateResponse:
     type: object
     properties:
       data:
