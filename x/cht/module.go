@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 	"math/rand"
 
+	"github.com/ChronicToken/cht/x/cht/client/cli"
+	"github.com/ChronicToken/cht/x/cht/client/rest"
+	"github.com/ChronicToken/cht/x/cht/keeper"
+	"github.com/ChronicToken/cht/x/cht/simulation"
+	"github.com/ChronicToken/cht/x/cht/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -18,13 +23,6 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-
-	"github.com/ChronicToken/cht/x/cht/client/cli"
-	"github.com/ChronicToken/cht/x/cht/client/rest"
-	"github.com/ChronicToken/cht/x/cht/keeper"
-	"github.com/ChronicToken/cht/x/cht/simulation"
-	"github.com/ChronicToken/cht/x/cht/types"
 )
 
 var (
@@ -49,7 +47,7 @@ func (b AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) { //n
 func (b AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, serveMux *runtime.ServeMux) {
 	err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(clientCtx))
 	if err != nil {
-		log.NewNopLogger().Error(err.Error())
+		panic(err)
 	}
 }
 

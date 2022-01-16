@@ -9,7 +9,7 @@ import (
 
 func AddGenesisChtMsgCmd(defaultNodeHome string) *cobra.Command {
 	txCmd := &cobra.Command{
-		Use:                        "add-chtd-genesis-message",
+		Use:                        "add-cht-genesis-message",
 		Short:                      "cht genesis subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,

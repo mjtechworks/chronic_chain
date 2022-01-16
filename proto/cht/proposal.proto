@@ -1,5 +1,5 @@
 syntax = "proto3";
-package cht;
+package ChronicToken.cht.cht;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";

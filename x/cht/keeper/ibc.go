@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
-	host "github.com/cosmos/ibc-go/v2/modules/core/24-host"
+	host "github.com/cosmos/ibc-go/modules/core/24-host"
 
 	"github.com/ChronicToken/cht/x/cht/types"
 )
@@ -31,7 +31,7 @@ func (k Keeper) ensureIbcPort(ctx sdk.Context, contractAddr sdk.AccAddress) (str
 	return portID, k.bindIbcPort(ctx, portID)
 }
 
-const portIDPrefix = "wasm."
+const portIDPrefix = "cht."
 
 func PortIDForContract(addr sdk.AccAddress) string {
 	return portIDPrefix + addr.String()

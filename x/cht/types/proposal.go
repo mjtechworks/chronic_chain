@@ -62,13 +62,13 @@ func init() { // register new content types with the sdk
 	govtypes.RegisterProposalType(string(ProposalTypeClearAdmin))
 	govtypes.RegisterProposalType(string(ProposalTypePinCodes))
 	govtypes.RegisterProposalType(string(ProposalTypeUnpinCodes))
-	govtypes.RegisterProposalTypeCodec(&StoreCodeProposal{}, "wasm/StoreCodeProposal")
-	govtypes.RegisterProposalTypeCodec(&InstantiateContractProposal{}, "wasm/InstantiateContractProposal")
-	govtypes.RegisterProposalTypeCodec(&MigrateContractProposal{}, "wasm/MigrateContractProposal")
-	govtypes.RegisterProposalTypeCodec(&UpdateAdminProposal{}, "wasm/UpdateAdminProposal")
-	govtypes.RegisterProposalTypeCodec(&ClearAdminProposal{}, "wasm/ClearAdminProposal")
-	govtypes.RegisterProposalTypeCodec(&PinCodesProposal{}, "wasm/PinCodesProposal")
-	govtypes.RegisterProposalTypeCodec(&UnpinCodesProposal{}, "wasm/UnpinCodesProposal")
+	govtypes.RegisterProposalTypeCodec(&StoreCodeProposal{}, "cht/StoreCodeProposal")
+	govtypes.RegisterProposalTypeCodec(&InstantiateContractProposal{}, "cht/InstantiateContractProposal")
+	govtypes.RegisterProposalTypeCodec(&MigrateContractProposal{}, "cht/MigrateContractProposal")
+	govtypes.RegisterProposalTypeCodec(&UpdateAdminProposal{}, "cht/UpdateAdminProposal")
+	govtypes.RegisterProposalTypeCodec(&ClearAdminProposal{}, "cht/ClearAdminProposal")
+	govtypes.RegisterProposalTypeCodec(&PinCodesProposal{}, "cht/PinCodesProposal")
+	govtypes.RegisterProposalTypeCodec(&UnpinCodesProposal{}, "cht/UnpinCodesProposal")
 }
 
 // ProposalRoute returns the routing key of a parameter change proposal.
