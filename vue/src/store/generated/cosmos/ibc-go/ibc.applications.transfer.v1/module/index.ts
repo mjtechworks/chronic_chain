@@ -41,7 +41,7 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgTransfer: (data: MsgTransfer): EncodeObject => ({ typeUrl: "/ibc.applications.transfer.v1.MsgTransfer", value: data }),
+    msgTransfer: (data: MsgTransfer): EncodeObject => ({ typeUrl: "/ibc.applications.transfer.v1.MsgTransfer", value: MsgTransfer.fromPartial( data ) }),
     
   };
 };
