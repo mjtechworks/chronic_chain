@@ -7,10 +7,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
-	channeltypes "github.com/cosmos/ibc-go/modules/core/04-channel/types"
-	porttypes "github.com/cosmos/ibc-go/modules/core/05-port/types"
-	host "github.com/cosmos/ibc-go/modules/core/24-host"
-	"github.com/cosmos/ibc-go/modules/core/exported"
+	channeltypes "github.com/cosmos/ibc-go/v2/modules/core/04-channel/types"
+	porttypes "github.com/cosmos/ibc-go/v2/modules/core/05-port/types"
+	host "github.com/cosmos/ibc-go/v2/modules/core/24-host"
+	"github.com/cosmos/ibc-go/v2/modules/core/exported"
 
 	types "github.com/ChronicToken/cht/x/cht/types"
 )
@@ -248,10 +248,10 @@ func (i IBCHandler) OnRecvPacket(
 }
 
 // OnAcknowledgementPacket implements the IBCModule interface
-func (i IBCHandler) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) (*sdk.Result, error) {
+func (i IBCHandler) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error {
 	contractAddr, err := ContractFromPortID(packet.SourcePort)
 	if err != nil {
-		return nil, sdkerrors.Wrapf(err, "contract port id")
+		return sdkerrors.Wrapf(err, "contract port id")
 	}
 
 	err = i.keeper.OnAckPacket(ctx, contractAddr, wasmvmtypes.IBCPacketAckMsg{
@@ -259,32 +259,28 @@ func (i IBCHandler) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes
 		OriginalPacket:  newIBCPacket(packet),
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &sdk.Result{
-		Events: ctx.EventManager().Events().ToABCIEvents(),
-	}, nil
+	return nil
 
 }
 
 // OnTimeoutPacket implements the IBCModule interface
 func (i IBCHandler) OnTimeoutPacket(
 	ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress,
-) (*sdk.Result, error) {
+) error {
 	contractAddr, err := ContractFromPortID(packet.SourcePort)
 	if err != nil {
-		return nil, sdkerrors.Wrapf(err, "contract port id")
+		return sdkerrors.Wrapf(err, "contract port id")
 	}
 	msg := wasmvmtypes.IBCPacketTimeoutMsg{Packet: newIBCPacket(packet)}
 	err = i.keeper.OnTimeoutPacket(ctx, contractAddr, msg)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &sdk.Result{
-		Events: ctx.EventManager().Events().ToABCIEvents(),
-	}, nil
+	return nil
 
 }
 
