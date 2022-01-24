@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div class="container">
+    <sp-latest-blocks />
+  </div>
 </template>
 
 <script>

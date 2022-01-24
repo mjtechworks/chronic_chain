@@ -10,3 +10,21 @@
 .sp-component-title span {
   color: #555e75 !important;
 }
+
+.sp-blockdisplaysmall__hash {
+  flex: 1;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  max-lines: 3;
+  box-sizing: content-box;
+  margin: 0 1rem;
+}
+
+.sp-transfer-list__table__address {
+  width: auto;
+  overflow-wrap: anywhere;
+}
+
+.sp-transfer-list__table {
+  table-layout: auto;
+}

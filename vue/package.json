@@ -17,9 +17,14 @@
     "@cosmjs/stargate": "^0.26.1",
     "@starport/vue": "^0.1.55",
     "@starport/vuex": "^0.1.55",
+    "axios": "^0.25.0",
+    "bech32": "^2.0.0",
+    "bignumber.js": "^9.0.2",
     "core-js": "^3.18.2",
+    "lodash": "^4.17.21",
     "vue": "^3.2.6",
     "vue-router": "^4.0.3",
+    "vuelidate": "^0.7.7",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

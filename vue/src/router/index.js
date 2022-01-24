@@ -7,6 +7,7 @@ import Listing from '@/views/Listing.vue'
 import MyNFT from '@/views/MyNFT.vue'
 import TestNet from '@/views/TestNet.vue'
 import Relayers from '@/views/Relayers.vue'
+import BlockView from '@/views/BlockView'
 
 const routerHistory = createWebHistory()
 const routes = [
@@ -16,7 +17,8 @@ const routes = [
   },
   { path: '/types', component: Types },
   { path: '/relayers', component: Relayers },
-  { path: '/block-explorer', component: BlockExplorer },
+  { path: '/blocks', component: BlockExplorer },
+  { path: '/block/:id', component: BlockView },
   { path: '/gov-proposal', component: GovProposal },
   { path: '/my-nft', component: MyNFT },
   { path: '/listing', component: Listing },

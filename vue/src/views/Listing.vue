@@ -1,5 +1,7 @@
 <template>
-  <div class="transactions"></div>
+  <div>
+    <sp-blocks-table />
+  </div>
 </template>
 
 <script>
