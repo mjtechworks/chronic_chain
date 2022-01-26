@@ -1,14 +1,14 @@
 accounts:
   - name: alice
-    coins: ["210000000tcht", "200000000cgas"]
+    coins: ["18500000cht", "18500000cgas"]
   - name: bob
-    coins: ["10000tcht", "100000000cgas"]
+    coins: ["18500000cht", "18500000cgas"]
   - name: carlos
-    coins: ["210000000tcht", "200000000cgas"]
+    coins: ["5000000cht", "5000000cgas"]
     address: chronic1gqqhp8clrckg22d2dfn2z5rs85w3pynae7648x
 validator:
   name: alice
-  staked: "100000000tcht"
+  staked: "100000000cht"
 client:
   openapi:
     path: "docs/static/openapi.yml"
@@ -16,8 +16,8 @@ client:
     path: "vue/src/store"
 faucet:
   name: bob
-  coins: [ "5tcht", "100000cgas" ]
-  coins_max: [ "10000tcht", "10000cgas" ]
+  coins: [ "5cht", "100000cgas" ]
+  coins_max: [ "10000cht", "10000cgas" ]
 #host:
 #  rpc: ":26659"
 #  p2p: ":26658"
@@ -25,11 +25,11 @@ faucet:
 #  grpc: ":9090"
 #  api: ":1318"
 genesis:
-  chain_id: "modified-grapes"
+  chain_id: "chronic-grapes"
   app_state:
     staking:
       params:
-        bond_denom: "tcht"
+        bond_denom: "cht"
     mint:
       params:
         mint_denom: "cgas"
