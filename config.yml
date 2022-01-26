@@ -1,21 +1,21 @@
 accounts:
   - name: alice
-    coins: ["18500000cht", "100000cgas"]
-  - name: bob
-    coins: ["18500000cht", "100000cgas"]
+    coins: ["18500000cht", "100000000cgas"]
+  - name: austin
+    coins: ["18500000cht", "100000000cgas"]
   - name: carlos
     coins: ["5000000cht", "5000000cgas"]
-    address: chronic1gqqhp8clrckg22d2dfn2z5rs85w3pynae7648x
+    address: chronic15vyzeepk69mnjptu0mzlcn4fz84u26e22w403w
 validator:
   name: alice
-  staked: "100000000cgas"
+  staked: "10000000cgas"
 client:
   openapi:
     path: "docs/static/openapi.yml"
   vuex:
     path: "vue/src/store"
 faucet:
-  name: bob
+  name: austin
   coins: [ "5cht", "100000cgas" ]
   coins_max: [ "10000cht", "10000cgas" ]
 #host:
@@ -29,7 +29,7 @@ genesis:
   app_state:
     staking:
       params:
-        bond_denom: "cht"
+        bond_denom: "cgas"
     mint:
       params:
         mint_denom: "cgas"
