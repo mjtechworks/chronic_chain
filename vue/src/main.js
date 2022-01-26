@@ -34,7 +34,7 @@ window.onload = async () => {
           },
           currencies: [
             {
-              coinDenom: 'TCHT',
+              coinDenom: 'CHT',
               coinMinimalDenom: 'cgas',
               coinDecimals: 6,
               coinGeckoId: process.env.VUE_APP_ADDRESS_PREFIX,
@@ -42,14 +42,14 @@ window.onload = async () => {
           ],
           feeCurrencies: [
             {
-              coinDenom: 'TCHT',
+              coinDenom: 'CHT',
               coinMinimalDenom: 'cgas',
               coinDecimals: 6,
               coinGeckoId: process.env.VUE_APP_ADDRESS_PREFIX,
             },
           ],
           stakeCurrency: {
-            coinDenom: 'TCHT',
+            coinDenom: 'CHT',
             coinMinimalDenom: 'cgas',
             coinDecimals: 6,
             coinGeckoId: process.env.VUE_APP_ADDRESS_PREFIX,
