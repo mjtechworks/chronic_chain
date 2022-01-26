@@ -68,18 +68,18 @@ table {
   padding: 2rem;
   height: 4rem;
   display: table-cell;
-  /*color: var(--txt);*/
-  /*font-size: var(--text-sm);*/
+  color: #2d3748;
+  font-size: 1.2rem;
 }
 
 .no-results h2 {
   font-weight: 600;
   padding-bottom: 0.5rem;
-  /*color: var(--bright);*/
-  /*font-size: var(--text-lg);*/
+  color: #1a202c;
+  font-size: 1.5rem;
 }
 
 thead {
-  /*border-bottom: 1px solid var(--bc-dim);*/
+  border-bottom: 1px solid #edf2f7;
 }
 </style>

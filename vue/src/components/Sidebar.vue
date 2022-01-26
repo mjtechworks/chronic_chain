@@ -4,9 +4,9 @@
       <img src="../assets/logo.svg" class="app-logo" alt="logo" />
       <SpLinkIcon link="/" text="Dashboard" icon="Dashboard" />
       <SpLinkIcon link="/my-nft" text="My NFT's" icon="Modules" />
-      <SpLinkIcon link="/my-nft" text="The OG" icon="Form" />
-      <SpLinkIcon link="/my-nft" text="The Early Bird" icon="Form" />
-      <SpLinkIcon link="/my-nft" text="MThe Executive" icon="Form" />
+      <!--      <SpLinkIcon link="/my-nft" text="The OG" icon="Form" />-->
+      <!--      <SpLinkIcon link="/my-nft" text="The Early Bird" icon="Form" />-->
+      <!--      <SpLinkIcon link="/my-nft" text="MThe Executive" icon="Form" />-->
       <SpLinkIcon link="/blocks" text="Block Explorer" icon="Transactions" />
       <SpLinkIcon href="https://app.osmosis.zone/?from=ATOM&to=OSMO" text="Buy Now" icon="Token" />
       <!--      <SpLinkIcon link="/relayers" text="Relayers" icon="Transactions" />-->

@@ -2,20 +2,10 @@
   <tr class="balance-row">
     <td :key="balance.denom">
       <div class="row">
-        <div
-          class="token-icon"
-          :style="{
-            backgroundImage: `url(${image})`,
-            backgroundColor: hex,
-          }"
-        />
-        <div class="total">
-          {{ bigFigureOrShortDecimals(balance.total) }}
+        <h3 class="total">
+          {{ bigFigureOrShortDecimals(balance.amount) }}
           {{ balance.denom }}
-        </div>
-        <div v-if="balance.sourceChain" class="chain">
-          {{ balance.sourceChain }}
-        </div>
+        </h3>
       </div>
     </td>
 
@@ -27,28 +17,28 @@
       <h2 v-else-if="!unstake">0</h2>
     </td>
 
-    <td v-if="!unstakingBalance" :key="balance.denom + '_available'" class="available">
-      <span v-if="balance.type === 'STAKE'" class="available-amount">
-        {{ bigFigureOrShortDecimals(balance.available) }}
-      </span>
-    </td>
+    <!--    <td v-if="!unstakingBalance" :key="balance.denom + '_available'" class="available">-->
+    <!--      <span v-if="balance.type === 'STAKE'" class="available-amount">-->
+    <!--        {{ bigFigureOrShortDecimals(balance.available) }}-->
+    <!--      </span>-->
+    <!--    </td>-->
 
     <td v-if="!unstakingBalance" :key="balance.denom + '_actions'" class="actions">
       <div v-if="send" class="icon-button-container">
         <button class="icon-button" @click="$emit('open-send-modal')">
-          <i class="material-icons">send</i>
+          <span class="sp-icon sp-icon-UpArrow" />
         </button>
         <span>Send</span>
       </div>
       <div v-if="stake" class="icon-button-container">
         <button class="icon-button" @click="$emit('open-stake-modal')">
-          <i class="material-icons">arrow_upward</i>
+          <span class="sp-icon sp-icon-UpArrow" />
         </button>
         <span>Stake</span>
       </div>
       <div v-if="unstake" class="icon-button-container">
         <button class="icon-button" @click="$emit('open-unstake-modal')">
-          <i class="material-icons">arrow_downward</i>
+          <span class="sp-icon sp-icon-DownArrow" />
         </button>
         <span>Unstake</span>
       </div>
@@ -63,10 +53,6 @@ import { fromNow } from '@/common/time'
 export default {
   name: `BalanceRow`,
   props: {
-    balances: {
-      type: Array,
-      required: true,
-    },
     balance: {
       type: Object,
       required: true,
@@ -117,7 +103,7 @@ export default {
 </script>
 <style scoped>
 .balance-row {
-  /*border-bottom: 1px solid var(--bc-dim);*/
+  border-bottom: 1px solid #edf2f7;
 }
 
 .balance-row:not(:first-child) {
@@ -125,7 +111,7 @@ export default {
 }
 
 .balance-row:not(:last-child) {
-  /*border-bottom: 1px solid var(--bc-dim);*/
+  border-bottom: 1px solid #edf2f7;
 }
 
 td {
@@ -144,11 +130,11 @@ td {
 }
 
 .rewards {
-  /*color: var(--success);*/
+  color: #2f855a;
 }
 
 .total {
-  /*color: var(--bright);*/
+  color: #1a202c;
 }
 
 .chain {
@@ -179,13 +165,13 @@ td {
   display: block;
   font-size: 10px;
   text-align: center;
-  /*color: var(--dim);*/
+  color: #4a5568;
   padding-top: 2px;
 }
 
 .icon-button {
   border-radius: 50%;
-  /*background: var(--primary);*/
+  background: hsl(7, 88%, 60%);
   border: none;
   outline: none;
   height: 2rem;
@@ -197,13 +183,13 @@ td {
 }
 
 .icon-button:hover {
-  /*background: var(--primary-hover);*/
+  background: hsl(7, 88%, 55%);
   cursor: pointer;
 }
 
 .icon-button i {
   font-size: 14px;
-  /*color: var(--white);*/
+  color: white;
   font-weight: 900;
 }
 </style>

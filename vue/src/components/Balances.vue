@@ -1,38 +1,32 @@
 <template>
-  <div class="table-container">
-    <div class="header-container">
-      <h1>Your Balances</h1>
-      <!--      <SpButton-->
-      <!--        id="claim-button"-->
-      <!--        :disabled="!readyToWithdraw || !balancesLoaded"-->
-      <!--        value="Claim Rewards"-->
-      <!--        @click.native="readyToWithdraw && openClaimModal()"-->
-      <!--      />-->
+  <div class="container">
+    <div class="table-container">
+      <div class="header-container">
+        <h1>Your Balances</h1>
+        <!--      <SpButton-->
+        <!--        id="claim-button"-->
+        <!--        :disabled="!readyToWithdraw"-->
+        <!--        value="Claim Rewards"-->
+        <!--        @click.native="readyToWithdraw && openClaimModal()"-->
+        <!--      />-->
+      </div>
+      <TableContainer :length="sortedBalances.length" :columns="properties" :sort="sort" :show-row-count="false">
+        <BalanceRow
+          v-for="balance in sortedBalances"
+          :key="balance.id"
+          :balance="balance"
+          :total-rewards-per-denom="totalRewardsPerDenom"
+          :send="true"
+          @open-send-modal="openSendModal(balance.denom)"
+        />
+      </TableContainer>
+      <!--    <SendModal ref="SendModal" :denoms="getAllDenoms" />-->
+      <!--    <ClaimModal ref="ClaimModal" :address="session.address" :rewards="rewards" :balances="balances" />-->
     </div>
-    <TableContainer
-      :length="sortedBalances.length"
-      :columns="properties"
-      :sort="sort"
-      :show-row-count="false"
-      :loaded="balancesLoaded"
-    >
-      <BalanceRow
-        v-for="balance in sortedBalances"
-        :key="balance.id"
-        :balances="balances"
-        :balance="balance"
-        :total-rewards-per-denom="totalRewardsPerDenom"
-        :send="true"
-        @open-send-modal="openSendModal(balance.denom)"
-      />
-    </TableContainer>
-    <!--    <SendModal ref="SendModal" :denoms="getAllDenoms" />-->
-    <!--    <ClaimModal ref="ClaimModal" :address="session.address" :rewards="rewards" :balances="balances" />-->
   </div>
 </template>
 <script>
 import { orderBy } from 'lodash'
-import { mapState } from 'vuex'
 import TableContainer from '@/components/TableContainer'
 import BalanceRow from '@/components/BalanceRow'
 // import SendModal from '@/components/ActionModals/SendModal'
@@ -46,9 +40,31 @@ export default {
       order: `desc`,
     },
   }),
+  beforeMount() {
+    console.log(this.$store.getters)
+  },
   computed: {
-    ...mapState([`session`]),
-    ...mapState(`data`, ['balances', 'balancesLoaded', 'rewards']),
+    // ...mapState([`session`]),
+    // ...mapState(`cosmos.bank.v1beta1`, ['balances', 'rewards']),
+    balances() {
+      if (!this.$store.getters['common/wallet/address']) return []
+      return (
+        this.$store.getters['cosmos.bank.v1beta1/getAllBalances']({
+          params: {
+            address: this.$store.getters['common/wallet/address'],
+          },
+        })?.balances ?? []
+      )
+    },
+    rewards() {
+      return (
+        this.$store.getters['cosmos.distribution.v1beta1/getDelegationTotalRewards']({
+          params: {
+            address: this.$store.getters['common/wallet/address'],
+          },
+        })?.rewards ?? []
+      )
+    },
     readyToWithdraw() {
       return Boolean(Object.values(this.totalRewardsPerDenom).find((value) => value > 0))
     },
@@ -88,10 +104,10 @@ export default {
           title: `Rewards`,
           value: `rewards`,
         },
-        {
-          title: `Available`,
-          value: `available`,
-        },
+        // {
+        //   title: `Available`,
+        //   value: `available`,
+        // },
       ]
     },
   },
@@ -114,6 +130,8 @@ h1 {
   width: 100%;
   padding: 3rem 4rem;
   margin: 0 auto;
+  background-color: white;
+  border-radius: 2rem;
 }
 
 .header-container {
@@ -135,15 +153,15 @@ h1 {
 
 .icon-button-container span {
   display: block;
-  /*font-size: var(--text-xs);*/
+  font-size: 0.7rem;
   text-align: center;
-  /*color: var(--dim);*/
+  color: #4a5568;
   padding-top: 2px;
 }
 
 .icon-button {
   border-radius: 50%;
-  /*background: var(--primary);*/
+  background: hsl(7, 88%, 60%);
   border: none;
   outline: none;
   height: 2rem;
@@ -155,7 +173,7 @@ h1 {
 }
 
 .icon-button:hover {
-  /*background: var(--primary-hover);*/
+  background: hsl(7, 88%, 55%);
   cursor: pointer;
 }
 

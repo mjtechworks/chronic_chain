@@ -7,19 +7,19 @@
         class="action-modal-icon action-modal-prev"
         @click="previousStep"
       >
-        <i class="material-icons notranslate">arrow_back</i>
+        <i class="material-icons">arrow_back</i>
       </div>
       <div class="action-modal-header">
         <div id="closeBtn" class="action-modal-icon action-modal-close" @click="close">
-          <i class="material-icons notranslate">close</i>
+          <i class="material-icons">close</i>
         </div>
         <span class="action-modal-title">{{ title }}</span>
         <Steps v-if="[defaultStep, feeStep, signStep].includes(step)" :steps="steps" :active-step="step" />
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
         <Card icon="language">
-          <div slot="title">You're in explore mode</div>
-          <div slot="subtitle">Sign in with a Ledger Nano or browser extension to proceed.</div>
+          <template v-slot:title>You're in explore mode</template>
+          <template v-slot:subtitle>Sign in with a Ledger Nano or browser extension to proceed.</template>
         </Card>
       </div>
       <div v-else-if="step === defaultStep" class="action-modal-form">
@@ -76,7 +76,7 @@
       <div class="action-modal-footer">
         <slot name="action-modal-footer">
           <div v-if="[defaultStep, feeStep, signStep].includes(step)" class="action-modal-group">
-            <Button id="closeBtn" value="Cancel" type="secondary" @click.native="close" />
+            <Button value="Cancel" type="secondary" @click.native="close" />
             <Button
               v-if="requiresSignIn"
               v-focus
