@@ -1,14 +1,18 @@
 <template>
   <div>
     <Balances />
+    <Delegations />
+    <Undelegations />
   </div>
 </template>
 
 <script>
 import Balances from '@/components/Balances'
+import Delegations from '@/components/Delegations'
+import Undelegations from '@/components/Undelegations'
 export default {
   name: 'MyNFT',
-  components: { Balances },
+  components: { Undelegations, Delegations, Balances },
   mounted() {
     console.log(this.wallet)
   },

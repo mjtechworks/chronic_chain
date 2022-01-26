@@ -23,6 +23,7 @@
     "core-js": "^3.18.2",
     "lodash": "^4.17.21",
     "vue": "^3.2.6",
+    "vue-material-design-icons": "^5.0.0",
     "vue-router": "^4.0.3",
     "vuelidate": "^0.7.7",
     "vuex": "^4.0.0"

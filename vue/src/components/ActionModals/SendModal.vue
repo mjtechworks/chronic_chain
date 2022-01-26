@@ -86,14 +86,14 @@
       /> -->
       <div v-if="index === amounts.length - 1 && denoms.length > 1" class="manage-amounts-container">
         <div v-if="amounts.length > 1" class="add-amount-button" @click="removeAmount(index)">
-          <i class="material-icons notranslate">remove_circle</i>
+          <i class="material-icons">remove_circle</i>
         </div>
         <div
           v-if="getAvailableDenoms(denomOptions, index, amounts).length > 1"
           class="add-amount-button"
           @click="addAmount(index + 1)"
         >
-          <i class="material-icons notranslate">add_circle</i>
+          <i class="material-icons">add_circle</i>
         </div>
       </div>
     </FormGroup>
