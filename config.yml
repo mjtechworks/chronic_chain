@@ -5,7 +5,7 @@ accounts:
     coins: ["18500000cht", "100000000cgas"]
   - name: carlos
     coins: ["5000000cht", "5000000cgas"]
-    address: chronic15vyzeepk69mnjptu0mzlcn4fz84u26e22w403w
+    address: chronic1gqqhp8clrckg22d2dfn2z5rs85w3pynae7648x
 validator:
   name: alice
   staked: "10000000cgas"
